@@ -5,6 +5,7 @@ Normal form:
 		1/(1/MAX_VALUE) get Infinity so we do not use "1/MAX_VALUE <= abs(x) <= MAX_VALUE"
 	2. Otherwise: {neg,recip,val,pt} with ln(MAX_VALUE) < val <= MAX_VALUE and pt>0
 */
+//Note: other .js files in "Tetration" folder use functions from this file
 const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,RecipMaxValue = 1/Number.MAX_VALUE
 ,Normal = function(x){
@@ -16,7 +17,8 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 		return x
 	}
 	return x
-}//The following functions assume inputs are already normalized
+}
+//The following functions assume inputs are already normalized
 ,EqualQ = function(x,y){return typeof x=='object' ? x.neg===y.neg&&x.recip===y.recip&&x.val===y.val&&x.pt===y.pt : x===y}
 ,LessQ = function(x,y){
 	var x01,y01;// {true,false,?,?}:0, {true,true,?,?}:1, {false,true,?,?}:2, {false,false,?,?}:3
