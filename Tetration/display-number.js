@@ -1,6 +1,6 @@
-const Show = function(precision,fixed,expo){//Only show numbers "large" enough, work for fixed<308<expo and 10^precision<expo
+const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work for fixed<308<expo and 10^precision<expo
    var lo = Math.pow(10,precision-fixed);
-   return function(x){
+   return x=>{
       var etop,str,eff;
       if(typeof x=='object'){
          if(x.recip) return (0).toFixed(fixed);
@@ -14,9 +14,9 @@ const Show = function(precision,fixed,expo){//Only show numbers "large" enough, 
       return Math.abs(x)>=lo?x.toPrecision(precision).replace('+',''):x.toFixed(fixed)
    }
 }
-,ShowExE = function(precision,fixed,expo){
+,ShowExE = (precision,fixed,expo)=>{
    var lo = Math.pow(10,precision-fixed);
-   return function(x){
+   return x=>{
       var etop,str,eff;
       if(typeof x=='object'){
          if(x.recip) return (0).toFixed(fixed);
@@ -34,7 +34,7 @@ const Show = function(precision,fixed,expo){//Only show numbers "large" enough, 
 ,DisplayLongInt = Show(12,0,1e13)
 ,Display = Show(6,3,1e13)
 ,DisplayDec = Show(6,1,1e13)
-,Toth = function(x){
+,Toth = x=>{
    var nx = Natural(x);
    if(typeof nx=='object') return DisplayLongInt(nx)+'th';
    switch(nx%10){
