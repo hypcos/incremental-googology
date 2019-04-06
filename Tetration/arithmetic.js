@@ -1,15 +1,15 @@
 /*
 Encoding: {neg,recip,val,pt} = (neg?-1:1)*(exp(exp(...exp(val)...)))^(recip?-1:1) with pt exp's
 Normal form:
-	1. 1/MAX_VALUE < abs(x) <= MAX_VALUE, or 0 or Infinity or -Infinity or NaN: x (is Number)
-		1/(1/MAX_VALUE) get Infinity so we do not use "1/MAX_VALUE <= abs(x) <= MAX_VALUE"
-	2. Otherwise: {neg,recip,val,pt} with ln(MAX_VALUE) < val <= MAX_VALUE and pt>0
+   1. 1/MAX_VALUE < abs(x) <= MAX_VALUE, or 0 or Infinity or -Infinity or NaN: x (is Number)
+      1/(1/MAX_VALUE) get Infinity so we do not use "1/MAX_VALUE <= abs(x) <= MAX_VALUE"
+   2. Otherwise: {neg,recip,val,pt} with ln(MAX_VALUE) < val <= MAX_VALUE and pt>0
 */
 //Note: other .js files in "Tetration" folder use functions from this file
 const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,RecipMaxValue = 1/Number.MAX_VALUE
 ,Normal = x=>{
-   if(Number.isFinite(x)) return Math.abs(x)>RecipMaxValue||x===0 ? x : ({neg:Math.sign(x)===-1,recip:true,val:-Math.log(Math.abs(x)),pt:1});
+   if(Number.isFinite(x)) return Math.abs(x)>RecipMaxValue||x===0 ? x : ({neg:Math.sign(x)==-1,recip:true,val:-Math.log(Math.abs(x)),pt:1});
    if(typeof x=='object'){
       if(Number.isFinite(x.val)) return x.pt ? x.val<=LnMaxValue ? x.val<0&&x.pt===1?Normal({neg:x.neg,recip:!(x.recip),val:-x.val,pt:1}):Normal({neg:x.neg,recip:x.recip,val:Math.exp(x.val),pt:x.pt-1}) : x : x.recip? x.neg?-1/x.val:1/x.val : x.neg?-x.val:x.val;
       if(x.val==Infinity) return x.recip? 0 : x.neg?-Infinity:Infinity;
@@ -25,7 +25,7 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
       x01 = x.recip? x.neg?1:2 : x.neg?0:3;
       if(typeof y=='object'){
          y01 = y.recip? y.neg?1:2 : y.neg?0:3;
-         return x01<y01 || x01===y01 && (x01&1 ? x.pt<y.pt||x.pt===y.pt&&x.val<y.val : x.pt>y.pt||x.pt===y.pt&&x.val>y.val)
+         return x01<y01 || x01==y01 && (x01&1 ? x.pt<y.pt||x.pt===y.pt&&x.val<y.val : x.pt>y.pt||x.pt===y.pt&&x.val>y.val)
       }else{
          y01 = Number.isFinite(y) ? y? y<0?0.5:2.5 : 1.5 : y<0?-1:4;//NaN is treated as Infinity
          return x01<y01
