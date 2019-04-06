@@ -14,7 +14,7 @@ const _tier0=['one','two','three','four','five','six','seven','eight','nine','te
    var nx = Natural(x),inp,str='',fl,expo;
    if(nx===0) return 'zero';
    if(LessQ(nx,{neg:false,recip:false,val:230258509299.4044,pt:1})){
-      inp=DisplayLongInt(nx);
+      inp=DisplayHiInt(nx);
       if(LessQ(nx,1e15)){// nx < 10^15
          fl=Math.floor(nx/1e12);
          if(fl) str+=ConvertTier0(fl)+' trillion, ';
@@ -41,6 +41,6 @@ const _tier0=['one','two','three','four','five','six','seven','eight','nine','te
       }
       return str.endsWith(', ')?str.slice(0,-2):str
    }
-   return DisplayLongInt(nx);
+   return DisplayHiInt(nx);
 }
 ,UpperFirst = x=>x[0].toUpperCase()+x.substr(1)
