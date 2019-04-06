@@ -34,7 +34,7 @@ const _tier0=['one','two','three','four','five','six','seven','eight','nine','te
       inp=inp.substr(expo%3+1);
       if(fl) str+=ConvertTier0(fl)+' '+ConvertStdIllion(Math.floor(expo/3-1))+', ';
       while(inp.length){
-         fl=inp.length<3?inp*(inp.length===2?10:100):+inp.substr(0,3);
+         fl=inp.length<3?inp*(inp.length==2?10:100):+inp.substr(0,3);
          inp=inp.substr(3);
          expo-=3;
          if(fl) str+=ConvertTier0(fl)+' '+ConvertStdIllion(Math.floor(expo/3-1))+', '
