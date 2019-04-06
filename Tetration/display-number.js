@@ -8,7 +8,7 @@ const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work f
          if(etop>=expo) return (x.neg?'-':'')+'e'.repeat(x.pt)+etop.toPrecision(precision).replace('+','');
          eff = Math.min(Math.ceil(Math.log10(expo/etop)),precision);
          str = Math.pow(10,etop-Math.floor(etop)).toPrecision(eff);
-         str = str[1]==='0'||str[1]==='e' ? (eff===1?'9':'9.'+'9'.repeat(eff-1))+'e'+Math.floor(etop) : str+'e'+Math.floor(etop);
+         str = str[1]=='0'||str[1]=='e' ? (eff==1?'9':'9.'+'9'.repeat(eff-1))+'e'+Math.floor(etop) : str+'e'+Math.floor(etop);
          return (x.neg?'-':'')+'e'.repeat(x.pt-1)+str
       }
       return Math.abs(x)>=lo?x.toPrecision(precision).replace('+',''):x.toFixed(fixed)
@@ -24,7 +24,7 @@ const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work f
          if(etop>=expo) return (x.neg?'-':'')+'E('+etop.toPrecision(precision).replace('+','')+(x.pt===1?')':')#'+x.pt).replace('+','');
          eff = Math.min(Math.ceil(Math.log10(expo/etop)),precision);
          str = Math.pow(10,etop-Math.floor(etop)).toPrecision(eff);
-         str = str[1]==='0'||str[1]==='e' ? (eff===1?'9':'9.'+'9'.repeat(eff-1))+'e'+Math.floor(etop) : str+'e'+Math.floor(etop);
+         str = str[1]=='0'||str[1]=='e' ? (eff==1?'9':'9.'+'9'.repeat(eff-1))+'e'+Math.floor(etop) : str+'e'+Math.floor(etop);
          return (x.neg?'-':'')+(x.pt===1?str:'E('+str+(x.pt===2?')':')#'+(x.pt-1)).replace('+',''))
       }
       return Math.abs(x)>=lo?x.toPrecision(precision).replace('+',''):x.toFixed(fixed)
@@ -38,9 +38,9 @@ const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work f
    var nx = Natural(x);
    if(typeof nx=='object') return DisplayHiInt(nx)+'th';
    switch(nx%10){
-      case 1: return DisplayHiInt(nx)+(nx%100===11?'th':'st');
-      case 2: return DisplayHiInt(nx)+(nx%100===12?'th':'nd');
-      case 3: return DisplayHiInt(nx)+(nx%100===13?'th':'rd');
+      case 1: return DisplayHiInt(nx)+(nx%100==11?'th':'st');
+      case 2: return DisplayHiInt(nx)+(nx%100==12?'th':'nd');
+      case 3: return DisplayHiInt(nx)+(nx%100==13?'th':'rd');
       default: return DisplayHiInt(nx)+'th'
    }
 }
