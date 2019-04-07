@@ -122,6 +122,14 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 }
 ,Root = (x,y)=> Power(x,Recip(y))
 ,Log = (x,y)=> Times(Ln(y),Recip(Ln(x)))
+,Power1 = (x,y)=>{//x^y-1 should be consider specially where x^y very close to 1
+   var temp=Power(x,y);
+   if(Number.isFinite(temp)&&x!==1&&y!==0&&Sign(x)>0&&temp<1.000001&&temp>0.999999){
+      temp=Times(Ln(x),y);
+      return Plus(temp,Times(Times(temp,temp),0.5))
+   }
+   return Minus(temp,1)
+}
 ,Floor = x=> typeof x=='object'?x.recip?x.neg?-1:0:x:Math.floor(x)
 ,Natural = x=> Sign(x)<0||x.recip?0:Number.isFinite(x)?Math.round(x):x
 //Library of googological functions, mainly on natural numbers
