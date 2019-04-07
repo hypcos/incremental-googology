@@ -128,7 +128,7 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
       temp=Times(Ln(x),y);
       return Plus(temp,Times(Times(temp,temp),0.5))
    }
-   return Minus(temp,1)
+   return Plus(temp,-1)
 }
 ,Floor = x=> typeof x=='object'?x.recip?x.neg?-1:0:x:Math.floor(x)
 ,Natural = x=> Sign(x)<0||x.recip?0:Number.isFinite(x)?Math.round(x):x
