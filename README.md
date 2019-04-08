@@ -13,7 +13,10 @@ where n may be 2<sup>53</sup>-1 or 2<sup>1024</sup>-2<sup>971</sup> (or other Nu
 
 Every separated folder can extend to a web game.
 ## Current State
-The repository started with folder "Tetration", only consisting some googological libraries.
+The repository started with folder "Tetration", only with a very first concept: the "digits".
+It has no statistics or achievements yet.
+
+The game is still unplayable.
 ## Main Difficulty
 The main difficulty of Incremental Googology is the googology itself - numbers are large.
 
