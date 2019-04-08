@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Incremental Googology</title>
+<link rel="stylesheet" type="text/css" href="index.css">
+<meta charset="UTF-8">
+<meta name="author" content="hyp_cos">
+<meta name="keywords" content="big number, large number, googology, incremental, idle, clicker">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+</head>
+<body><div id="loading">
+   <br><br>GAME LOADING
+</div>
+<div id="game">Your number is
+   <span id="main-number">{{ShowMainNumber}}</span><br>
+   <button class="tab" @mousedown="CurrentTab=-1">Options</button><button class="tab" @mousedown="CurrentTab=0">Digits</button><br>
+   <div v-if="CurrentTab==0">
+      Your number is gaining {{ShowTotalProduce}}/s<br>
+      Note that every digit can be expensive if its value exceeds the next digit<br>
+      <div class="itemrow" v-for="(dn,n) in Digits">
+         <div class="itemrow4">{{DigitName(n)}}</div>
+         <button class="itemrow5" :disabled="CantDigitQ(n)" @mousedown="BuyDigit(n)" @dblclick="BulkDigit(n)">Cost: {{ShowDigitCost(n)}}</button>
+         <div class="itemrow5" v-show="Stage>=1">Double click to
+            <select v-model.number="BulkDigitFrac[n]">
+               <option value="0.0001">Spend 0.01%</option>
+               <option value="0.001">Spend 0.1%</option>
+               <option value="0.01">Spend 1%</option>
+               <option value="0.1">Spend 10%</option>
+               <option value="0.5">Spend 50%</option>
+               <option value="1">Buy Max</option>
+            </select>
+         </div>
+         <div>Every {{DigitIdx(n)}} digit produces {{ShowDigitProduce(n)}}/s</div>
+      </div>
+      <div class="caution" v-show="Stage>=2">Counting a digit always resets lower digits (locating higher in the page).</div>
+   </div>
+   <div class="setting" v-else-if="CurrentTab==-1">
+      <div class="itemrow">
+         <div class="itemrow4" v-for="n in 4"><button @mousedown="Save(n)">Save {{n}}</button></div>
+      </div>
+      <div class="itemrow">
+         <div class="itemrow4" v-for="n in 4"><button @mousedown="Load(n)">Load {{n}}</button></div>
+      </div>
+      <div class="itemrow">
+         <div class="itemrow4">
+            Automatic saving:<br><select v-model.number="AutoSave">
+               <option value="5000">5 s</option>
+               <option value="10000">10 s</option>
+               <option value="20000">20 s</option>
+               <option value="60000">1 min</option>
+               <option value="180000">3 min</option>
+               <option value="600000">10 min</option>
+               <option value="0">Off</option>
+            </select>
+         </div>
+         <div class="itemrow4"><button @mousedown="Export()">Export</button></div>
+         <div class="itemrow4">
+            Update interval: {{UpdateInterval}} ms <br><input type="range" v-model.number="UpdateInterval" min="10" max="333">
+         </div>
+         <div class="itemrow4"><button @mousedown="Reset()">FULL RESET</button></div>
+      </div>
+      <div id="export" v-if="ExportBox">
+         <textarea v-model="ExportContent"></textarea>
+         <button @mousedown="Import()">Import</button>
+         <button @mousedown="ExportBox=false">Cancel</button>
+      </div>
+   </div>
+</div>
+<script src="arithmetic.js"></script>
+<script src="display-number.js"></script>
+<script src="short-scale-name.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
