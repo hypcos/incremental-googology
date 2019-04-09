@@ -71,8 +71,8 @@ var LastUpdate=Date.now()
       ,CantDigitQ:function(n){return LessQ(this.MainNumber,this.DigitCost(n))}
       ,BuyDigit:function(n){
          var i;
-         this.MainNumber=Minus(this.MainNumber,this.DigitCost(n));
          for(i=n;i--;) this.Digits[i]=1;
+         this.MainNumber=Minus(this.MainNumber,this.DigitCost(n));
          Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
       }
       ,BulkDigit:function(n){
@@ -89,6 +89,9 @@ var LastUpdate=Date.now()
          var keep,already,available,dn,prev;
          if(!this.BulkDigitFrac[n]) return;
          keep=Times(this.MainNumber,1-this.BulkDigitFrac[n]);
+         if(GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost(n))){
+            for(i=n;i--;) this.Digits[i]=1
+         }
          available=Plus(already=cost(this.Digits[n]),Times(this.MainNumber,this.BulkDigitFrac[n]));
          if(LessQ(available,threshold)){
             dn=Floor(Power(Divide(available,Times(Power(10,n),0.45)),0.5))
@@ -104,7 +107,8 @@ var LastUpdate=Date.now()
          prev=0;
          while(!EqualQ(prev,this.MainNumber)&&GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost(n))){
             prev=this.MainNumber;
-            this.BuyDigit(n)
+            this.MainNumber=Minus(this.MainNumber,this.DigitCost(n));
+            Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
          }
       }
       ,DigitIdx:n=>Toth(n+1)
