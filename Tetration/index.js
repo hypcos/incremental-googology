@@ -15,7 +15,7 @@ var LastUpdate=Date.now()
    el:'#game'
    ,data:{
       UpdateInterval:67
-      ,AutoSave:20000
+      ,AutoSave:5000
       ,ExportBox:false
       ,ExportContent:''
       ,Stage:0
@@ -23,12 +23,13 @@ var LastUpdate=Date.now()
       ,CurrentTab:0
       ,Digits:[1]
       ,BulkDigitFrac:[]
+      ,StdIllion:1
    }
    ,computed:{
       ShowMainNumber:function(){return DisplayHi(this.MainNumber)}
       ,TotalProduce:function(){
          var n,l=this.Digits.length,sum=0;
-         for(n=0;n<l;++n) sum=Plus(sum,Times(Floor(Times(this.Digits[n],0.9)),this.DigitProduce(n)));
+         for(n=0;n<l;++n) sum=Plus(sum,Times(Floor(Times(this.Digits[n],0.9)),this.DigitProduce[n]));
          return sum
       }
       ,ShowTotalProduce:function(){return Display(this.TotalProduce)}
@@ -38,6 +39,31 @@ var LastUpdate=Date.now()
          v[len]=Power(10,len);
          return v
       }
+      ,DigitName:function(){return this.DigitValue.map(x=>UpperFirst(ShortScaleName(x)))}
+      ,DigitCost:function(){
+         var v=[],n,len=this.Digits.length;
+         for(n=0;n<len;++n) v.push(LessQ(this.DigitValue[n],this.DigitValue[n+1])?
+         this.DigitValue[n]:Power(this.DigitValue[n+1],Divide(this.DigitValue[n],this.DigitValue[n+1])));
+         return v
+      }
+      ,ShowDigitCost:function(){return this.DigitCost.map(DisplayDec)}
+      ,CantDigitQ:function(){return this.DigitCost.map(x=>LessQ(this.MainNumber,x))}
+      ,DigitIdx:function(){
+         var v=[],n,len=this.Digits.length;
+         for(n=0;n<len;++n) v.push(Toth(n+1));
+         return v
+      }
+      ,DigitProduce:function(){
+         var v=[],n,len=this.Digits.length;
+         for(n=0;n<len;++n) v.push(Times(n+1,Power(2,Plus(this.StdIllion,-1))));
+         return v
+      }
+      ,ShowDigitProduce:function(){return this.DigitProduce.map(Display)}
+      ,StdIllionName:function(){return ConvertStdIllion(this.StdIllion)}
+      ,StdIllionCost:function(){return Power(1000,Plus(this.StdIllion,1))}
+      ,ShowStdIllionCost:function(){return DisplayDec(this.StdIllionCost)}
+      ,CantStdIllion:function(){return LessQ(this.Digits[0],this.StdIllionCost)}
+      ,UnlockDigits:function(){return LessQ(this.StdIllion,22)?'unlock 3 more digits and ':''}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -61,65 +87,64 @@ var LastUpdate=Date.now()
          this.MainNumber=1;
          this.CurrentTab=0;
          this.Digits=[1];
-         this.BulkDigitFrac=[]
+         this.BulkDigitFrac=[];
+         this.StdIllion=1
       }
-      ,DigitName:function(n){return UpperFirst(ShortScaleName(this.DigitValue[n]))}
-      ,DigitCost:function(n){return LessQ(this.DigitValue[n],this.DigitValue[n+1])?
-         this.DigitValue[n]
-         :Power(this.DigitValue[n+1],Divide(this.DigitValue[n],this.DigitValue[n+1]))}
-      ,ShowDigitCost:function(n){return DisplayDec(this.DigitCost(n))}
-      ,CantDigitQ:function(n){return LessQ(this.MainNumber,this.DigitCost(n))}
       ,BuyDigit:function(n){
          var i;
          for(i=n;i--;) this.Digits[i]=1;
-         this.MainNumber=Minus(this.MainNumber,this.DigitCost(n));
+         this.MainNumber=Minus(this.MainNumber,this.DigitCost[n]);
          Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
       }
       ,BulkDigit:function(n){
          const s1=(m,dm)=>Times(Times(0.5,Power(10,m)),Times(dm,Plus(dm,1)))
          ,cost1=dn=>Minus(s1(n,dn-1),s1(n+1,Floor(Times(dn,0.1))))
-         ,a=Power(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]))
-         ,am=Power1(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]))
-         ,a10=Power(this.DigitValue[n+1],Recip(this.Digits[n+1]))
-         ,a10m=Power1(this.DigitValue[n+1],Recip(this.Digits[n+1]))
-         ,cost2=dn=>Minus(Times(Divide(Power1(this.DigitValue[n+1],Divide(Times(Plus(dn,-1),0.1),this.Digits[n+1])),am),a),
-         Times(Divide(Power1(this.DigitValue[n+1],Divide(Floor(Times(dn,0.1)),this.Digits[n+1])),a10m),a10))
-         ,threshold=cost1(Plus(Times(10,this.Digits[n+1]),1))
-         ,cost=dn=>LessQ(Times(10,this.Digits[n+1]),dn)?Plus(Minus(threshold,cost2(Plus(Times(10,this.Digits[n+1]),1))),cost2(dn)):cost1(dn);
+         ,a=Power(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]||1))
+         ,am=Power1(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]||1))
+         ,a10=Power(this.DigitValue[n+1],Recip(this.Digits[n+1]||1))
+         ,a10m=Power1(this.DigitValue[n+1],Recip(this.Digits[n+1]||1))
+         ,cost2=dn=>Minus(Times(Divide(Power1(this.DigitValue[n+1],Divide(Times(Plus(dn,-1),0.1),this.Digits[n+1]||1)),am),a),
+         Times(Divide(Power1(this.DigitValue[n+1],Divide(Floor(Times(dn,0.1)),this.Digits[n+1]||1)),a10m),a10))
+         ,threshold=cost1(Plus(Times(10,this.Digits[n+1]||1),1))
+         ,cost=dn=>LessQ(Times(10,this.Digits[n+1]||1),dn)?Plus(Minus(threshold,cost2(Plus(Times(10,this.Digits[n+1]||1),1))),cost2(dn)):cost1(dn);
          var keep,already,available,dn,prev;
          if(!this.BulkDigitFrac[n]) return;
          keep=Times(this.MainNumber,1-this.BulkDigitFrac[n]);
-         if(GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost(n))){
+         if(GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost[n])){
             for(i=n;i--;) this.Digits[i]=1
          }
          available=Plus(already=cost(this.Digits[n]),Times(this.MainNumber,this.BulkDigitFrac[n]));
          if(LessQ(available,threshold)){
             dn=Floor(Power(Divide(available,Times(Power(10,n),0.45)),0.5))
          }else{
-            available=Plus(available,Minus(cost2(Plus(Times(10,this.Digits[n+1]),1)),threshold));
+            available=Plus(available,Minus(cost2(Plus(Times(10,this.Digits[n+1]||1),1)),threshold));
             dn=Floor(Divide(Times(Minus(
                Ln(Plus(available,Minus(Divide(a,am),Divide(a10,a10m)))),
                Ln(Minus(Recip(am),Divide(a,a10m)))
-               ),Times(this.Digits[n+1],10)),Ln(this.DigitValue[n+1])))
+               ),Times(this.Digits[n+1]||1,10)),Ln(this.DigitValue[n+1])))
          }
          this.MainNumber=Plus(Minus(this.MainNumber,cost(dn)),already);
          Vue.set(this.Digits,n,Number.isFinite(dn)&&dn%10==0?dn+1:dn);
          prev=0;
-         while(!EqualQ(prev,this.MainNumber)&&GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost(n))){
+         while(!EqualQ(prev,this.MainNumber)&&GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost[n])){
             prev=this.MainNumber;
-            this.MainNumber=Minus(this.MainNumber,this.DigitCost(n));
+            this.MainNumber=Minus(this.MainNumber,this.DigitCost[n]);
             Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
          }
       }
-      ,DigitIdx:n=>Toth(n+1)
-      ,DigitProduce:n=>n+1
-      ,ShowDigitProduce:n=>Display(n+1)
+      ,BuyStdIllion:function(){
+         this.MainNumber=1;
+         this.Digits=[1];
+         this.StdIllion=Plus(this.StdIllion,1)
+      }
    }
    ,watch:{
       MainNumber:function(x){
-         var d=Plus(Floor(Log(10,x)),1);
+         var d=Min(Plus(Floor(Log(10,x)),1),Min(this.StdIllion,22)*3+3);
          if(this.Stage<1&&LessQ(6,x)) this.Stage=1;
          if(this.Stage<2&&LessQ(10,x)) this.Stage=2;
+         if(this.Stage<3&&LessQ(1e4,x)) this.Stage=3;
+         if(this.Stage<4&&LessQ(1e6,x)) this.Stage=4;
          while(this.Digits.length<d) this.Digits.push(1)
       }
    }
@@ -196,10 +221,10 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
       }
    }
 }
-,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac]]))
+,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac,Game.StdIllion]]))
 ,Load = n=>{
    var stream=localStorage.getItem(''+n);
-   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac]]=FromStream(stream)
+   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
 };
 //Initialization
 Load(0);
