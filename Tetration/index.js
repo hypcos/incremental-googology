@@ -21,27 +21,31 @@ var LastUpdate=Date.now()
       ,Stage:0
       ,MainNumber:1
       ,CurrentTab:0
-      ,Digits:[1]
+      ,Digit:[0]
       ,BulkDigitFrac:[]
       ,StdIllion:1
    }
    ,computed:{
       ShowMainNumber:function(){return DisplayHi(this.MainNumber)}
       ,TotalProduce:function(){
-         var n,l=this.Digits.length,sum=0;
-         for(n=0;n<l;++n) sum=Plus(sum,Times(Floor(Times(this.Digits[n],0.9)),this.DigitProduce[n]));
+         var n,l=this.Digit.length,sum=0;
+         for(n=0;n<l;++n) sum=Plus(sum,Times(this.Digit[n],this.DigitProduce[n]));
          return sum
       }
       ,ShowTotalProduce:function(){return Display(this.TotalProduce)}
+      ,Digits:function(){
+         var v=this.Digit.map(x=>Floor(Times(Plus(x,0.9375),1.1111111111111111)));
+         v.push(1);
+         return v
+      }
       ,DigitValue:function(){
-         var v=[],i,len=this.Digits.length;
-         for(i=0;i<len;++i) v.push(Natural(Times(this.Digits[i]||1,Power(10,i))));
-         v[len]=Power(10,len);
+         var v=[],n,len=this.Digits.length;
+         for(n=0;n<len;++n) v.push(Natural(Times(this.Digits[n],Power(10,n))));
          return v
       }
       ,DigitName:function(){return this.DigitValue.map(x=>UpperFirst(ShortScaleName(x)))}
       ,DigitCost:function(){
-         var v=[],n,len=this.Digits.length;
+         var v=[],n,len=this.Digit.length;
          for(n=0;n<len;++n) v.push(LessQ(this.DigitValue[n],this.DigitValue[n+1])?
          this.DigitValue[n]:Power(this.DigitValue[n+1],Divide(this.DigitValue[n],this.DigitValue[n+1])));
          return v
@@ -49,12 +53,12 @@ var LastUpdate=Date.now()
       ,ShowDigitCost:function(){return this.DigitCost.map(DisplayDec)}
       ,CantDigitQ:function(){return this.DigitCost.map(x=>LessQ(this.MainNumber,x))}
       ,DigitIdx:function(){
-         var v=[],n,len=this.Digits.length;
+         var v=[],n,len=this.Digit.length;
          for(n=0;n<len;++n) v.push(Toth(n+1));
          return v
       }
       ,DigitProduce:function(){
-         var v=[],n,len=this.Digits.length;
+         var v=[],n,len=this.Digit.length;
          for(n=0;n<len;++n) v.push(Times(n+1,Power(2,Plus(this.StdIllion,-1))));
          return v
       }
@@ -86,55 +90,55 @@ var LastUpdate=Date.now()
          this.Stage=0;
          this.MainNumber=1;
          this.CurrentTab=0;
-         this.Digits=[1];
+         this.Digit=[0];
          this.BulkDigitFrac=[];
          this.StdIllion=1
       }
       ,BuyDigit:function(n){
          var i;
-         for(i=n;i--;) this.Digits[i]=1;
+         for(i=n;i--;) this.Digit[i]=0;
          this.MainNumber=Minus(this.MainNumber,this.DigitCost[n]);
-         Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
+         Vue.set(this.Digit,n,Plus(this.Digit[n],1))
       }
       ,BulkDigit:function(n){
          const s1=(m,dm)=>Times(Times(0.5,Power(10,m)),Times(dm,Plus(dm,1)))
          ,cost1=dn=>Minus(s1(n,dn-1),s1(n+1,Floor(Times(dn,0.1))))
-         ,a=Power(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]||1))
-         ,am=Power1(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]||1))
-         ,a10=Power(this.DigitValue[n+1],Recip(this.Digits[n+1]||1))
-         ,a10m=Power1(this.DigitValue[n+1],Recip(this.Digits[n+1]||1))
-         ,cost2=dn=>Minus(Times(Divide(Power1(this.DigitValue[n+1],Divide(Times(Plus(dn,-1),0.1),this.Digits[n+1]||1)),am),a),
-         Times(Divide(Power1(this.DigitValue[n+1],Divide(Floor(Times(dn,0.1)),this.Digits[n+1]||1)),a10m),a10))
-         ,threshold=cost1(Plus(Times(10,this.Digits[n+1]||1),1))
-         ,cost=dn=>LessQ(Times(10,this.Digits[n+1]||1),dn)?Plus(Minus(threshold,cost2(Plus(Times(10,this.Digits[n+1]||1),1))),cost2(dn)):cost1(dn);
-         var keep,already,available,dn,prev;
+         ,a=Power(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]))
+         ,am=Power1(this.DigitValue[n+1],Divide(0.1,this.Digits[n+1]))
+         ,a10=Power(this.DigitValue[n+1],Recip(this.Digits[n+1]))
+         ,a10m=Power1(this.DigitValue[n+1],Recip(this.Digits[n+1]))
+         ,cost2=dn=>Minus(Times(Divide(Power1(this.DigitValue[n+1],Divide(Times(Plus(dn,-1),0.1),this.Digits[n+1])),am),a),
+         Times(Divide(Power1(this.DigitValue[n+1],Divide(Floor(Times(dn,0.1)),this.Digits[n+1])),a10m),a10))
+         ,threshold=cost1(Plus(Times(10,this.Digits[n+1]),1))
+         ,cost=dn=>LessQ(Times(10,this.Digits[n+1]),dn)?Plus(Minus(threshold,cost2(Plus(Times(10,this.Digits[n+1]),1))),cost2(dn)):cost1(dn);
+         var keep,already,available,dn,prev,i;
          if(!this.BulkDigitFrac[n]) return;
          keep=Times(this.MainNumber,1-this.BulkDigitFrac[n]);
          if(GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost[n])){
-            for(i=n;i--;) this.Digits[i]=1
+            for(i=n;i--;) this.Digit[i]=0
          }
          available=Plus(already=cost(this.Digits[n]),Times(this.MainNumber,this.BulkDigitFrac[n]));
          if(LessQ(available,threshold)){
             dn=Floor(Power(Divide(available,Times(Power(10,n),0.45)),0.5))
          }else{
-            available=Plus(available,Minus(cost2(Plus(Times(10,this.Digits[n+1]||1),1)),threshold));
+            available=Plus(available,Minus(cost2(Plus(Times(10,this.Digits[n+1]),1)),threshold));
             dn=Floor(Divide(Times(Minus(
                Ln(Plus(available,Minus(Divide(a,am),Divide(a10,a10m)))),
                Ln(Minus(Recip(am),Divide(a,a10m)))
-               ),Times(this.Digits[n+1]||1,10)),Ln(this.DigitValue[n+1])))
+               ),Times(this.Digits[n+1],10)),Ln(this.DigitValue[n+1])))
          }
          this.MainNumber=Plus(Minus(this.MainNumber,cost(dn)),already);
-         Vue.set(this.Digits,n,Number.isFinite(dn)&&dn%10==0?dn+1:dn);
+         Vue.set(this.Digit,n,Floor(Plus(Times(dn,0.9),0.03125)));
          prev=0;
          while(!EqualQ(prev,this.MainNumber)&&GreaterEqualQ(Minus(this.MainNumber,keep),this.DigitCost[n])){
             prev=this.MainNumber;
             this.MainNumber=Minus(this.MainNumber,this.DigitCost[n]);
-            Vue.set(this.Digits,n,Plus(this.Digits[n],Number.isFinite(this.Digits[n])&&this.Digits[n]%10==9?2:1))
+            Vue.set(this.Digit,n,Plus(this.Digit[n],1))
          }
       }
       ,BuyStdIllion:function(){
          this.MainNumber=1;
-         this.Digits=[1];
+         this.Digit=[0];
          this.StdIllion=Plus(this.StdIllion,1)
       }
    }
@@ -145,7 +149,7 @@ var LastUpdate=Date.now()
          if(this.Stage<2&&LessQ(10,x)) this.Stage=2;
          if(this.Stage<3&&LessQ(1e4,x)) this.Stage=3;
          if(this.Stage<4&&LessQ(1e6,x)) this.Stage=4;
-         while(this.Digits.length<d) this.Digits.push(1)
+         while(this.Digit.length<d) this.Digit.push(0)
       }
    }
 });
@@ -221,10 +225,10 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
       }
    }
 }
-,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac,Game.StdIllion]]))
+,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]))
 ,Load = n=>{
    var stream=localStorage.getItem(''+n);
-   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digits,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
+   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
 };
 //Initialization
 Load(0);
