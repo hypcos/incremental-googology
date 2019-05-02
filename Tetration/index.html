@@ -17,7 +17,7 @@
    <div v-if="CurrentTab==0">
       Your number is gaining {{ShowTotalProduce}}/s<br>
       Note that every digit can be expensive if its value exceeds the next digit<br>
-      <div class="itemrow" v-for="(dn,n) in Digits">
+      <div class="itemrow" v-for="(dn,n) in Digit">
          <div class="itemrow4">{{DigitName[n]}}</div>
          <button class="itemrow5" :disabled="CantDigitQ[n]" @mousedown="BuyDigit(n)" @dblclick="BulkDigit(n)">Cost: {{ShowDigitCost[n]}}</button>
          <div class="itemrow5" v-show="Stage>=1">Double click to
@@ -35,7 +35,7 @@
       <div class="caution" v-show="Stage>=2">Counting a digit always resets lower digits (locating higher in the page).</div>
       <div class="itemrow" v-show="Stage>=4">
          <button class="itemrow4" :disabled="CantStdIllion" @mousedown="BuyStdIllion()">Get {{StdIllionName}}</button>
-         <div>Reset all digits and your number, but {{UnlockDigits}}double the production of digits. 1st digit requirement: {{ShowStdIllionCost}}</div>
+         <div>Reset all digits and your number, but {{UnlockDigits}}double the production of digits. 1st digit's value requirement: {{ShowStdIllionCost}}</div>
       </div>
    </div>
    <div class="setting" v-else-if="CurrentTab==-1">
