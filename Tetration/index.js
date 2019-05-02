@@ -38,11 +38,7 @@ var LastUpdate=Date.now()
          v.push(1);
          return v
       }
-      ,DigitValue:function(){
-         var v=[],n,len=this.Digits.length;
-         for(n=0;n<len;++n) v.push(Natural(Times(this.Digits[n],Power(10,n))));
-         return v
-      }
+      ,DigitValue:function(){return this.Digits.map((x,n)=>Natural(Times(x,Power(10,n))))}
       ,DigitName:function(){return this.DigitValue.map(x=>UpperFirst(ShortScaleName(x)))}
       ,DigitCost:function(){
          var v=[],n,len=this.Digit.length;
