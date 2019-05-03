@@ -143,8 +143,7 @@ var LastUpdate=Date.now()
          var d=Min(Plus(Floor(Log(10,x)),1),Min(this.StdIllion,22)*3+3);
          if(this.Stage<1&&LessQ(6,x)) this.Stage=1;
          if(this.Stage<2&&LessQ(10,x)) this.Stage=2;
-         if(this.Stage<3&&LessQ(1e4,x)) this.Stage=3;
-         if(this.Stage<4&&LessQ(1e6,x)) this.Stage=4;
+         if(this.Stage<3&&LessQ(1e6,x)) this.Stage=3;
          while(this.Digit.length<d) this.Digit.push(0)
       }
    }
