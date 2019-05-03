@@ -33,7 +33,7 @@
          <div>Every {{DigitIdx[n]}} digit produces {{ShowDigitProduce[n]}}/s</div>
       </div>
       <div class="caution" v-show="Stage>=2">Counting a digit always resets lower digits (locating higher in the page).</div>
-      <div class="itemrow" v-show="Stage>=4">
+      <div class="itemrow" v-show="Stage>=3">
          <button class="itemrow4" :disabled="CantStdIllion" @mousedown="BuyStdIllion()">Get {{StdIllionName}}</button>
          <div>Reset all digits and your number, but {{UnlockDigits}}double the production of digits. 1st digit's value requirement: {{ShowStdIllionCost}}</div>
       </div>
