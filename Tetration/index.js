@@ -216,10 +216,10 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
       }
    }
 }
-,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]))
+,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]))
 ,Load = n=>{
    var stream=localStorage.getItem(''+n);
-   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[],Game.Stage,Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
+   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
 };
 //Initialization
 Load(0);
