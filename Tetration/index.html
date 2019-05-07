@@ -22,6 +22,7 @@
          <button class="itemrow5" :disabled="CantDigitQ[n]" @mousedown="BuyDigit(n)" @dblclick="BulkDigit(n)">Cost: {{ShowDigitCost[n]}}</button>
          <div class="itemrow5" v-show="Stage>=1">Double click to
             <select v-model.number="BulkDigitFrac[n]">
+               <option value="0.00001">Spend 0.001%</option>
                <option value="0.0001">Spend 0.01%</option>
                <option value="0.001">Spend 0.1%</option>
                <option value="0.01">Spend 1%</option>
