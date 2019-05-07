@@ -1,12 +1,17 @@
 const Loop = ()=>{
-   var dt=(Date.now()-LastUpdate)*0.001;
+   setTimeout(Loop,Game.UpdateInterval);
+   var digitarget=Min(Plus(Floor(Log(10,Game.MainNumber)),1),Min(Game.StdIllion,22)*3+3)
+   ,dt=(Date.now()-LastUpdate)*0.001;
    LastUpdate=Date.now();
    Game.MainNumber=Plus(Game.MainNumber,Times(Game.TotalProduce,dt));
+   if(Game.Stage<1&&LessQ(6,Game.MainNumber)) Game.Stage=1;
+   if(Game.Stage<2&&LessQ(10,Game.MainNumber)) Game.Stage=2;
+   if(Game.Stage<3&&LessQ(1e6,Game.MainNumber)) Game.Stage=3;
+   while(Game.Digit.length<digitarget) Game.Digit.push(0);
    if(Game.AutoSave&&LastUpdate-LastSave>=Game.AutoSave){
       LastSave=LastUpdate;
       Save(0)
    }
-   setTimeout(Loop,Game.UpdateInterval)
 };
 var LastUpdate=Date.now()
 ,LastSave=Date.now()
@@ -136,15 +141,6 @@ var LastUpdate=Date.now()
          this.MainNumber=1;
          this.Digit=[0];
          this.StdIllion=Plus(this.StdIllion,1)
-      }
-   }
-   ,watch:{
-      MainNumber:function(x){
-         var d=Min(Plus(Floor(Log(10,x)),1),Min(this.StdIllion,22)*3+3);
-         if(this.Stage<1&&LessQ(6,x)) this.Stage=1;
-         if(this.Stage<2&&LessQ(10,x)) this.Stage=2;
-         if(this.Stage<3&&LessQ(1e6,x)) this.Stage=3;
-         while(this.Digit.length<d) this.Digit.push(0)
       }
    }
 });
