@@ -76,16 +76,24 @@ th,td{padding:0}
    width: 100%;
    font-size: 80px;
 }
-#main-number{font-size:50px}
-.tab{
-   background-color: #aef;
+.tab button{
+   background-color: #afe;
    padding: 0 12px 4px;
-   border: 2px solid #0cf;
+   border: 2px solid #0fc;
    border-radius: 20px;
    font-size: 32px;
    font-weight: bold;
 }
-.tab:hover{background-color:#08a}
+.tab button:hover{background-color:#054}
+.tab2 button{
+   background-color: #aaf;
+   padding: 1px 9px 4px;
+   border: 2px solid #00f;
+   border-radius: 14px;
+   font-size: 20px;
+   font-weight: 520;
+}
+.tab2 button:hover{background-color:#00a}
 .setting{margin:40px 0}
 .setting .itemrow{
    text-align: center;
@@ -93,14 +101,14 @@ th,td{padding:0}
    font-weight: 500;
 }
 .setting button{
-   background-color: #aaf;
+   background-color: #caf;
    min-width: 80%;
    padding: 0 12px 4px;
-   border: 3px solid #00f;
+   border: 3px solid #60f;
    font-size: 40px;
    font-weight: 500;
 }
-.setting button:hover{background-color:#00a}
+.setting button:hover{background-color:#40a}
 .setting select{font-size:20px}
 .setting input[type="range"]{width:95%}
 #export{
