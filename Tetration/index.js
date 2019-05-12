@@ -1,13 +1,25 @@
 const Loop = ()=>{
    setTimeout(Loop,Game.UpdateInterval);
-   var digitarget=Min(Plus(Floor(Log(10,Game.MainNumber)),1),Min(Game.StdIllion,22)*3+3)
-   ,dt=(Date.now()-LastUpdate)*0.001;
+   var digit_=Min(Plus(Floor(Log(10,Game.MainNumber)),1),Min(Game.StdIllion,22)*3+3)
+   ,dt=(Date.now()-LastUpdate)*0.001
+   ,n;
    LastUpdate=Date.now();
+   if(n=Game.StdYllionAmount.length){
+      for(n=n-1;n--;){
+         Game.StdYllionAmount[n]=Plus(Game.StdYllionAmount[n],Times(Game.StdYllionProduce[n+1],dt))
+      }
+      Vue.set(Game.StdYllionAmount,0,Game.StdYllionAmount[0]);
+      if(Game.Digit.length>3){
+         Game.Digit4Residue=Plus(Game.Digit4Residue,Times(Game.StdYllionProduce[0],dt));
+         Vue.set(Game.Digit,3,Plus(Game.Digit[3],Floor(Game.Digit4Residue)));
+         Game.Digit4Residue=EqualQ(Floor(Game.Digit4Residue),Game.Digit4Residue)?0:Minus(Game.Digit4Residue,Floor(Game.Digit4Residue))
+      }
+   }
    Game.MainNumber=Plus(Game.MainNumber,Times(Game.TotalProduce,dt));
    if(Game.Stage<1&&LessQ(6,Game.MainNumber)) Game.Stage=1;
    if(Game.Stage<2&&LessQ(10,Game.MainNumber)) Game.Stage=2;
    if(Game.Stage<3&&LessQ(1e6,Game.MainNumber)) Game.Stage=3;
-   while(Game.Digit.length<digitarget) Game.Digit.push(0);
+   while(Game.Digit.length<digit_) Game.Digit.push(0);
    if(Game.AutoSave&&LastUpdate-LastSave>=Game.AutoSave){
       LastSave=LastUpdate;
       Save(0)
@@ -24,11 +36,16 @@ var LastUpdate=Date.now()
       ,ExportBox:false
       ,ExportContent:''
       ,Stage:0
+      ,Yllions:0
       ,MainNumber:1
       ,CurrentTab:0
+      ,DigitTab:0
       ,Digit:[0]
       ,BulkDigitFrac:[]
       ,StdIllion:1
+      ,Digit4Residue:0
+      ,StdYllion:[]
+      ,StdYllionAmount:[]
    }
    ,computed:{
       ShowMainNumber:function(){return DisplayHi(this.MainNumber)}
@@ -52,7 +69,7 @@ var LastUpdate=Date.now()
          return v
       }
       ,ShowDigitCost:function(){return this.DigitCost.map(DisplayDec)}
-      ,CantDigitQ:function(){return this.DigitCost.map(x=>LessQ(this.MainNumber,x))}
+      ,CantDigit:function(){return this.DigitCost.map(x=>LessQ(this.MainNumber,x))}
       ,DigitIdx:function(){
          var v=[],n,len=this.Digit.length;
          for(n=0;n<len;++n) v.push(Toth(n+1));
@@ -60,7 +77,7 @@ var LastUpdate=Date.now()
       }
       ,DigitProduce:function(){
          var v=[],n,len=this.Digit.length;
-         for(n=0;n<len;++n) v.push(Times(n+1,Power(2,Plus(this.StdIllion,-1))));
+         for(n=0;n<len;++n) v.push(Times(n+1,Power(11,Plus(this.StdIllion,-1))));
          return v
       }
       ,ShowDigitProduce:function(){return this.DigitProduce.map(Display)}
@@ -69,6 +86,26 @@ var LastUpdate=Date.now()
       ,ShowStdIllionCost:function(){return DisplayDec(this.StdIllionCost)}
       ,CantStdIllion:function(){return LessQ(this.Digits[0],this.StdIllionCost)}
       ,UnlockDigits:function(){return LessQ(this.StdIllion,22)?'unlock 3 more digits and ':''}
+      ,StdYllionName:function(){
+         var v=['4th digit'],n,len=this.StdYllion.length;//With offset; 1:ten,2:hundred,3:myriad,4:myllion,...
+         for(n=0;n<len;++n) v.push(ConvertStdYllion(n));
+         return v
+      }
+      ,StdYllionNAme:function(){return this.StdYllionName.map(UpperFirst)}
+      ,ShowStdYllionAmount:function(){return this.StdYllionAmount.map(Show(6,0,1e13))}
+      ,StdYllionStep:function(){
+         var v=[],n,len=this.StdYllion.length-2;
+         for(n=-2;n<len;++n) v.push(Power(2,n));
+         return v
+      }
+      ,StdYllionAction:function(){return this.StdYllion.map((x,n)=>x?'Make '+this.StdYllionName[n+1]+'s '+Display(this.StdYllionStep[n])+' times stronger':'Get '+this.StdYllionName[n+1])}
+      ,StdYllionCost:function(){return this.StdYllion.map((x,n)=>Natural(Power(10,Times(Power(2,n+1),Plus(x,0.5)))))}
+      ,ShowStdYllionCost:function(){return this.StdYllionCost.map(DisplayDec)}
+      ,CantStdYllion:function(){return this.StdYllionCost.map(x=>LessQ(this.Digit[4],x))}
+      ,StdYllionSingleProduce:function(){return this.StdYllion.map((x,n)=>Power(Plus(this.StdYllionStep[n],1),x&&Plus(x,-1)))}
+      ,ShowStdYllionSingleProduce:function(){return this.StdYllionSingleProduce.map(Display)}
+      ,StdYllionProduce:function(){return this.StdYllionAmount.map((x,n)=>Times(x,this.StdYllionSingleProduce[n]))}
+      ,ShowStdYllionProduce:function(){return this.StdYllionProduce.map(Display)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -89,11 +126,16 @@ var LastUpdate=Date.now()
          if(!confirm('Unlike other resets, you will lose all the process WITHOUT ANY BONUS OR REWARD.\nDo you really want a FULL reset?')) return;
          LastGame=Date.now();
          this.Stage=0;
+         this.Yllions=0;
          this.MainNumber=1;
          this.CurrentTab=0;
+         this.DigitTab=0;
          this.Digit=[0];
          this.BulkDigitFrac=[];
-         this.StdIllion=1
+         this.StdIllion=1;
+         this.Digit4Residue=0;
+         this.StdYllion=[];
+         this.StdYllionAmount=[]
       }
       ,BuyDigit:function(n){
          var i;
@@ -141,6 +183,25 @@ var LastUpdate=Date.now()
          this.MainNumber=1;
          this.Digit=[0];
          this.StdIllion=Plus(this.StdIllion,1)
+      }
+      ,BuyStdYllion:function(n){
+         Vue.set(this.Digit,4,Minus(this.Digit[4],this.StdYllionCost[n]));
+         if(this.StdYllion[n]){
+            Vue.set(this.StdYllion,n,Plus(this.StdYllion[n],1))
+         }else{
+            Vue.set(this.StdYllion,n,1);
+            Vue.set(this.StdYllionAmount,n,1)
+         }
+      }
+   }
+   ,watch:{
+      Digit:function(v){
+         var yllion_=Floor(Plus(Log(2,Log(10,v[4])),1.0000000000000002));
+         if(!(this.Yllions&1)&&Sign(yllion_)>0) this.Yllions^=1;
+         while(this.StdYllion.length<yllion_){
+            this.StdYllion.push(0);
+            this.StdYllionAmount.push(0)
+         }
       }
    }
 });
@@ -216,10 +277,10 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
       }
    }
 }
-,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]))
+,Save = n=>localStorage.setItem(''+n,ToStream([LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage,Game.Yllions],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion,Game.Digit4Residue,Game.StdYllion,Game.StdYllionAmount]]))
 ,Load = n=>{
    var stream=localStorage.getItem(''+n);
-   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion]]=FromStream(stream)
+   if(stream) [LastUpdate,[Game.UpdateInterval,Game.AutoSave],[LastGame],[Game.Stage,Game.Yllions],Game.MainNumber,[Game.Digit,Game.BulkDigitFrac,Game.StdIllion,Game.Digit4Residue,Game.StdYllion,Game.StdYllionAmount]]=FromStream(stream)
 };
 //Initialization
 Load(0);
