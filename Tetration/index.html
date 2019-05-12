@@ -46,8 +46,8 @@
          </div>
       </div>
       <div v-if="DigitTab==1">
-         You have 5th digit counted <span style="font-size:50px">{{Digit[4]}}</span><br>
-         Normal -yllions cost 5th digit.
+         You have counted <span style="font-size:50px">{{Digit[4]}}</span> 5th digits.<br>
+         Normal -yllions cost 5th digits.
          <button @mousedown="BuyMaxStdYllion()">Buy Max</button><br>
          <div class="itemrow" v-for="(yn,n) in StdYllion">
             <div class="itemrow4">{{StdYllionNAme[n+1]}}s: {{ShowStdYllionAmount[n]}}</div>
