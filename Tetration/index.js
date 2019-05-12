@@ -186,12 +186,8 @@ var LastUpdate=Date.now()
       }
       ,BuyStdYllion:function(n){
          Vue.set(this.Digit,4,Minus(this.Digit[4],this.StdYllionCost[n]));
-         if(this.StdYllion[n]){
-            Vue.set(this.StdYllion,n,Plus(this.StdYllion[n],1))
-         }else{
-            Vue.set(this.StdYllion,n,1);
-            Vue.set(this.StdYllionAmount,n,1)
-         }
+         if(!this.StdYllionAmount[n]) Vue.set(this.StdYllionAmount,n,1);
+         Vue.set(this.StdYllion,n,Plus(this.StdYllion[n],1))
       }
    }
    ,watch:{
