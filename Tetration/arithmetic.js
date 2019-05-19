@@ -124,14 +124,28 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,Log = (x,y)=> Times(Ln(y),Recip(Ln(x)))
 ,Power1 = (x,y)=>{//x^y-1 should be consider specially where x^y very close to 1
    var temp=Power(x,y);
-   if(Number.isFinite(temp)&&x!==1&&y!==0&&Sign(x)>0&&temp<1.000001&&temp>0.999999){
+   if(Number.isFinite(temp)&&x!==1&&y!==0&&Sign(x)>0&&temp<1.0018&&temp>0.9982){
       temp=Times(Ln(x),y);
-      return Plus(temp,Times(Times(temp,temp),0.5))
+      return Times(Plus(Times(Plus(Times(Plus(Times(temp,0.25),1),Times(temp,0.333333333333333333)),1),Times(temp,0.5)),1),temp)
    }
    return Plus(temp,-1)
 }
+,Exp1 = x=> LessQ(Abs(x),0.0018)?typeof x=='object'?x:Times(Plus(Times(Plus(Times(Plus(Times(x,0.25),1),Times(x,0.333333333333333333)),1),Times(x,0.5)),1),x):Plus(Exp(x),-1)
+,Ln1 = x=> LessQ(Abs(x),0.003)?typeof x=='object'?x:Times(Plus(Times(Plus(Times(Plus(Times(Plus(Times(0.2,x),-0.25),x),0.333333333333333333),x),-0.5),x),1),x):Ln(Plus(x,1)) //ln(1+x) should be consider specially where x very close to 0
 ,Floor = x=> typeof x=='object'?x.recip?x.neg?-1:0:x:Math.floor(x)
 ,Natural = x=> Sign(x)<0||x.recip?0:Number.isFinite(x)?Math.round(x):x
+,BinSolve = (f,y,x1,x2)=>{//Assuming f is unary and increasing
+   var x=Times(Plus(x1,x2),0.5),fx=f(x);
+   return EqualQ(x,x1)||EqualQ(x,x2)||EqualQ(fx,y)?x:LessQ(fx,y)?BinSolve(f,y,x,x2):BinSolve(f,y,x1,x)
+}
+,BinNaturalSolve = (f,y,x1,x2)=>{
+   var x=Natural(Times(Plus(x1,x2),0.5)),fx=f(x);
+   return EqualQ(Neg(Floor(Neg(x1))),Floor(x2))||EqualQ(fx,y)?x:LessQ(fx,y)?BinNaturalSolve(f,y,x,x2):BinNaturalSolve(f,y,x1,x)
+}
+,BinFloorSolve = (f,y,x1,x2)=>{
+   var x=Floor(Times(Plus(x1,x2),0.5)),fx=f(x);
+   return GreaterEqualQ(x1,x)||GreaterEqualQ(y,fx)&&LessQ(y,f(Plus(x,1)))?x:LessQ(fx,y)?BinFloorSolve(f,y,x,x2):BinFloorSolve(f,y,x1,x)
+}
 //Library of googological functions, mainly on natural numbers
 ,IteratedPower = (base,height,tailend)=>{//base^base^...base^tailend with height base's
    var b = Natural(height);//Naturalize height, but base and tailend could be non-natural
@@ -159,4 +173,35 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
       return Exp(Times(n,Plus(Ln(n),-1)))
    }
 })()
+,Simplex = (m,n)=>{// Simplex(m,n) = C(m+n,m) = (m+n)!/(m!*n!)
+   var i,product=1;
+   if(LessQ(n,m)) return Simplex(n,m);
+   if(LessQ(m,17)){
+      for(i=0;++i<=m;) product=Times(product,Plus(n,i));
+      return Natural(Divide(product,Factorial(m)))
+   }
+   if(LessQ(n,171)) return Natural(Divide(Divide(Factorial(Plus(m,n)),Factorial(n)),Factorial(m)));
+   return Natural(Exp(Plus(Plus(Times(m,Ln1(Divide(n,m))),Times(n,Ln1(Divide(m,n)))),
+      Plus(Plus(Times(0.5,Ln(Plus(Recip(n),Recip(m)))),-0.918938533204672742),
+      Plus(Plus(Times(0.0833333333333333333,Minus(Recip(Plus(m,n)),Plus(Recip(n),Recip(m)))),
+      Times(-0.00277777777777777778,Minus(Power(Plus(m,n),-3),Plus(Power(n,-3),Power(m,-3))))),
+      Times(0.00079365079365079365,Minus(Power(Plus(m,n),-5),Plus(Power(n,-5),Power(m,-5)))))))))
+}
+,SimpSum = (m,n,dn)=>{// SimpSum(m,n,dn) = Simplex(m,n+1) + Simplex(m,n+2) + ... + Simplex(m,n+dn)
+   var i,sum=0,sm,sd;
+   if(LessQ(dn,17)){
+      for(i=0;++i<=dn;) sum=Plus(sum,Simplex(m,Plus(n,i)));
+      return sum
+   }
+   i=Plus(m,1);
+   if(LessQ(Plus(n,n),Times(m,dn))) return Minus(Simplex(i,Plus(n,dn)),Simplex(i,n));
+   sm=Plus(n,i);
+   sd=Plus(n,dn);
+   sum=Plus(sm,dn);
+   return Times(Exp1(Plus(Minus(Plus(Times(i,Ln1(Divide(dn,sm))),Times(dn,Ln1(Divide(i,sd)))),
+      Times(Plus(n,0.5),Ln1(Divide(Times(i,dn),Times(sum,n))))),
+      Plus(Times(0.0833333333333333333,Plus(Minus(Recip(sum),Recip(sm)),Minus(Recip(n),Recip(sd)))),
+      Times(-0.00277777777777777778,Plus(Minus(Power(sum,-3),Power(sm,-3)),Minus(Power(n,-3),Power(sd,-3))))))
+      ),Simplex(i,n))
+}
 //TODO: More googological functions may join
