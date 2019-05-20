@@ -176,6 +176,7 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,Simplex = (m,n)=>{// Simplex(m,n) = C(m+n,m) = (m+n)!/(m!*n!)
    var i,product=1;
    if(LessQ(n,m)) return Simplex(n,m);
+   if(Sign(m)<0) return 0;
    if(LessQ(m,17)){
       for(i=0;++i<=m;) product=Times(product,Plus(n,i));
       return Natural(Divide(product,Factorial(m)))
@@ -187,21 +188,20 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
       Times(-0.00277777777777777778,Minus(Power(Plus(m,n),-3),Plus(Power(n,-3),Power(m,-3))))),
       Times(0.00079365079365079365,Minus(Power(Plus(m,n),-5),Plus(Power(n,-5),Power(m,-5)))))))))
 }
-,SimpSum = (m,n,dn)=>{// SimpSum(m,n,dn) = Simplex(m,n+1) + Simplex(m,n+2) + ... + Simplex(m,n+dn)
-   var i,sum=0,sm,sd;
+,SimpDiff = (m,n,dn)=>{// SimpDiff(m,n,dn) = Simplex(m-1,n+1) + Simplex(m-1,n+2) + ... + Simplex(m-1,n+dn)
+   var i,sum=0,sm,sd,m1=Plus(m,-1);
    if(LessQ(dn,17)){
-      for(i=0;++i<=dn;) sum=Plus(sum,Simplex(m,Plus(n,i)));
+      for(i=0;++i<=dn;) sum=Plus(sum,Simplex(m1,Plus(n,i)));
       return sum
    }
-   i=Plus(m,1);
-   if(LessQ(Plus(n,n),Times(m,dn))) return Minus(Simplex(i,Plus(n,dn)),Simplex(i,n));
-   sm=Plus(n,i);
+   if(LessQ(Plus(n,n),Times(m,dn))) return Minus(Simplex(m,Plus(n,dn)),Simplex(m,n));
+   sm=Plus(n,m);
    sd=Plus(n,dn);
    sum=Plus(sm,dn);
-   return Times(Exp1(Plus(Minus(Plus(Times(i,Ln1(Divide(dn,sm))),Times(dn,Ln1(Divide(i,sd)))),
-      Times(Plus(n,0.5),Ln1(Divide(Times(i,dn),Times(sum,n))))),
+   return Times(Exp1(Plus(Minus(Plus(Times(m,Ln1(Divide(dn,sm))),Times(dn,Ln1(Divide(m,sd)))),
+      Times(Plus(n,0.5),Ln1(Divide(Times(m,dn),Times(sum,n))))),
       Plus(Times(0.0833333333333333333,Plus(Minus(Recip(sum),Recip(sm)),Minus(Recip(n),Recip(sd)))),
       Times(-0.00277777777777777778,Plus(Minus(Power(sum,-3),Power(sm,-3)),Minus(Power(n,-3),Power(sd,-3))))))
-      ),Simplex(i,n))
+      ),Simplex(m,n))
 }
 //TODO: More googological functions may join
