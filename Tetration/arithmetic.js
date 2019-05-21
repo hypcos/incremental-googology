@@ -134,17 +134,27 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,Ln1 = x=> LessQ(Abs(x),0.003)?typeof x=='object'?x:Times(Plus(Times(Plus(Times(Plus(Times(Plus(Times(0.2,x),-0.25),x),0.333333333333333333),x),-0.5),x),1),x):Ln(Plus(x,1)) //ln(1+x) should be consider specially where x very close to 0
 ,Floor = x=> typeof x=='object'?x.recip?x.neg?-1:0:x:Math.floor(x)
 ,Natural = x=> Sign(x)<0||x.recip?0:Number.isFinite(x)?Math.round(x):x
-,BinSolve = (f,y,x1,x2)=>{//Assuming f is unary and increasing
-   var x=Times(Plus(x1,x2),0.5),fx=f(x);
-   return EqualQ(x,x1)||EqualQ(x,x2)||EqualQ(fx,y)?x:LessQ(fx,y)?BinSolve(f,y,x,x2):BinSolve(f,y,x1,x)
+,BinSolve = (f,y,a,b)=>{//Assuming f is unary and increasing
+   var x1=a,x2=b,x=Times(Plus(x1,x2),0.5),fx;
+   while(!(EqualQ(x1,x)||EqualQ(x2,x))){
+      fx=f(x);
+      if(EqualQ(y,fx)) return x;
+      if(LessQ(y,fx)) x2=x;
+      else x1=x;
+      x=Times(Plus(x1,x2),0.5)
+   }
+   return x
 }
-,BinNaturalSolve = (f,y,x1,x2)=>{
-   var x=Natural(Times(Plus(x1,x2),0.5)),fx=f(x);
-   return EqualQ(Neg(Floor(Neg(x1))),Floor(x2))||EqualQ(fx,y)?x:LessQ(fx,y)?BinNaturalSolve(f,y,x,x2):BinNaturalSolve(f,y,x1,x)
-}
-,BinFloorSolve = (f,y,x1,x2)=>{
-   var x=Floor(Times(Plus(x1,x2),0.5)),fx=f(x);
-   return GreaterEqualQ(x1,x)||GreaterEqualQ(y,fx)&&LessQ(y,f(Plus(x,1)))?x:LessQ(fx,y)?BinFloorSolve(f,y,x,x2):BinFloorSolve(f,y,x1,x)
+,BinFloorSolve = (f,y,a,b)=>{
+   var x1=a,x2=b,x=Floor(Times(Plus(x1,x2),0.5)),fx;
+   while(!(EqualQ(Floor(x1),x)||EqualQ(Floor(x2),x))){
+      fx=f(x);
+      if(EqualQ(y,fx)) return x;
+      if(LessQ(y,fx)) x2=x;
+      else x1=x;
+      x=Floor(Times(Plus(x1,x2),0.5))
+   }
+   return x1
 }
 //Library of googological functions, mainly on natural numbers
 ,IteratedPower = (base,height,tailend)=>{//base^base^...base^tailend with height base's
