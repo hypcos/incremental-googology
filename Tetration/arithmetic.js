@@ -146,8 +146,8 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
    return x
 }
 ,BinFloorSolve = (f,y,a,b)=>{
-   var x1=a,x2=b,x=Floor(Times(Plus(x1,x2),0.5)),fx;
-   while(!(EqualQ(Floor(x1),x)||EqualQ(Floor(x2),x))){
+   var x1=Floor(a),x2=Floor(b),x=Floor(Times(Plus(x1,x2),0.5)),fx;
+   while(!(EqualQ(x1,x)||EqualQ(x2,x))){
       fx=f(x);
       if(EqualQ(y,fx)) return x;
       if(LessQ(y,fx)) x2=x;
