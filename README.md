@@ -15,12 +15,12 @@ where n may be 2<sup>53</sup>-1 or 2<sup>1024</sup>-2<sup>971</sup> (or other Nu
 
 Every separated folder can extend to a web game.
 ## Current State
-The repository started with folder "Tetration", with concept: "digits" and standard "-illions".
+The repository started with folder "Tetration", now at 2nd version, with only item "one" to "ten".
 It has no statistics or achievements yet.
 
 The game is still unplayable.
-## Main Difficulty
-The main difficulty of Incremental Googology is the googology itself - numbers are large.
+## Main Difficulty 1
+First main difficulty of Incremental Googology is the googology itself - numbers are large.
 
 To illustrate, googolisms (i.e. numbers relevant to googology) are compared with the physical universe.
 The entropy of observed universe is approximately 10<sup>120</sup> times of Boltzmann constant,
@@ -81,3 +81,22 @@ Instead, there are some representation system with "flexible" precision.
 For example, [fast-growing hierarchy](https://googology.wikia.com/wiki/Fast-growing_hierarchy)
 may express very large numbers in compact form, and also distinguish very large n and n+1.
 One may also combine several systems into one, and express numbers in compact form if any of them can.
+## Main Difficulty 2
+Second difficulty of Incremental Googology is the numeric design for a playable gaming process.
+
+Ideally, each "stage" of an incremental game should last approximate similar time,
+with some fluctuation, after which a next concept or operation comes.
+Also, the balance between "idle" and "active" playing mode counts.
+So it require some growing curve of "costs of items" and "effects of items".
+
+But in Incremental Googology, numbers, functions and notations, should fit special googological meaning.
+The occurences of items should also fit the logic of googology,
+e.g. "superfactorial" items should come after factorial items, which comes after multiplication items.
+With this kind of considering, only a small fraction of "source numbers" (or "source functions", "source notations")
+can be used in Incremental Googology.
+
+Thus, the way of numeric design cannot be changing the numbers as usual,
+but changing how the source googologisms combine.
+When tuning, the usual way is to change some numbers, so it requires small changes on codes,
+but the Incremental Googology way requires reconstruction of how sources combine,
+which need large changes on codes, so it is more difficult.
