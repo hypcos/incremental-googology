@@ -1,3 +1,4 @@
+.left{text-align:left}
 body{
    background-color: #555;
    color: #fff;
@@ -22,13 +23,12 @@ button{
    cursor: pointer;
    transition: .2s;
 }
-button:hover{
+button:hover:not(.cell){
    background-color: #052;
    color: #fff;
 }
 button[disabled]{
    background-color: #aaa;
-   color: #000;
    cursor: not-allowed;
 }
 button:focus,select:focus{outline:none}
@@ -43,6 +43,7 @@ select{
    font-family: inherit;
 }
 option{padding: inherit}
+input[type="range"]{width:95%}
 table,th,td{border:none}
 table{
    min-width: 100%;
@@ -50,6 +51,22 @@ table{
    border-collapse: collapse;
 }
 th,td{padding:0}
+.cell{
+   height: 152px;
+   width: 228px;
+   padding: 4px;
+   margin: 0;
+   vertical-align:text-top;
+}
+.cell .strong{
+   font-size: 15px;
+   font-weight: bold;
+}
+.celldark{background-color:#5f9}
+.cell1{
+   background-color: #cfa;
+   border: 1px solid #6f0;
+}
 .itemrow{
    display: flex;
    align-items: center;
@@ -58,7 +75,6 @@ th,td{padding:0}
    font-size: 15px;
 }
 .itemrow4{width: 25%}
-.itemrow5{width: 20%}
 .caution{
    color: #f55;
    font-size: 15px;
@@ -110,7 +126,6 @@ th,td{padding:0}
 }
 .setting button:hover{background-color:#40a}
 .setting select{font-size:20px}
-.setting input[type="range"]{width:95%}
 #export{
    background-color: #555;
    position: fixed;

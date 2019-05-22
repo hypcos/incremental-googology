@@ -30,17 +30,13 @@ const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work f
       return Math.abs(x)>=lo?x.toPrecision(precision).replace('+',''):x.toFixed(fixed)
    }
 }
-,DisplayHi = Show(12,3,1e14)
-,DisplayHiInt = Show(12,0,1e13)
-,Display = Show(6,3,1e13)
-,DisplayDec = Show(6,1,1e13)
-,Toth = x=>{
+,Toth = (display,x)=>{
    var nx = Natural(x);
-   if(typeof nx=='object') return DisplayHiInt(nx)+'th';
+   if(typeof nx=='object') return display(nx)+'th';
    switch(nx%10){
-      case 1: return DisplayHiInt(nx)+(nx%100==11?'th':'st');
-      case 2: return DisplayHiInt(nx)+(nx%100==12?'th':'nd');
-      case 3: return DisplayHiInt(nx)+(nx%100==13?'th':'rd');
-      default: return DisplayHiInt(nx)+'th'
+      case 1: return display(nx)+(nx%100==11?'th':'st');
+      case 2: return display(nx)+(nx%100==12?'th':'nd');
+      case 3: return display(nx)+(nx%100==13?'th':'rd');
+      default: return display(nx)+'th'
    }
 }
