@@ -14,42 +14,21 @@
 <div id="game">Your number is
    <span style="font-size:50px">{{Show(12,MainNumber)}}</span><br>
    <div class="tab">
-      <button @mousedown="CurrentTab=-1">Options</button><button @mousedown="CurrentTab=0">Digits</button>
+      <button @mousedown="CurrentTab=-1">Options</button><button @mousedown="CurrentTab=0">Counting</button>
    </div>
    <div v-if="CurrentTab==0">
       Your number is gaining {{Show(11,Growth)}}/s
       <div class="left">
-         <button class="cell celldark" @mousedown="BUYFirstDigit()">
-            <span class="strong">1st Digit items</span><br>
-            Click this to bulk buy all items<br>
-            <input type="checkbox" v-model="RevFirstDigit" @mousedown.stop>Buying order: {{RevFirstDigit?'Higher to lower':'Lower to higher'}}
-         </button><button class="cell" :disabled="CantOne" @mousedown="BuyOne()" @dblclick="BulkOne()">
-            <span class="strong">One<br>{{ShowInt(9,One)}}</span><br>
-            Cost: {{ShowInt(9,OneCost)}}<br>
-            <input type="range" v-model.number="OneBulklevel" min="-25" max="0" step="0.125" @mousedown.stop @dblclick.stop><br>
-            Double click to spend {{ShowPercent(Math.exp(OneBulklevel)*100)}}%
-         </button><button class="cell" v-for="(x,n) in FirstDigit" :disabled="CantFirstDigit[n]" @mousedown="BuyFirstDigit(n)" @dblclick="BulkFirstDigit(n)">
-            <span class="strong">{{SingleDigitName[n+1]}}<br>{{ShowInt(9,x)}}</span><br>
-            {{SingleDigitName[n]}}s are {{Show(9,FirstDigitEff[n])}}× as effective<br>
-            Cost {{singleDigitName[n]}}s: {{ShowInt(9,FirstDigitCost[n])}}<br>
-            <input type="range" v-model.number="FirstDigitBulklevel[n]" min="-25" max="0" step="0.125" @mousedown.stop @dblclick.stop><br>
-            Double click to spend {{ShowPercent(Math.exp(FirstDigitBulklevel[n])*100)}}%
-         </button><button class="cell cell1" v-if="CanUnlockFirstDigit" :disabled="CantUnlockFirstDigit" @mousedown="UnlockFirstDigit()">
-            <span class="strong">Reset to unlock {{singleDigitName[MaxFirstDigit+1]}}</span><br>
-            Require {{singleDigitName[MaxFirstDigit]}}s: 40585
-         </button>
-      </div>
-      <div class="left">
-         <button class="cell celldark" @mousedown="BUYHigherDigit()">
-            <span class="strong">Higher Digit items</span><br>
-            Click this to bulk buy all items<br>
-            <input type="checkbox" v-model="RevHigherDigit" @mousedown.stop>Buying order: {{RevHigherDigit?'Higher to lower':'Lower to higher'}}
-         </button><button class="cell" :disabled="CantTen" @mousedown="BuyTen()" @dblclick="BulkTen()">
-            <span class="strong">2nd Digit: Ten<br>{{ShowInt(9,Ten)}}</span><br>
-            Ones are {{Show(9,TenEff)}}× as effective<br>
-            Cost: {{ShowInt(9,TenCost)}}<br>
-            <input type="range" v-model.number="TenBulklevel" min="-25" max="0" step="0.125" @mousedown.stop @dblclick.stop><br>
-            Double click to spend {{ShowPercent(Math.exp(TenBulklevel)*100)}}%
+         <button class="cell celldark" @mousedown="BUYCounting()">
+            <span class="strong">Counting</span><br>
+            Click here to bulk buy (double click) all items<br>
+            <input type="checkbox" v-model="RevCounting" @mousedown.stop>Buying order: {{RevCounting?'Higher to lower':'Lower to higher'}}
+         </button><button class="cell" v-for="(x,n) in Counting" :disabled="CantCounting[n]" @mousedown="BuyCounting(n)" @dblclick="BulkCounting(n)">
+            <span class="strong">{{ShortScaleName(n+1)}}<br>{{ShowInt(9,x)}}</span><br>
+            <span v-if="n">{{ShortScaleName(n)}}s are {{Show(9,CountingEff[n])}}× as effective<br></span>
+            Cost<span v-if="n"> {{shortScaleName(n)}}s</span>: {{ShowInt(9,CountingCost[n])}}<br>
+            <input type="range" v-model.number="CountingBulklevel[n]" min="-25" max="0" step="0.125" @mousedown.stop @dblclick.stop><br>
+            Double click to spend {{ShowPercent(Math.exp(CountingBulklevel[n])*100)}}%
          </button>
       </div>
    </div>
