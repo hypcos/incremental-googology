@@ -1,13 +1,10 @@
 const Loop = ()=>{
    setTimeout(Loop,v.UpdateInterval);
-   var digit_=Floor(Log(10,v.MainNumber))
-   ,dt=(Date.now()-LastUpdate)*0.001
-   ,n,temp;
+   var n
+   ,dt=(Date.now()-LastUpdate)*0.001;
    LastUpdate=Date.now();
-   for(temp=v.HigherDigitEff[0]||1,n=v.Teens.length;n--;) temp=Times(temp,v.TeensEff[n]);
-   v.TenEff=Plus(v.TenEff,Times(Times(v.Ten,temp),dt));
-   for(n=v.FirstDigit.length;n--;) v.FirstDigitEff[n]=Plus(v.FirstDigitEff[n],Times(Times(v.FirstDigit[n],Times(v.FirstDigitEff[n+1]||1,v.TysEff[n]||1)),dt));
-   Vue.set(v.FirstDigitEff,0,v.FirstDigitEff[0]);
+   for(n=v.Counting.length;--n;) v.CountingEff[n]=Plus(v.CountingEff[n],Times(Times(v.Counting[n],v.CountingEff[n+1]||1),dt));
+   Vue.set(v.CountingEff,0,v.CountingEff[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt));
    if(v.AutoSave&&LastUpdate-LastSave>=v.AutoSave){
       LastSave=LastUpdate;
@@ -19,38 +16,14 @@ const Loop = ()=>{
    ,AutoSave:5000
    ,ExportBox:false
    ,ExportContent:''
-   ,MainNumber:1
+   ,MainNumber:1.0001
    ,CurrentTab:0
-   ,RevFirstDigit:false
-   ,RevTeens:false
-   ,RevTys:false
-   ,RevHigherDigit:false
-   ,One:0
-   ,OneBought:0
-   ,OneBulklevel:0
-   ,FirstDigit:[]
-   ,FirstDigitBought:[]
-   ,FirstDigitEff:[]
-   ,FirstDigitBulklevel:[]
-   ,Teens:[]
-   ,TeensBought:[]
-   ,TeensEff:[]
-   ,TeensBulklevel:[]
-   ,Tys:[]
-   ,TysBought:[]
-   ,TysEff:[]
-   ,TysBulklevel:[]
-   ,Ten:0
-   ,TenBought:0
-   ,TenEff:1
-   ,TenBulklevel:0
-   ,HigherDigit:[]
-   ,HigherDigitEff:[]
-   ,HigherDigitBulklevel:[]
-   ,MaxFirstDigit:1
-   ,MaxTeen:0
-   ,MaxTy:0
-   ,MaxHigherDigit:0
+   ,RevCounting:0
+   ,Counting:[0]
+   ,CountingBought:[0]
+   ,CountingEff:[1]
+   ,KCounting:[195643523275200]
+   ,CountingBulklevel:[0]
 });
 var LastUpdate=Date.now()
 ,LastSave=Date.now()
@@ -59,21 +32,13 @@ var LastUpdate=Date.now()
    el:'#game'
    ,data:JSON.parse(InitialString)
    ,computed:{
-      Growth(){return Times(this.One,Times(this.TenEff,this.FirstDigitEff[0]||1))}
-      ,OneCost(){return Simplex(1,this.OneBought)}
-      ,CantOne(){return LessQ(this.MainNumber,this.OneCost)}
-      ,FirstDigitCost(){return this.FirstDigitBought.map((x,n)=>Simplex(n+1,Plus(x,1)))}
-      ,CantFirstDigit(){
-         var n,a=[LessQ(this.One,this.FirstDigitCost[0])];
-         for(n=this.FirstDigit.length;--n;) a[n]=LessQ(this.FirstDigit[n-1],this.FirstDigitCost[n]);
+      Growth(){return Times(this.Counting[0],this.CountingEff[1]||1)}
+      ,CountingCost(){return this.CountingBought.map((x,n)=>{var u=Plus(x,1);return Times(Plus(n+1,Divide(Times(u,u),this.KCounting[n])),u)})}
+      ,CantCounting(){
+         var n,a=[LessQ(this.MainNumber,this.CountingCost[0])];
+         for(n=this.Counting.length;--n;) a[n]=LessQ(this.Counting[n-1],this.CountingCost[n]);
          return a
       }
-      ,TenCost(){return Simplex(9,Plus(this.TenBought,1))}
-      ,CantTen(){return LessQ(this.MainNumber,this.TenCost)}
-      ,singleDigitName(){return _tier0}
-      ,SingleDigitName(){return _tier0.map(UpperFirst)}
-      ,CanUnlockFirstDigit(){return this.MaxFirstDigit<8}
-      ,CantUnlockFirstDigit(){return LessQ(this.FirstDigit[this.MaxFirstDigit-1]||0,40585)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -97,117 +62,54 @@ var LastUpdate=Date.now()
          Object.getOwnPropertyNames(init).map(x=>this[x]=init[x]);
          Save(0)
       }
-      ,Show(n,x){return Show(n,3,Math.pow(10,n+1))(x)}
-      ,ShowInt(n,x){return Show(n,0,Math.pow(10,n+1))(x)}
-      ,ShowPercent(x){return Math.abs(x)<0.009995?x.toExponential(2):x.toPrecision(3)}
-      ,BuyOne(){
-         this.MainNumber=Minus(this.MainNumber,this.OneCost);
-         this.One=Plus(this.One,1);
-         this.OneBought=Plus(this.OneBought,1)
+      ,shortScaleName:x=>ShortScaleName(x)
+      ,ShortScaleName:x=>UpperFirst(ShortScaleName(x))
+      ,Show:(n,x)=>Show(n,3,Math.pow(10,n+1))(x)
+      ,ShowInt:(n,x)=>Show(n,0,Math.pow(10,n+1))(x)
+      ,ShowPercent:x=>Math.abs(x)<0.009995?x.toExponential(2):x.toPrecision(3)
+      ,BuyCounting(n){
+         if(n) this.Counting[n-1]=Minus(this.Counting[n-1],this.CountingCost[n]);
+         else this.MainNumber=Minus(this.MainNumber,this.CountingCost[0]);
+         Vue.set(this.Counting,n,Plus(this.Counting[n],1));
+         Vue.set(this.CountingBought,n,Plus(this.CountingBought[n],1))
       }
-      ,BulkOne(){
-         var available=Times(this.MainNumber,Math.exp(this.OneBulklevel))
-         ,upper=Minus(Root(Times(Plus(available,Simplex(2,Plus(this.OneBought,-1))),Factorial(2)),2),Plus(this.OneBought,-1))
-         ,delta=BinFloorSolve(d=>SimpDiff(2,Plus(this.OneBought,-1),d),available,Natural(Times(Minus(upper,2),0.99999999)),upper);
-         this.MainNumber=Minus(this.MainNumber,SimpDiff(2,Plus(this.OneBought,-1),delta));
-         this.One=Plus(this.One,delta);
-         this.OneBought=Plus(this.OneBought,delta)
+      ,BulkCounting(n){
+         const n1=n+1
+         ,f=x=>{var u=Times(x,Plus(x,1));return Times(Plus(Times(n1,0.5),Times(0.25,Divide(u,this.KCounting[n]))),u)}
+         ,solve=Y=>{
+            var z,u,sq=Times(n1,n1);
+            if(LessQ(Y,Times(Times(0.00006,this.KCounting[n]),sq))){
+               z=Divide(Y,Times(sq,this.KCounting[n]));
+               u=Times(Divide(Plus(Y,Y),n1),Minus(1,Times(z,Minus(1,Plus(z,z)))))
+            }else{
+               u=Times(Minus(Power(Plus(sq,Times(4,Divide(Y,this.KCounting[n]))),0.5),n1),this.KCounting[n])
+            }
+            return Plus(Power(Plus(u,0.25),0.5),-0.5)
+         };
+         var available,delta;
+         available=Times(n?this.Counting[n-1]:this.MainNumber,Math.exp(this.CountingBulklevel[n]));
+         delta=Floor(Minus(solve(Plus(available,f(this.CountingBought[n]))),this.CountingBought[n]));
+         if(Sign(delta)<0) delta=0;
+         if(n) this.Counting[n-1]=Minus(this.Counting[n-1],Min(Minus(f(Plus(this.CountingBought[n],delta)),f(this.CountingBought[n])),available));
+         else this.MainNumber=Minus(this.MainNumber,Min(Minus(f(Plus(this.CountingBought[n],delta)),f(this.CountingBought[n])),available));
+         Vue.set(this.Counting,n,Plus(this.Counting[n],delta));
+         Vue.set(this.CountingBought,n,Plus(this.CountingBought[n],delta))
       }
-      ,BuyFirstDigit(n){
-         if(n) this.FirstDigit[n-1]=Minus(this.FirstDigit[n-1],this.FirstDigitCost[n]);
-         else this.One=Minus(this.One,this.FirstDigitCost[0]);
-         Vue.set(this.FirstDigit,n,Plus(this.FirstDigit[n],1));
-         Vue.set(this.FirstDigitBought,n,Plus(this.FirstDigitBought[n],1))
-      }
-      ,BulkFirstDigit(n){
-         var available,upper,delta;
-         if(n){
-            available=Times(this.FirstDigit[n-1],Math.exp(this.FirstDigitBulklevel[n]))
-            ,upper=Minus(Root(Times(Plus(available,Simplex(n+2,this.FirstDigitBought[n])),Factorial(n+2)),n+2),this.FirstDigitBought[n])
-            ,delta=BinFloorSolve(d=>SimpDiff(n+2,this.FirstDigitBought[n],d),available,Natural(Times(Minus(upper,n+2),0.99999999)),upper);
-            this.FirstDigit[n-1]=Minus(this.FirstDigit[n-1],SimpDiff(n+2,this.FirstDigitBought[n],delta));
-            Vue.set(this.FirstDigit,n,Plus(this.FirstDigit[n],delta));
-            Vue.set(this.FirstDigitBought,n,Plus(this.FirstDigitBought[n],delta))
-         }else{
-            available=Times(this.One,Math.exp(this.FirstDigitBulklevel[0]))
-            ,upper=Minus(Root(Times(Plus(available,Simplex(2,this.FirstDigitBought[0])),Factorial(2)),2),this.FirstDigitBought[0])
-            ,delta=BinFloorSolve(d=>SimpDiff(2,this.FirstDigitBought[0],d),available,Natural(Times(Minus(upper,2),0.99999999)),upper);
-            this.One=Minus(this.One,SimpDiff(2,this.FirstDigitBought[0],delta));
-            Vue.set(this.FirstDigit,0,Plus(this.FirstDigit[0],delta));
-            Vue.set(this.FirstDigitBought,0,Plus(this.FirstDigitBought[0],delta))
-         }
-      }
-      ,BuyTen(){
-         this.MainNumber=Minus(this.MainNumber,this.TenCost);
-         this.Ten=Plus(this.Ten,1);
-         this.TenBought=Plus(this.TenBought,1)
-      }
-      ,BulkTen(){
-         var available=Times(this.MainNumber,Math.exp(this.TenBulklevel))
-         ,upper=Minus(Root(Times(Plus(available,Simplex(10,this.TenBought)),Factorial(10)),10),this.TenBought)
-         ,delta=BinFloorSolve(d=>SimpDiff(10,this.TenBought,d),available,Natural(Times(Minus(upper,10),0.99999999)),upper);
-         this.MainNumber=Minus(this.MainNumber,SimpDiff(10,this.TenBought,delta));
-         this.Ten=Plus(this.Ten,delta);
-         this.TenBought=Plus(this.TenBought,delta)
-      }
-      ,BulkHigherDigit(n){}
-      ,BUYFirstDigit(){
+      ,BUYCounting(){
          var n;
-         if(this.RevFirstDigit){
-            for(n=this.FirstDigit.length;n--;) this.BulkFirstDigit(n);
-            this.BulkOne()
-         }else{
-            this.BulkOne();
-            for(n=0;n<this.FirstDigit.length;++n) this.BulkFirstDigit(n)
-         }
-      }
-      ,BUYHigherDigit(){
-         var n;
-         if(this.RevHigherDigit){
-            for(n=this.HigherDigit.length;n--;) this.BulkHigherDigit(n);
-            this.BulkTen()
-         }else{
-            this.BulkTen();
-            for(n=0;n<this.HigherDigit.length;++n) this.BulkHigherDigit(n)
-         }
-      }
-      ,UnlockFirstDigit(){
-         var init=JSON.parse(InitialString);
-         this.MainNumber=init.MainNumber;
-         this.One=init.One;
-         this.OneBought=init.OneBought;
-         this.FirstDigit=init.FirstDigit;
-         this.FirstDigitBought=init.FirstDigitBought;
-         this.FirstDigitEff=init.FirstDigitEff;
-         this.Teens=init.Teens;
-         this.TeensBought=init.TeensBought;
-         this.TeensEff=init.TeensEff;
-         this.Tys=init.Tys;
-         this.TysBought=init.TysBought;
-         this.TysEff=init.TysEff;
-         this.Ten=init.Ten;
-         this.TenBought=init.TenBought;
-         this.TenEff=init.TenEff;
-         this.HigherDigit=init.HigherDigit;
-         this.HigherDigitEff=init.HigherDigitEff;
-         this.MaxFirstDigit+=1
+         if(this.RevCounting) for(n=this.Counting.length;n--;) this.BulkCounting(n);
+         else for(n=0;n<this.Counting.length;++n) this.BulkCounting(n)
       }
    }
    ,watch:{
-      One(x){
-         if(this.FirstDigit.length||LessQ(x,2)) return;
-         this.FirstDigit[0]=0;
-         this.FirstDigitBought[0]=0;
-         this.FirstDigitEff[0]=1;
-         if(!this.FirstDigitBulklevel.hasOwnProperty(0)) this.FirstDigitBulklevel[0]=0
-      }
-      ,FirstDigit(a){
+      Counting(a){
          var l=a.length;
-         if(l>7||l>=this.MaxFirstDigit||!l||LessQ(a[l-1],l+2)) return;
+         if(LessQ(a[l-1],l+1)) return;
          a[l]=0;
-         this.FirstDigitBought[l]=0;
-         this.FirstDigitEff[l]=1;
-         if(!this.FirstDigitBulklevel.hasOwnProperty(l)) this.FirstDigitBulklevel[l]=0
+         this.CountingBought[l]=0;
+         this.CountingEff[l]=1;
+         this.KCounting[l]=195643523275200;
+         if(!this.CountingBulklevel.hasOwnProperty(l)) this.CountingBulklevel[l]=0;
       }
    }
 });
@@ -284,16 +186,13 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
    }
 }
 ,Save = n=>{
-   var rev=v.RevFirstDigit|v.RevTeens<<1|v.RevTys<<2|v.RevHigherDigit<<3;
-   localStorage.setItem(''+n,ToStream([LastUpdate,[v.UpdateInterval,v.AutoSave],[LastGame],[],v.MainNumber,[rev,v.One,v.OneBought,v.OneBulklevel,v.FirstDigit,v.FirstDigitBought,v.FirstDigitEff,v.FirstDigitBulklevel,v.Teens,v.TeensBought,v.TeensEff,v.TeensBulklevel,v.Tys,v.TysBought,v.TysEff,v.TysBulklevel,v.Ten,v.TenBought,v.TenEff,v.TenBulklevel,v.HigherDigit,v.HigherDigitEff,v.HigherDigitBulklevel,v.MaxFirstDigit,v.MaxTeen,v.MaxTy,v.MaxHigherDigit]]))
+   var rev=v.RevCounting;
+   localStorage.setItem(''+n,ToStream([LastUpdate,[v.UpdateInterval,v.AutoSave],[LastGame],[],v.MainNumber,[rev,v.Counting,v.CountingBought,v.CountingEff,v.KCounting,v.CountingBulklevel]]))
 }
 ,Load = n=>{
    var stream=localStorage.getItem(''+n),rev;
-   if(stream) [LastUpdate,[v.UpdateInterval,v.AutoSave],[LastGame],[],v.MainNumber,[rev,v.One,v.OneBought,v.OneBulklevel,v.FirstDigit,v.FirstDigitBought,v.FirstDigitEff,v.FirstDigitBulklevel,v.Teens,v.TeensBought,v.TeensEff,v.TeensBulklevel,v.Tys,v.TysBought,v.TysEff,v.TysBulklevel,v.Ten,v.TenBought,v.TenEff,v.TenBulklevel,v.HigherDigit,v.HigherDigitEff,v.HigherDigitBulklevel,v.MaxFirstDigit,v.MaxTeen,v.MaxTy,v.MaxHigherDigit]]=FromStream(stream)
-   v.RevFirstDigit=rev&1;
-   v.RevTeens=rev&2;
-   v.RevTys=rev&4;
-   v.RevHigherDigit=rev&8
+   if(stream) [LastUpdate,[v.UpdateInterval,v.AutoSave],[LastGame],[],v.MainNumber,[rev,v.Counting,v.CountingBought,v.CountingEff,v.KCounting,v.CountingBulklevel]]=FromStream(stream)
+   v.RevCounting=rev&1
 };
 //Initialization
 Load(0);
