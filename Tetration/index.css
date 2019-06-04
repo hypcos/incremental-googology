@@ -23,12 +23,13 @@ button{
    cursor: pointer;
    transition: .2s;
 }
-button:hover:not(.cell){
+button:hover{
    background-color: #052;
    color: #fff;
 }
 button[disabled]{
    background-color: #aaa;
+   color: #000;
    cursor: not-allowed;
 }
 button:focus,select:focus{outline:none}
@@ -43,7 +44,10 @@ select{
    font-family: inherit;
 }
 option{padding: inherit}
-input[type="range"]{width:95%}
+input[type="range"]{
+   height:12px;
+   width:95%
+}
 table,th,td{border:none}
 table{
    min-width: 100%;
@@ -52,8 +56,8 @@ table{
 }
 th,td{padding:0}
 .cell{
-   height: 152px;
-   width: 228px;
+   height: 172px;
+   width: 172px;
    padding: 4px;
    margin: 0;
    vertical-align:text-top;
@@ -66,6 +70,21 @@ th,td{padding:0}
 .cell1{
    background-color: #cfa;
    border: 1px solid #6f0;
+}
+.cell .bulkbuy{
+   background-color: transparent;
+   color: #60f;
+   padding: 0;
+   border: none;
+   border-radius: 0;
+   margin: 0;
+   font-size: 18px;
+   font-weight: 600;
+   text-shadow: 0 -1px 3px;
+}
+.cell .bulkbuy[disabled]{
+   color: #caf;
+   text-shadow: none;
 }
 .itemrow{
    display: flex;
@@ -110,13 +129,13 @@ th,td{padding:0}
    font-weight: 520;
 }
 .tab2 button:hover{background-color:#00a}
-.setting{margin:40px 0}
-.setting .itemrow{
+#setting{margin:40px 0}
+#setting .itemrow{
    text-align: center;
    font-size: 20px;
    font-weight: 500;
 }
-.setting button{
+#setting button{
    background-color: #caf;
    min-width: 80%;
    padding: 0 12px 4px;
@@ -124,8 +143,8 @@ th,td{padding:0}
    font-size: 40px;
    font-weight: 500;
 }
-.setting button:hover{background-color:#40a}
-.setting select{font-size:20px}
+#setting button:hover{background-color:#40a}
+#setting select{font-size:20px}
 #export{
    background-color: #555;
    position: fixed;
