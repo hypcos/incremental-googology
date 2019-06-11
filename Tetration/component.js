@@ -1,3 +1,4 @@
+'use strict';
 const Pointer = a=>{
    var n,l=a.length-1,pointer=v;
    for(n=0;n<l;++n) pointer=pointer[a[n]];
