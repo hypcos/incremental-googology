@@ -1,3 +1,4 @@
+'use strict';
 const Show = (precision,fixed,expo)=>{//Only show numbers "large" enough, work for fixed<308<expo and 10^precision<expo
    var lo = Math.pow(10,precision-fixed);
    return x=>{
