@@ -6,6 +6,7 @@ Normal form:
    2. Otherwise: {neg,recip,val,pt} with ln(MAX_VALUE) < val <= MAX_VALUE and pt>0
 */
 //Note: other .js files in "Tetration" folder use functions from this file
+'use strict';
 const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,RecipMaxValue = 1/Number.MAX_VALUE
 ,Normal = x=>{
