@@ -320,7 +320,7 @@ Load(0);
 {
    let DeltaT=(Date.now()-LastUpdate)*0.001;
    LastUpdate=Date.now();
-   let n=DeltaT<1000?Math.ceil(DeltaT):1000
+   let n=Math.ceil(Math.sqrt(DeltaT*3))
    ,dt=DeltaT/n;
    while(n--) Grow(dt);
 }
