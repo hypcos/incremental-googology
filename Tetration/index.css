@@ -16,16 +16,11 @@ button{
    padding: 4px 9px;
    border: 1px solid #0f6;
    border-radius: 10px;
-   margin: 2px;
+   margin: 2px 0;
    text-align: center;
    font-size: 12px;
    font-family: inherit;
    cursor: pointer;
-   transition: .2s;
-}
-button:hover{
-   background-color: #052;
-   color: #fff;
 }
 button[disabled]{
    background-color: #aaa;
@@ -62,10 +57,6 @@ th,td{padding:0}
    margin: 0;
    vertical-align:text-top;
 }
-.cell .strong{
-   font-size: 15px;
-   font-weight: bold;
-}
 .celldark{background-color:#5f9}
 .cell1{
    background-color: #cfa;
@@ -100,7 +91,26 @@ th,td{padding:0}
    font-weight: bold;
 }
 .caution:before{content:'Caution: '}
+.showtab,#setting button:hover{color:#fff}
 /*Special items*/
+.tab button{
+   background-color: #afe;
+   padding: 0 12px 4px;
+   border: 2px solid #0fc;
+   border-radius: 20px;
+   font-size: 32px;
+   font-weight: bold;
+}
+.tab button.showtab{background-color:#054}
+.tab2 button{
+   background-color: #aaf;
+   padding: 1px 9px 4px;
+   border: 2px solid #00f;
+   border-radius: 14px;
+   font-size: 20px;
+   font-weight: 520;
+}
+.tab2 button.showtab{background-color:#00a}
 #loading{
    background-color: #555;
    position: fixed;
@@ -111,24 +121,6 @@ th,td{padding:0}
    width: 100%;
    font-size: 80px;
 }
-.tab button{
-   background-color: #afe;
-   padding: 0 12px 4px;
-   border: 2px solid #0fc;
-   border-radius: 20px;
-   font-size: 32px;
-   font-weight: bold;
-}
-.tab button:hover{background-color:#054}
-.tab2 button{
-   background-color: #aaf;
-   padding: 1px 9px 4px;
-   border: 2px solid #00f;
-   border-radius: 14px;
-   font-size: 20px;
-   font-weight: 520;
-}
-.tab2 button:hover{background-color:#00a}
 #setting{margin:40px 0}
 #setting .itemrow{
    text-align: center;
@@ -142,6 +134,7 @@ th,td{padding:0}
    border: 3px solid #60f;
    font-size: 40px;
    font-weight: 500;
+   transition: .2s;
 }
 #setting button:hover{background-color:#40a}
 #setting select{font-size:20px}
