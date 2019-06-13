@@ -1,3 +1,4 @@
+'use strict';
 /*
 Encoding: {neg,recip,val,pt} = (neg?-1:1)*(exp(exp(...exp(val)...)))^(recip?-1:1) with pt exp's
 Normal form:
@@ -6,7 +7,6 @@ Normal form:
    2. Otherwise: {neg,recip,val,pt} with ln(MAX_VALUE) < val <= MAX_VALUE and pt>0
 */
 //Note: other .js files in "Tetration" folder use functions from this file
-'use strict';
 const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,RecipMaxValue = 1/Number.MAX_VALUE
 ,Normal = x=>{
@@ -22,13 +22,14 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,EqualQ = (x,y)=> typeof x=='object' ? x.neg===y.neg&&x.recip===y.recip&&x.val===y.val&&x.pt===y.pt : x===y
 ,LessQ = (x,y)=>{
    var x01,y01;// {true,false,?,?}:0, {true,true,?,?}:1, {false,true,?,?}:2, {false,false,?,?}:3
+   if(isNaN(x)||isNaN(y)) return false;
    if(typeof x=='object'){
       x01 = x.recip? x.neg?1:2 : x.neg?0:3;
       if(typeof y=='object'){
          y01 = y.recip? y.neg?1:2 : y.neg?0:3;
          return x01<y01 || x01==y01 && (x01&1 ? x.pt<y.pt||x.pt===y.pt&&x.val<y.val : x.pt>y.pt||x.pt===y.pt&&x.val>y.val)
       }else{
-         y01 = Number.isFinite(y) ? y? y<0?0.5:2.5 : 1.5 : y<0?-1:4;//NaN is treated as Infinity
+         y01 = Number.isFinite(y) ? y? y<0?0.5:2.5 : 1.5 : y<0?-1:4;
          return x01<y01
       }
    }else{
@@ -42,10 +43,10 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
    }
 }
 ,GreaterQ = (x,y)=> LessQ(y,x)
-,LessEqualQ = (x,y)=> !GreaterQ(x,y)
-,GreaterEqualQ = (x,y)=> !LessQ(x,y)
-,Min = (x,y)=> LessQ(x,y)?x:y
-,Max = (x,y)=> LessQ(x,y)?y:x
+,LessEqualQ = (x,y)=> LessQ(x,y)||EqualQ(x,y)
+,GreaterEqualQ = (x,y)=> LessQ(y,x)||EqualQ(x,y)
+,Min = (x,y)=> LessQ(x,y)||isNaN(x)?x:y
+,Max = (x,y)=> LessQ(x,y)||isNaN(y)?y:x
 ,Exp = x=>{//If input is normalized, it does not change Object into Number
    var abx;
    if(typeof x=='object') return x.recip? 1 : ({neg:false,recip:x.neg,val:x.val,pt:x.pt+1});//No need of Normal
@@ -109,8 +110,6 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 }
 ,Divide = (x,y)=> Times(x,Recip(y))
 ,Power = (x,y)=>{
-   var res;
-   if(Number.isFinite(x)&&Number.isFinite(y)&&(res=Math.pow(x,y))&&Number.isFinite(res)) return Normal(res);
    if(Sign(x)<0){
       if(Number.isFinite(y)){
          if(y!==Math.round(y)) return NaN;
