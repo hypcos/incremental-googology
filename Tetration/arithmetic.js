@@ -22,7 +22,7 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,EqualQ = (x,y)=> typeof x=='object' ? x.neg===y.neg&&x.recip===y.recip&&x.val===y.val&&x.pt===y.pt : x===y
 ,LessQ = (x,y)=>{
    var x01,y01;// {true,false,?,?}:0, {true,true,?,?}:1, {false,true,?,?}:2, {false,false,?,?}:3
-   if(isNaN(x)||isNaN(y)) return false;
+   if(Number.isNaN(x)||Number.isNaN(y)) return false;
    if(typeof x=='object'){
       x01 = x.recip? x.neg?1:2 : x.neg?0:3;
       if(typeof y=='object'){
@@ -45,8 +45,8 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 ,GreaterQ = (x,y)=> LessQ(y,x)
 ,LessEqualQ = (x,y)=> LessQ(x,y)||EqualQ(x,y)
 ,GreaterEqualQ = (x,y)=> LessQ(y,x)||EqualQ(x,y)
-,Min = (x,y)=> LessQ(x,y)||isNaN(x)?x:y
-,Max = (x,y)=> LessQ(x,y)||isNaN(y)?y:x
+,Min = (x,y)=> LessQ(x,y)||Number.isNaN(x)?x:y
+,Max = (x,y)=> LessQ(x,y)||Number.isNaN(y)?y:x
 ,Exp = x=>{//If input is normalized, it does not change Object into Number
    var abx;
    if(typeof x=='object') return x.recip? 1 : ({neg:false,recip:x.neg,val:x.val,pt:x.pt+1});//No need of Normal
