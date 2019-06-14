@@ -57,7 +57,11 @@ th,td{padding:0}
    margin: 0;
    vertical-align:text-top;
 }
-.celldark{background-color:#5f9}
+.celldark{
+   background-color: #5f9;
+   font-size: 15px;
+   font-weight: bold;
+}
 .cell1{
    background-color: #cfa;
    border: 1px solid #6f0;
@@ -84,7 +88,9 @@ th,td{padding:0}
    text-align: left;
    font-size: 15px;
 }
-.itemrow4{width: 25%}
+.itemrow2{width:50%}
+.itemrow3{width:33.33%}
+.itemrow4{width:25%}
 .caution{
    color: #f55;
    font-size: 15px;
