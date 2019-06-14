@@ -18,7 +18,7 @@ const Version=0
    ,Precision:5
    ,CurrentTab:0
    ,MainNumber:4
-   ,MainNumberStage:0
+   ,BMSStage:0
    ,BM0etc:[[0]]
    ,BM0etcBought:[[0]]
    ,BM0etcLength:[3]
@@ -142,7 +142,8 @@ var LastSave=Date.now()
 ,LastGame=Date.now();
 v.$watch('MainNumber',x=>{
    var amount=v.BM0etc,bought=v.BM0etcBought,lens=v.BM0etcLength,n,n1=amount.length,m=lens.length;
-   if(v.MainNumberStage<1&&LessEqualQ(18446744073709551616,x)) v.MainNumberStage=1;
+   if(v.BMSStage<2&&LessEqualQ(18446744073709551616,x)) v.BMSStage=2;
+   if(v.BMSStage<1&&LessEqualQ(16777216,x)) v.BMSStage=1;
    while(LessQ(x,Power(--m+2,Power(2,m+1))));
    while(n1<=m){
       Vue.set(amount,n1,[]);
@@ -160,7 +161,7 @@ v.$watch('MainNumber',x=>{
    }
 });
 //Valid historical versions
-DataList[0]=['UpdateInterval','AutoSave','Precision','MainNumber','MainNumberStage'
+DataList[0]=['UpdateInterval','AutoSave','Precision','MainNumber','BMSStage'
 ,'BM0etc','BM0etcBought','BM0etcLength','BM0etcLengthEver','BM0c1'];
 //Initialization
 Load(0);
