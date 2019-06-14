@@ -1,5 +1,5 @@
 'use strict';
-const Pointer = a=>{
+const Pointer = (v,a)=>{
    var n,l=a.length-1,pointer=v;
    for(n=0;n<l;++n) pointer=pointer[a[n]];
    return [pointer,a[l]]
@@ -7,18 +7,18 @@ const Pointer = a=>{
 Vue.component('buy',{
    props:['info','amount','bought','mult','textsize']
    ,computed:{
-      Amount(){return Pointer(this.amount)}
-      ,Bought(){return Pointer(this.bought)}
-      ,Costo(){return Pointer(this.info.costo)}
-      ,Content(){return this.info.content(this.Bought[0][this.Bought[1]])}
+      Amount(){return Pointer(this.$root,this.amount)}
+      ,Bought(){return Pointer(this.$root,this.bought)}
+      ,Costo(){return Pointer(this.$root,this.info.costo)}
+      ,Text(){return this.info.text(this.Bought[0][this.Bought[1]])}
       ,Cost(){return this.info.cost(this.Bought[0][this.Bought[1]])}
-      ,Cant(){return LessQ(this.Costo[0][this.Costo[1]],this.Cost)||!v.Count&&this.info.costo[0]=='MainNumber'}
-      ,ShowAmount(){return Show(9,3,1e10)(this.Amount[0][this.Amount[1]])}
+      ,Cant(){return LessQ(this.Costo[0][this.Costo[1]],this.Cost)}
+      ,ShowAmount(){return this.$root.Show(this.Amount[0][this.Amount[1]])}
       ,ShowMult(){
-         var a=Pointer(this.mult);
-         return Show(9,3,1e10)(a[0][a[1]])
+         var a=Pointer(this.$root,this.mult);
+         return this.$root.Show(a[0][a[1]])
       }
-      ,ShowCost(){return Show(9,0,1e10)(this.Cost)}
+      ,ShowCost(){return this.$root.ShowInt(this.Cost)}
    }
    ,methods:{
       Buy(){
@@ -44,8 +44,7 @@ Vue.component('buy',{
       }
    }
    ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="info.tooltip">\
-      <b :style="{\'font-size\':textsize+\'px\'}" v-show="info.text">{{info.text}}<br></b>\
-      <b :style="{\'font-size\':textsize+\'px\'}" v-show="Content">{{Content}}<br></b>\
+      <b :style="{\'font-size\':textsize+\'px\'}">{{Text}}</b><br>\
       {{ShowAmount}}<br>\
       {{ShowMult}}×<br>\
       Cost: {{ShowCost}}\
