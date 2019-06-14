@@ -11,30 +11,37 @@
    <br><br>GAME LOADING
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-<div id="game">
-   <button :disabled="CantCount" @mousedown="BuyCount()" @dblclick="BuyMaxCount()"
-   style="background-color:inherit;color:#fff;padding:0;border:none;border-radius:0;margin:0">Your number is
-   <span style="font-size:50px">{{Show(11,MainNumber)}}</span><br>
-   Your number is gaining {{Show(10,Growth)}} per second<br>
-   Click here to <span style="font-weight:bold">count {{ShowInt(10,CountCost)}}</span>, double click to count max
-   </button>
+<div id="game">Your number is
+   <span style="font-size:50px">{{Show(MainNumber)}}</span><br>
+   Your number is gaining {{Show(Growth)}} per second
    <div class="tab">
       <button @mousedown="CurrentTab=-1" :class="{showtab:CurrentTab==-1}">Options</button>
-      <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}">Digits</button>
+      <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}" title="Bashicu matrix system">BMS</button>
    </div>
    <div v-if="CurrentTab==0">
-      Digits give multiplier <span style="font-size:20px">{{Show(10,DigitEff)}}</span>× to counting
       <div class="left">
-         <buy v-for="(index,n) in DigitOrdering" :info="DigitInfo[index]" :amount="['Digit',n]" :bought="['DigitBought',n]" :mult="['DigitMult',n]" :textsize="15"><br>
-            <bulk class="bulkbuy" :bulkinfo="DigitBulkInfo[index]"></bulk>
-         </buy>
+         <button v-show="MainNumberStage>=1" class="cell" :disabled="BM0c1Cant" @mousedown="BM0c1Buy"
+         title="Reset your number, all zero-only BM and unlockers">
+            <b style="font-size:15px">(0)(1)[{{ShowInt(BM0c1)}}]</b><br>
+            Reset to unlock a new base number<br>
+            Requirement: {{ShowInt(BM0c1Cost)}}
+         </button>
       </div>
-      <div class="itemrow" v-for="(digit,n) in DigitLocked">
-         <button class="itemrow4" :disabled="CantUnlockDigit[n]" @mousedown="UnlockDigit(digit.index)">Unlock {{digit.text}}</button>
-         Require {{ShowInt(10,digit.requirement)}} {{ShowUnlockDigitCosto}}
+      <button class="celldark itemrow2" style="padding:16px;margin:8px;font-size:24px" @mousedown="BM0etcMaxall()">
+         Buy max of all zero-only Bashicu matrices
+      </button>
+      <div v-for="(amounts,n1) in BM0etc" class="left">
+         <button class="cell cell1" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
+         title="Reset your number, all zero-only BM and previous unlockers">
+            <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
+            Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{ShowInt(n1+2)}}]
+            and previous unlockers by {{Show(BM0etcUnlockerEff[n1])}}×<br>
+            Requirement: {{ShowInt(n1+2)}} {{BM0etcUnlockText[n1]}}'s
+         </button><buy v-for="(am,n) in amounts" ref="BM0etc" :info="BM0etcInfo[n1][n]"
+         :amount="['BM0etc',n1,n]" :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
       </div>
    </div>
-   <div id="setting" v-else-if="CurrentTab==-1">
+   <div v-else-if="CurrentTab==-1" id="setting">
       <div class="itemrow">
          <div class="itemrow4" v-for="n in 4"><button @mousedown="Save(n)">Save {{n}}</button></div>
       </div>
@@ -42,6 +49,10 @@
          <div class="itemrow4" v-for="n in 4"><button @mousedown="Load(n)">Load {{n}}</button></div>
       </div>
       <div class="itemrow">
+         <div class="itemrow4">
+            Update interval: {{UpdateInterval}} ms <br>
+            <input type="range" v-model.number="UpdateInterval" min="10" max="333">
+         </div>
          <div class="itemrow4">
             Automatic saving:<br><select v-model.number="AutoSave">
                <option value="5000">5 s</option>
@@ -54,13 +65,15 @@
             </select>
          </div>
          <div class="itemrow4"><button @mousedown="Export()">Export</button></div>
-         <div class="itemrow4">
-            Update interval: {{UpdateInterval}} ms <br>
-            <input type="range" v-model.number="UpdateInterval" min="10" max="333">
-         </div>
          <div class="itemrow4"><button @mousedown="Reset()">FULL RESET</button></div>
       </div>
-      <div id="export" v-if="ExportBox">
+      <div class="itemrow">
+         <div class="itemrow4">
+            Display {{Precision}} significant digits<br>
+            <input type="range" v-model.number="Precision" min="1" max="13">
+         </div>
+      </div>
+      <div v-if="ExportBox" id="export">
          <textarea v-model="ExportContent"></textarea>
          <button @mousedown="Import()">Import</button>
          <button @mousedown="ExportBox=false">Cancel</button>
@@ -70,6 +83,7 @@
 <script src="arithmetic.js"></script>
 <script src="display-number.js"></script>
 <script src="short-scale-name.js"></script>
+<script src="save-load.js"></script>
 <script src="component.js"></script>
 <script src="index.js"></script>
 </body>
