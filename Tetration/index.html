@@ -20,7 +20,7 @@
    </div>
    <div v-if="CurrentTab==0">
       <div class="left">
-         <button v-if="BMSStage>=2" class="cell" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
+         <button v-if="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
          title="Reset your number, all zero-only BM and unlockers">
             <b style="font-size:15px">(0)(1)[{{ShowInt(BM0c1)}}]</b><br>
             Reset to unlock a new base number<br>
@@ -30,15 +30,18 @@
       <button class="celldark itemrow2" style="font-size:24px" @mousedown="BM0etcMaxall()">
          Buy max of all zero-only Bashicu matrices
       </button>
-      <div v-for="(amounts,n1) in BM0etc" class="left">
-         <button v-if="BMSStage>=1" class="cell cell1" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
-         title="Reset your number, all zero-only BM and previous unlockers">
-            <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
-            Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{ShowInt(n1+2)}}]
-            and previous unlockers by {{Show(BM0etcUnlockerEff[n1])}}×<br>
-            Requirement: {{ShowInt(n1+2)}} {{BM0etcUnlockText[n1]}}'s
-         </button><buy v-for="(am,n) in amounts" ref="BM0etc" :info="BM0etcInfo[n1][n]"
-         :amount="['BM0etc',n1,n]" :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
+      <div class="left">
+         <div v-for="(amounts,n1) in BM0etc"
+         :class="{cellcolumn:BM0etc.length>4,column2:BM0etc.length==2,column3:BM0etc.length==3,column4:BM0etc.length==4}">
+            <button v-if="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
+            title="Reset your number, all zero-only BM and previous unlockers">
+               <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
+               Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{ShowInt(n1+2)}}]
+               and previous unlockers by {{Show(BM0etcUnlockerEff[n1])}}×<br>
+               Requirement: {{ShowInt(n1+2)}} {{BM0etcUnlockText[n1]}}'s
+            </button><buy v-for="(am,n) in amounts" ref="BM0etc" :info="BM0etcInfo[n1][n]"
+            :amount="['BM0etc',n1,n]" :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
+         </div>
       </div>
    </div>
    <div v-else-if="CurrentTab==-1" id="setting">
