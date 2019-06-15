@@ -1,6 +1,6 @@
+'use strict';
 //This file use functions in display-number.js
 //Standard -illion seires go up to centillion
-'use strict';
 const _tier0=['one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen']
 ,_ty0=['twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety']
 ,ConvertTier0 = n=>{// 1 <= n <= 999
