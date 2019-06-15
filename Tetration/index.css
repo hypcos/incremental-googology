@@ -71,21 +71,6 @@ th,td{padding:0}
    background-color: #fea;
    border: 1px solid #fc0;
 }
-.cell .bulkbuy{
-   background-color: transparent;
-   color: #60f;
-   padding: 0;
-   border: none;
-   border-radius: 0;
-   margin: 0;
-   font-size: 18px;
-   font-weight: 600;
-   text-shadow: 0 -1px 3px;
-}
-.cell .bulkbuy[disabled]{
-   color: #caf;
-   text-shadow: none;
-}
 .itemrow{
    display: flex;
    align-items: center;
