@@ -29,10 +29,10 @@ button[disabled]{
 }
 button:focus,select:focus{outline:none}
 select{
-   background-color: #afa;
+   background-color: #bfa;
    color: #000;
    padding: 0 2px;
-   border: 1px solid #0f0;
+   border: 1px solid #3f0;
    border-radius: 6px;
    margin: 0;
    font-size: 12px;
@@ -50,21 +50,26 @@ table{
    border-collapse: collapse;
 }
 th,td{padding:0}
+/*General items*/
 .cell{
    height: 172px;
-   width: 172px;
    padding: 4px;
    margin: 0;
    vertical-align:text-top;
 }
+.cellcolumn,.cell{width:172px}
 .celldark{
    background-color: #5f9;
    font-size: 15px;
    font-weight: bold;
 }
-.cell1{
+.cell2{
    background-color: #cfa;
    border: 1px solid #6f0;
+}
+.cell4{
+   background-color: #fea;
+   border: 1px solid #fc0;
 }
 .cell .bulkbuy{
    background-color: transparent;
@@ -88,9 +93,14 @@ th,td{padding:0}
    text-align: left;
    font-size: 15px;
 }
-.itemrow2{width:50%}
-.itemrow3{width:33.33%}
-.itemrow4{width:25%}
+.itemrow2,.column2{width:50%}
+.itemrow3,.column3{width:33.33%}
+.itemrow4,.column4{width:25%}
+.column2,.column3,.column4,.cellcolumn{
+   display: inline-block;
+   vertical-align: text-top;
+}
+/*Special items*/
 .caution{
    color: #f55;
    font-size: 15px;
@@ -98,25 +108,24 @@ th,td{padding:0}
 }
 .caution:before{content:'Caution: '}
 .showtab,#setting button:hover{color:#fff}
-/*Special items*/
 .tab button{
-   background-color: #afe;
+   background-color: #daf;
    padding: 0 12px 4px;
-   border: 2px solid #0fc;
+   border: 2px solid #90f;
    border-radius: 20px;
    font-size: 32px;
    font-weight: bold;
 }
-.tab button.showtab{background-color:#054}
+.tab button.showtab{background-color:#60a}
 .tab2 button{
-   background-color: #aaf;
+   background-color: #adf;
    padding: 1px 9px 4px;
-   border: 2px solid #00f;
+   border: 2px solid #09f;
    border-radius: 14px;
    font-size: 20px;
    font-weight: 520;
 }
-.tab2 button.showtab{background-color:#00a}
+.tab2 button.showtab{background-color:#035}
 #loading{
    background-color: #555;
    position: fixed;
@@ -134,15 +143,15 @@ th,td{padding:0}
    font-weight: 500;
 }
 #setting button{
-   background-color: #caf;
+   background-color: #baf;
    min-width: 80%;
    padding: 0 12px 4px;
-   border: 3px solid #60f;
+   border: 3px solid #30f;
    font-size: 40px;
    font-weight: 500;
    transition: .2s;
 }
-#setting button:hover{background-color:#40a}
+#setting button:hover{background-color:#20a}
 #setting select{font-size:20px}
 #export{
    background-color: #555;
