@@ -25,8 +25,8 @@ Vue.component('buy',{
          const amount=this.Amount,bought=this.Bought,costo=this.Costo;
          if(costo[0]===v) v[costo[1]]=Minus(v[costo[1]],this.Cost);
          else Vue.set(costo[0],costo[1],Minus(costo[0][costo[1]],this.Cost));
-         Vue.set(amount[0],amount[1],Natural(Plus(amount[0][amount[1]],1)));
-         Vue.set(bought[0],bought[1],Natural(Plus(bought[0][bought[1]],1)))
+         Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],1));
+         Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],1))
       }
       ,BuyMax(){
          const amount=this.Amount,bought=this.Bought,costo=this.Costo,infosum=this.info.sum;
@@ -39,8 +39,8 @@ Vue.component('buy',{
             Vue.set(costo[0],costo[1],Minus(costo[0][costo[1]],Minus(infosum(Plus(bought[0][bought[1]],delta)),infosum(bought[0][bought[1]]))))
             if(Sign(costo[0][costo[1]])<0) Vue.set(costo[0],costo[1],0);
          }
-         Vue.set(amount[0],amount[1],Natural(Plus(amount[0][amount[1]],delta)));
-         Vue.set(bought[0],bought[1],Natural(Plus(bought[0][bought[1]],delta)))
+         Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],delta));
+         Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],delta))
       }
    }
    ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="info.tooltip">\
