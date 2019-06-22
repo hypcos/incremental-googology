@@ -16,6 +16,7 @@
    Your number is gaining {{Show(Growth)}} per second
    <div class="tab">
       <button @mousedown="CurrentTab=-1" :class="{showtab:CurrentTab==-1}">Options</button>
+      <button @mousedown="CurrentTab=-2" :class="{showtab:CurrentTab==-2}">Achievements</button>
       <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}" title="Bashicu matrix system">BMS</button>
    </div>
    <div v-if="CurrentTab==0">
@@ -39,8 +40,8 @@
                Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{ShowInt(n1+2)}}]
                and previous unlockers by {{Show(BM0etcUnlockerEff[n1])}}×<br>
                Requirement: {{ShowInt(n1+2)}} {{BM0etcUnlockText[n1]}}'s
-            </button><buy v-for="(am,n) in amounts" ref="BM0etc" :info="BM0etcInfo[n1][n]"
-            :amount="['BM0etc',n1,n]" :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
+            </button><buy v-for="(am,n) in amounts" :info="BM0etcInfo[n1][n]" :amount="['BM0etc',n1,n]"
+            :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
          </div>
       </div>
    </div>
@@ -54,7 +55,7 @@
       <div class="itemrow">
          <div class="itemrow4">
             Update interval: {{UpdateInterval}} ms <br>
-            <input type="range" v-model.number="UpdateInterval" min="10" max="333">
+            <input type="range" v-model.number="UpdateInterval" min="16" max="333">
          </div>
          <div class="itemrow4">
             Automatic saving:<br><select v-model.number="AutoSave">
@@ -72,20 +73,47 @@
       </div>
       <div class="itemrow">
          <div class="itemrow4">
-            Display {{Precision}} significant digits<br>
-            <input type="range" v-model.number="Precision" min="1" max="13">
+            Display numbers in base-{{NumberBase}}<br>
+            <input type="range" v-model.number="NumberBase" min="2" max="36">
          </div>
+         <div class="itemrow4" title="When a number is beyond Javascript max number,
+both mantissa and exponent count into significant digits">
+            Display {{Precision}} significant digits<br>
+            <input type="range" v-model.number="Precision" min="1" :max="Math.floor(29.9336062089226/Math.log(NumberBase))">
+         </div>
+         <div class="itemrow4"><button @mousedown="Hotkey^=1">Hotkey: {{Hotkey?'On':'Off'}}</button></div>
       </div>
+      Hotkey:
+      <b>0</b> to buy max of all zero-only BM,
+      <b>2</b> ~ <b>9</b> to unlock BM with corresponding base number,
+      <b>1</b> to buy (0)(1)[n].<br>
+      Double click on something to buy max of it.
       <div v-if="ExportBox" id="export">
          <textarea v-model="ExportContent"></textarea>
          <button @mousedown="Import()">Import</button>
          <button @mousedown="ExportBox=false">Cancel</button>
       </div>
    </div>
+   <div v-else-if="CurrentTab==-2">
+      <div style="margin:6px;font-size:18px">
+         You achieved {{AchieveCellN}} cells(3×3), boosting zero-only BM by {{Show(AchieveCellEff)}}×
+      </div>
+      <table>
+         <tr v-for="y in 9">
+            <td v-for="x in 9" :class="{ach1:AchieveCell[y-1][x-1],ach2:AchieveRow[y-1],ach3:AchieveColumn[x-1]}">
+               <div class="ach" :class="{achieved:AchieveSingle[y-1][x-1]}" :title="Achievement.length>=y?AchievementTooltip[y-1][x-1]:''">
+                  {{Achievement.length>=y?AchievementName[y-1][x-1]:'LOCKED'}}
+               </div>
+            </td>
+         </tr>
+      </table>
+   </div>
 </div>
 <script src="arithmetic.js"></script>
 <script src="display-number.js"></script>
+<script src="versions.js"></script>
 <script src="save-load.js"></script>
+<script src="achievement.js"></script>
 <script src="component.js"></script>
 <script src="index.js"></script>
 </body>
