@@ -185,10 +185,11 @@ const Grow = (dt)=>{
                BuyMax(['BM0etc',n1,n],['BM0etcBought',n1,n],['MainNumber'],BM0etcInfo[n1][n].sum,BM0etcInfo[n1][n].solve)
       }
       ,BM0etcUnlock:n1=>{
-         var BM0etcLength=v.BM0etcLength,i;
+         var BM0etcLength=v.BM0etcLength;
          Vue.set(BM0etcLength,n1,BM0etcLength[n1]+1);
          if(v.BM0etcLengthEver[n1]<BM0etcLength[n1]) Vue.set(v.BM0etcLengthEver,n1,BM0etcLength[n1]);
-         Vue.set(v.BM0etcUnlockCount,i=n1<2?n1:2,v.BM0etcUnlockCount[i]+1);
+         if(n1<2) Vue.set(v.BM0etcUnlockCount,n1,v.BM0etcUnlockCount[n1]+1);
+         Vue.set(v.BM0etcUnlockCount,2,v.BM0etcUnlockCount[2]+1);
          BM0etcReset(n1)
       }
       ,BM0c1Buy:()=>{
