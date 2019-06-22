@@ -188,7 +188,7 @@ const Grow = (dt)=>{
          var BM0etcLength=v.BM0etcLength;
          Vue.set(BM0etcLength,n1,BM0etcLength[n1]+1);
          if(v.BM0etcLengthEver[n1]<BM0etcLength[n1]) Vue.set(v.BM0etcLengthEver,n1,BM0etcLength[n1]);
-         if(n1<2) Vue.set(v.BM0etcUnlockCount,n1,v.BM0etcUnlockCount[n1]+1);
+         if(!(Achievement[2]&16)&&n1<2) Vue.set(v.BM0etcUnlockCount,n1,v.BM0etcUnlockCount[n1]+1);
          Vue.set(v.BM0etcUnlockCount,2,v.BM0etcUnlockCount[2]+1);
          BM0etcReset(n1)
       }
