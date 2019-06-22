@@ -206,7 +206,7 @@ const Cancel=[]
          Vue.set(Achievement,1,Achievement[1]|8)
       })
    if(!(Achievement[1]&16))
-      Cancel[13]=v.$watch(()=>v.BM0etcUnlockCount[0]+v.BM0etcUnlockCount[1]+v.BM0etcUnlockCount[2]>=16,x=>{
+      Cancel[13]=v.$watch(()=>v.BM0etcUnlockCount[2]>=16,x=>{
          if(!x) return;
          Cancel[13]();
          Vue.set(Achievement,1,Achievement[1]|16)
