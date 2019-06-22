@@ -32,7 +32,7 @@ Vue.component('buy',{
          const amount=this.Amount,bought=this.Bought,costo=this.Costo,infosum=this.info.sum;
          var delta=Floor(Minus(this.info.solve(Plus(costo[0][costo[1]],infosum(bought[0][bought[1]]))),bought[0][bought[1]]));
          if(Sign(delta)<0) delta=0;
-         if(costo===v){
+         if(costo[0]===v){
             v[costo[1]]=Minus(v[costo[1]],Minus(infosum(Plus(bought[0][bought[1]],delta)),infosum(bought[0][bought[1]])));
             if(Sign(v[costo[1]])<0) v[costo[1]]=0;
          }else{
