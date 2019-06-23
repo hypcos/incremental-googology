@@ -12,20 +12,21 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
 <div id="game">Your number is
-   <span style="font-size:50px">{{Show(MainNumber)}}</span><br>
-   Your number is gaining {{Show(Growth)}} per second
+   <span style="font-size:50px">{{MainNumber|show}}</span><br>
+   Your number is gaining {{Growth|show}} per second
    <div class="tab">
-      <button @mousedown="CurrentTab=-1" :class="{showtab:CurrentTab==-1}">Options</button>
-      <button @mousedown="CurrentTab=-2" :class="{showtab:CurrentTab==-2}">Achievements</button>
-      <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}" title="Bashicu matrix system">BMS</button>
+      <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}">Options</button>
+      <button @mousedown="CurrentTab=1" :class="{showtab:CurrentTab==1}">Achievements</button>
+      <button @mousedown="CurrentTab=2" :class="{showtab:CurrentTab==2}">Statistics</button>
+      <button @mousedown="CurrentTab=3" :class="{showtab:CurrentTab==3}" title="Bashicu matrix system">BMS</button>
    </div>
-   <div v-if="CurrentTab==0">
+   <div v-if="CurrentTab==3">
       <div class="left">
          <button v-if="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
          title="Reset your number, all zero-only BM and unlockers">
-            <b style="font-size:15px">(0)(1)[{{ShowInt(BM0c1)}}]</b><br>
+            <b style="font-size:15px">(0)(1)[{{BM0c1|showInt}}]</b><br>
             Reset to unlock a new base number<br>
-            Requirement: {{ShowInt(BM0c1Cost)}}
+            Requirement: {{BM0c1Cost|showInt}}
          </button>
       </div>
       <button class="celldark itemrow2" style="font-size:24px" @mousedown="BM0etcMaxall()">
@@ -37,15 +38,15 @@
             <button v-if="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
             title="Reset your number, all zero-only BM and previous unlockers">
                <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
-               Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{ShowInt(n1+2)}}]
-               and previous unlockers by {{Show(BM0etcUnlockerEff[n1])}}×<br>
-               Requirement: {{ShowInt(n1+2)}} {{BM0etcUnlockText[n1]}}'s
+               Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{n1+2|showInt}}]
+               and previous unlockers by {{BM0etcUnlockerEff[n1]|show}}×<br>
+               Requirement: {{n1+2|showInt}} {{BM0etcUnlockText[n1]}}'s
             </button><buy v-for="(am,n) in amounts" :info="BM0etcInfo[n1][n]" :amount="['BM0etc',n1,n]"
             :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
          </div>
       </div>
    </div>
-   <div v-else-if="CurrentTab==-1" id="setting">
+   <div v-else-if="CurrentTab==0" id="setting">
       <div class="itemrow">
          <div class="itemrow4" v-for="n in 4"><button @mousedown="Save(n)">Save {{n}}</button></div>
       </div>
@@ -94,9 +95,9 @@ both mantissa and exponent count into significant digits">
          <button @mousedown="ExportBox=false">Cancel</button>
       </div>
    </div>
-   <div v-else-if="CurrentTab==-2">
+   <div v-else-if="CurrentTab==1">
       <div style="margin:6px;font-size:18px">
-         You achieved {{AchieveCellN}} cells(3×3), boosting zero-only BM by {{Show(AchieveCellEff)}}×
+         You achieved {{AchieveCellN}} cells(3×3), boosting zero-only BM by {{AchieveCellEff|show}}×
       </div>
       <table>
          <tr v-for="y in 3">
@@ -107,6 +108,18 @@ both mantissa and exponent count into significant digits">
             </td>
          </tr>
       </table>
+   </div>
+   <div v-else-if="CurrentTab==2" style="font-size:13px">
+      <br>
+      You have played the game for {{GamePlayed()}} seconds.<br><br>
+      Your number has ever reached {{MainNumberEver|show}}.
+      <div v-if="Achievement.length>1">
+         <br>
+         You have ever unlocked
+         <span v-for="text in BM0etcUnlockEverText">{{text}}, </span>
+         so far.<br>
+         You have ever unlocked zero-only BM {{BM0etcUnlockTotal|showInt}} times in total.
+      </div>
    </div>
 </div>
 <script src="arithmetic.js"></script>
