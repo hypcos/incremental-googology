@@ -6,19 +6,26 @@ const Pointer = (v,a)=>{
 };
 Vue.component('buy',{
    props:['info','amount','bought','mult','textsize']
+   ,data(){return{
+      inf:this.info
+      ,amo:this.amount
+      ,bou:this.bought
+      ,mul:this.mult
+      ,tex:this.textsize
+   }}
    ,computed:{
-      Amount(){return Pointer(this.$root,this.amount)}
-      ,Bought(){return Pointer(this.$root,this.bought)}
-      ,Costo(){return Pointer(this.$root,this.info.costo)}
-      ,Text(){return this.info.text(this.Bought[0][this.Bought[1]])}
-      ,Cost(){return this.info.cost(this.Bought[0][this.Bought[1]])}
+      Amount(){return Pointer(this.$root,this.amo)}
+      ,Bought(){return Pointer(this.$root,this.bou)}
+      ,Costo(){return Pointer(this.$root,this.inf.costo)}
+      ,Text(){return this.inf.text(this.Bought[0][this.Bought[1]])}
+      ,Cost(){return this.inf.cost(this.Bought[0][this.Bought[1]])}
       ,Cant(){return LessQ(this.Costo[0][this.Costo[1]],this.Cost)}
-      ,ShowAmount(){return this.$root.Show(this.Amount[0][this.Amount[1]])}
+      ,ShowAmount(){return show(this.Amount[0][this.Amount[1]])}
       ,ShowMult(){
-         var a=Pointer(this.$root,this.mult);
-         return this.$root.Show(a[0][a[1]])
+         var a=Pointer(this.$root,this.mul);
+         return show(a[0][a[1]])
       }
-      ,ShowCost(){return this.$root.ShowInt(this.Cost)}
+      ,ShowCost(){return showInt(this.Cost)}
    }
    ,methods:{
       Buy(){
@@ -29,8 +36,8 @@ Vue.component('buy',{
          Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],1))
       }
       ,BuyMax(){
-         const amount=this.Amount,bought=this.Bought,costo=this.Costo,infosum=this.info.sum;
-         var delta=Floor(Minus(this.info.solve(Plus(costo[0][costo[1]],infosum(bought[0][bought[1]]))),bought[0][bought[1]]));
+         const amount=this.Amount,bought=this.Bought,costo=this.Costo,infosum=this.inf.sum;
+         var delta=Floor(Minus(this.inf.solve(Plus(costo[0][costo[1]],infosum(bought[0][bought[1]]))),bought[0][bought[1]]));
          if(Sign(delta)<0) delta=0;
          if(costo[0]===v){
             v[costo[1]]=Minus(v[costo[1]],Minus(infosum(Plus(bought[0][bought[1]],delta)),infosum(bought[0][bought[1]])));
@@ -43,8 +50,8 @@ Vue.component('buy',{
          Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],delta))
       }
    }
-   ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="info.tooltip">\
-      <b :style="{\'font-size\':textsize+\'px\'}">{{Text}}</b><br>\
+   ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="inf.tooltip">\
+      <b :style="{\'font-size\':tex+\'px\'}">{{Text}}</b><br>\
       {{ShowAmount}}<br>\
       {{ShowMult}}×<br>\
       Cost: {{ShowCost}}\
