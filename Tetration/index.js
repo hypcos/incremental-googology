@@ -17,8 +17,9 @@ const Grow = (dt)=>{
    ,NumberBase:10
    ,Precision:4
    ,Hotkey:1
-   ,CurrentTab:0
+   ,CurrentTab:3
    ,Achievement:[0]
+   ,Ach2r16:[0,0]
    ,MainNumber:4
    ,MainNumberEver:4
    ,BMSStage:0
@@ -26,12 +27,17 @@ const Grow = (dt)=>{
    ,BM0etcBought:[[0,0,0]]
    ,BM0etcLength:[3]
    ,BM0etcLengthEver:[3]
-   ,BM0etcUnlockCount:[0,0,0]
+   ,BM0etcUnlockTotal:0
    ,BM0c1:2
 })
-,v = new Vue({
+,vPre = InitialData()
+,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
+,showInt = x=>Show(x,vPre.Precision,vPre.NumberBase,true);
+Vue.filter('show',show);
+Vue.filter('showInt',showInt);
+const v = new Vue({
    el:'#game'
-   ,data:InitialData()
+   ,data:vPre
    ,computed:{
       Growth(){
          var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult,n=BM0etc.length,s=Times(BM0etc[0][0],BM0etcMult[0][0]);
@@ -87,8 +93,8 @@ const Grow = (dt)=>{
             for(n=this.BM0etcLengthEver[n1];n--;){
                b16=Power(n1+2,Power(2,Plus(Plus(n1,2),n)));
                arr[n]={
-                  text:((n1,n)=>()=>'(0)'.repeat(n)+'['+this.ShowInt(n1)+']')(n1+2,n+1+n1)
-                  ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+this.ShowInt(n1+2)+']':'Make your number grow'
+                  text:((n1,n)=>()=>'(0)'.repeat(n)+'['+showInt(n1)+']')(n1+2,n+1+n1)
+                  ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+showInt(n1+2)+']':'Make your number grow'
                   ,costo:['MainNumber']
                   ,cost:(b16=>x=>Power(b16,Plus(x,0.5)))(b16)
                   ,sum:((b16,sumk)=>x=>Times(sumk,Plus(Power(b16,x),-1)))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
@@ -136,7 +142,7 @@ const Grow = (dt)=>{
          }
          return arr1
       }
-      ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+this.ShowInt(n+2)+']')}
+      ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0etcCantUnlock(){return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,n+2))}
       ,BM0etcUnlockerEff(){
          var BM0etcLength=this.BM0etcLength,n=BM0etcLength.length-1,arr=[]
@@ -145,6 +151,7 @@ const Grow = (dt)=>{
          while(n--) arr[n]=Times(Plus(Times(Plus(BM0etcLength[n+1],-3),arr[n+1]),1),Overall);
          return arr.map(x=>Power(2,x))
       }
+      ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0c1Cost(){
          var BM0c1=this.BM0c1;
          return Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2)))
@@ -152,9 +159,7 @@ const Grow = (dt)=>{
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
    }
    ,methods:{
-      Show(x){return Show(x,this.Precision,this.NumberBase)}
-      ,ShowInt(x){return Show(x,this.Precision,this.NumberBase,true)}
-      ,Save:n=>Save(n)
+      Save:n=>Save(n)
       ,Load:n=>Load(n)
       ,Export:()=>{
          Save(0);
@@ -178,6 +183,7 @@ const Grow = (dt)=>{
          Achievementwatch();
          Save(0)
       }
+      ,GamePlayed:()=>show((Date.now()-Hidden.LastGame)*0.001)
       ,BM0etcMaxall:()=>{
          var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length;
          while(n1--)
@@ -188,8 +194,8 @@ const Grow = (dt)=>{
          var BM0etcLength=v.BM0etcLength;
          Vue.set(BM0etcLength,n1,BM0etcLength[n1]+1);
          if(v.BM0etcLengthEver[n1]<BM0etcLength[n1]) Vue.set(v.BM0etcLengthEver,n1,BM0etcLength[n1]);
-         if(!(Achievement[2]&16)&&n1<2) Vue.set(v.BM0etcUnlockCount,n1,v.BM0etcUnlockCount[n1]+1);
-         Vue.set(v.BM0etcUnlockCount,2,v.BM0etcUnlockCount[2]+1);
+         if(!(v.Achievement[2]&16)&&n1<2) Vue.set(v.Ach2r16,n1,v.Ach2r16[n1]+1);
+         ++v.BM0etcUnlockTotal;
          BM0etcReset(n1)
       }
       ,BM0c1Buy:()=>{
