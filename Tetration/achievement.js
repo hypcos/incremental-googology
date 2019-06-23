@@ -133,7 +133,7 @@ const Cancel=[]
       })
    if(!(Achievement[0]&32))
       Cancel[5]=v.$watch(()=>{
-         var str=v.Show(v.MainNumber),len=str.length;
+         var str=show(v.MainNumber),len=str.length;
          return len>=3&&'e'.repeat(len)===str
       },x=>{
          if(!x) return;
@@ -206,7 +206,7 @@ const Cancel=[]
          Vue.set(Achievement,1,Achievement[1]|8)
       })
    if(!(Achievement[1]&16))
-      Cancel[13]=v.$watch(()=>v.BM0etcUnlockCount[2]>=16,x=>{
+      Cancel[13]=v.$watch(()=>v.BM0etcUnlockTotal>=16,x=>{
          if(!x) return;
          Cancel[13]();
          Vue.set(Achievement,1,Achievement[1]|16)
@@ -299,7 +299,7 @@ const Cancel=[]
          Vue.set(Achievement,2,Achievement[2]|8)
       })
    if(!(Achievement[2]&16))
-      Cancel[22]=v.$watch(()=>v.BM0etcUnlockCount[0]<v.BM0etcUnlockCount[1],x=>{
+      Cancel[22]=v.$watch(()=>v.Ach2r16[0]<v.Ach2r16[1],x=>{
          if(!x) return;
          Cancel[22]();
          Vue.set(Achievement,2,Achievement[2]|16)
