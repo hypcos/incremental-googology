@@ -28,6 +28,7 @@ const Version=1
       ,'Precision'
       ,'Hotkey'
       ,'Achievement'
+      ,'Ach2r16'
       ,'MainNumber'
       ,'MainNumberEver'
       ,'BMSStage'
@@ -35,7 +36,7 @@ const Version=1
       ,'BM0etcBought'
       ,'BM0etcLength'
       ,'BM0etcLengthEver'
-      ,'BM0etcUnlockCount'
+      ,'BM0etcUnlockTotal'
       ,'BM0c1'
    ]
 ]
