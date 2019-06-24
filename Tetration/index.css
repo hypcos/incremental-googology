@@ -1,3 +1,4 @@
+:focus{outline:none}
 .left{text-align:left}
 body{
    background-color: #555;
@@ -6,7 +7,7 @@ body{
    border: none;
    margin: 4px;
    text-align: center;
-   font: 10px 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   font: 11px 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 button{
    background-color: #afc;
@@ -27,7 +28,6 @@ button[disabled]{
    color: #000;
    cursor: not-allowed;
 }
-button:focus,select:focus{outline:none}
 select{
    background-color: #bfa;
    color: #000;
@@ -45,7 +45,7 @@ input[type="range"]{
 }
 table,th,td{border:none}
 table{
-   min-width: 100%;
+   display: inline-block;
    font-size: 15px;
    border-collapse: collapse;
 }
@@ -86,12 +86,6 @@ th,td{padding:0}
    vertical-align: text-top;
 }
 /*Special items*/
-.caution{
-   color: #f55;
-   font-size: 15px;
-   font-weight: bold;
-}
-.caution:before{content:'Caution: '}
 .showtab,#setting button:hover{color:#fff}
 .tab button{
    background-color: #daf;
@@ -156,3 +150,21 @@ th,td{padding:0}
    font-size: 12px;
 }
 #export button{min-width:auto}
+.ach{
+   height: 98px;
+   width: 98px;
+   border: 1px solid #000;
+   border-radius: 12px;
+   margin: 5px;
+}
+.achieved{
+   background-color:#ff0;
+   color:#000;
+}
+.ach1.ach2.ach3{background-color:#fff}
+.ach1.ach2{background-color:#8bf}
+.ach1.ach3{background-color:#f8b}
+.ach2.ach3{background-color:#bf8}
+.ach1{background-color:#85b}
+.ach2{background-color:#5b8}
+.ach3{background-color:#b85}

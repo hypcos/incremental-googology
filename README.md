@@ -16,7 +16,6 @@ where n may be 2<sup>53</sup>-1 or 2<sup>1024</sup>-2<sup>971</sup> (or other Nu
 Every separated folder can extend to a web game.
 ## Current State
 The repository started with folder "Tetration", now at 4th version, with only item "Bashicu matrix system" (BMS).
-It has no statistics or achievements yet.
 
 (BMS is believed to be one of the strongest recursive notations,
 competing with fast-growing hierarchy (FGH) + Taranovsky's ordinal notation
@@ -26,7 +25,7 @@ In the game, the beginning system should be able to accept bonus from higher str
 while named numbers should have their place for special effects, which should come in later game,
 so a strong system without named numbers, such as BMS, suits the beginning.)
 
-The game is now playable for hours.
+The game is now playable for hours, or days for some achievements.
 ## Main Difficulty 1
 First main difficulty of Incremental Googology is the googology itself - numbers are large.
 
