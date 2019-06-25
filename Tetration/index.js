@@ -105,17 +105,11 @@ const v = new Vue({
          }
          return arr1
       }
-      ,BM0etcMult(){
-         var bought,len,unlockereff,n,n1=this.BM0etcBought.length,arr,arr1=[]
-         ,Achievement=this.Achievement
+      ,BM0etcMult_Ach(){
+         var Achievement=this.Achievement,BM0etcLengthEver=this.BM0etcLengthEver,n,n1=BM0etcLengthEver.length,arr,arr1=[]
          ,Overall=this.AchieveCellEff*(Achievement[1]&8?1.01:1)//Overall bonus to all (0)...(0)[x]
-         ,BaseMult
-         ,Base3Incr=2+(Achievement[2]&64?0.1:0);
+         ,BaseMult;
          while(n1--){
-            n=(bought=this.BM0etcBought[n1]).length;
-            len=this.BM0etcLength[n1];
-            unlockereff=this.BM0etcUnlockerEff[n1];
-            arr=[];
             switch(n1){//Bonus to (0)...(0)[n1+2] for certain base number
                case 0:
                BaseMult=(Achievement[0]&64?1.02:1)*(Achievement[0]&128?1.05:1)*(Achievement[0]&256?1.1:1)*(Achievement[1]&256?1.7:1);
@@ -126,8 +120,9 @@ const v = new Vue({
                default:
                BaseMult=1
             }
-            while(n--)
-               arr[n]=Times(Times(bought[n]?Power(n1==1?Base3Incr:n1+2,Plus(bought[n],-1)):1,Power(unlockereff,Max(len-3-n,0))),Times(Overall,BaseMult));
+            arr=[];
+            n=BM0etcLengthEver[n1];
+            while(n--) arr[n]=Times(Overall,BaseMult);
             arr1[n1]=arr
          }
          //Single BM specific bonus
@@ -139,6 +134,45 @@ const v = new Vue({
          if(arr1[1]&&Achievement[2]&32){
             if(arr1[1][0]) arr1[1][0]=Times(arr1[1][0],1.2);
             if(arr1[1][1]) arr1[1][1]=Times(arr1[1][1],1.2)
+         }
+         return arr1
+      }
+      ,BM0etcMult_Bought(){
+         var BM0etcBought=this.BM0etcBought,bought
+         ,n,n1=BM0etcBought.length,arr,arr1=[]
+         ,Base3Incr=2+(this.Achievement[2]&64?0.1:0);
+         while(n1--){
+            arr=[];
+            n=(bought=BM0etcBought[n1]).length;
+            while(n--) arr[n]=bought[n]?Power(n1==1?Base3Incr:n1+2,Plus(bought[n],-1)):1;
+            arr1[n1]=arr
+         }
+         return arr1
+      }
+      ,BM0etcMult_Unlocker(){
+         var BM0etcLength=this.BM0etcLength,BM0etcUnlockerEff=this.BM0etcUnlockerEff
+         ,len,unlockereff
+         ,n,n1=BM0etcLength.length,arr,arr1=[];
+         while(n1--){
+            n=len=BM0etcLength[n1];
+            unlockereff=BM0etcUnlockerEff[n1];
+            arr=[];
+            while(n--) arr[n]=Power(unlockereff,Max(len-3-n,0));
+            arr1[n1]=arr
+         }
+         return arr1
+      }
+      ,BM0etcMult(){
+         var Ach=this.BM0etcMult_Ach,Bought=this.BM0etcMult_Bought,Unlocker=this.BM0etcMult_Unlocker
+         ,ach,bought,unlocker
+         ,n,n1=Bought.length,arr,arr1=[];
+         while(n1--){
+            arr=[];
+            ach=Ach[n1];
+            n=(bought=Bought[n1]).length;
+            unlocker=Unlocker[n1];
+            while(n--) arr[n]=Times(bought[n],Times(ach[n],unlocker[n]));
+            arr1[n1]=arr
          }
          return arr1
       }
