@@ -15,10 +15,10 @@
    <span style="font-size:50px">{{MainNumber|show}}</span><br>
    Your number is gaining {{Growth|show}} per second
    <div class="tab">
-      <button @mousedown="CurrentTab=0" :class="{showtab:CurrentTab==0}">Options</button>
-      <button @mousedown="CurrentTab=1" :class="{showtab:CurrentTab==1}">Achievements</button>
-      <button @mousedown="CurrentTab=2" :class="{showtab:CurrentTab==2}">Statistics</button>
-      <button @mousedown="CurrentTab=3" :class="{showtab:CurrentTab==3}" title="Bashicu matrix system">BMS</button>
+      <button @mousedown="CurrentTab=0" :disabled="CurrentTab==0">Options</button>
+      <button @mousedown="CurrentTab=1" :disabled="CurrentTab==1">Achievements</button>
+      <button @mousedown="CurrentTab=2" :disabled="CurrentTab==2">Statistics</button>
+      <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3" title="Bashicu matrix system">BMS</button>
    </div>
    <div v-if="CurrentTab==3">
       <div class="left">
