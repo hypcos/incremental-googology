@@ -181,11 +181,11 @@ const v = new Vue({
          RowCancel.map(x=>x());
          var init=InitialData();
          Object.getOwnPropertyNames(init).map(x=>v[x]=init[x]);
-         Hidden=HiddenRaw();
+         Time=TimeRaw();
          Achievementwatch();
          Save(0)
       }
-      ,GamePlayed:()=>show((Date.now()-Hidden.LastGame)*0.001)
+      ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
       ,BM0etcMaxall:()=>{
          var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length;
          while(n1--)
@@ -231,20 +231,20 @@ const v = new Vue({
 }
 ,Loop = ()=>{
    setTimeout(Loop,v.UpdateInterval);
-   var dt=(Date.now()-Hidden.LastUpdate)*0.001;
-   Hidden.LastUpdate=Date.now();
+   var dt=(Date.now()-Time.LastUpdate)*0.001;
+   Time.LastUpdate=Date.now();
    Grow(dt);
-   if(v.AutoSave&&Hidden.LastUpdate-LastSave>=v.AutoSave){
-      LastSave=Hidden.LastUpdate;
+   if(v.AutoSave&&Time.LastUpdate-LastSave>=v.AutoSave){
+      LastSave=Time.LastUpdate;
       Save(0)
    }
 }
-,HiddenRaw = ()=>({
+,TimeRaw = ()=>({
    LastUpdate:Date.now()
    ,LastGame:Date.now()
 });
 var LastSave=Date.now()
-,Hidden=HiddenRaw();
+,Time=TimeRaw();
 v.$watch('NumberBase',x=>{
    var pmax=29.9336062089226/Math.log(x);
    if(pmax<v.Precision) v.Precision=Math.floor(pmax)
@@ -288,8 +288,8 @@ window.addEventListener('keydown',e=>{
 //Initialization
 Load(0);
 {
-   let DeltaT=(Date.now()-Hidden.LastUpdate)*0.001;
-   Hidden.LastUpdate=Date.now();
+   let DeltaT=(Date.now()-Time.LastUpdate)*0.001;
+   Time.LastUpdate=Date.now();
    let n=Math.ceil(Math.sqrt(DeltaT*3))
    ,dt=DeltaT/n;
    while(n--) Grow(dt);

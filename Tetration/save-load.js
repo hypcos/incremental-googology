@@ -71,21 +71,23 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
    }
 }
 ,Save = n=>{
-   var i,a1=[],a2=[],hidden=HiddenList[Version],data=DataList[Version];
-   for(i=hidden.length;i--;) a1[i]=Hidden[hidden[i]];
+   var i,a1=[],a2=[],hidden=TimeList[Version],data=DataList[Version];
+   for(i=hidden.length;i--;) a1[i]=Time[hidden[i]];
    for(i=data.length;i--;) a2[i]=v[data[i]];
    localStorage.setItem(''+n,ToStream([Version,a1,a2]))
 }
 ,Load = n=>{
-   var i,stream=localStorage.getItem(''+n),hidden,data,version;
+   var i,stream=localStorage.getItem(''+n),hidden,current_hidden,data,version;
    if(!stream) return;
    Cancel.map(x=>x());
    RowCancel.map(x=>x());
    stream=FromStream(stream);
    version=Natural(stream[0]);
    if(!(version<=Version)) return;
-   hidden=HiddenList[version];
-   for(i=hidden.length;i--;) Hidden[hidden[i]]=stream[1][i];
+   hidden=TimeList[version];
+   for(i=hidden.length;i--;) Time[hidden[i]]=stream[1][i];
+   current_hidden=TimeList[Version];
+   for(i=hidden.length;i<current_hidden.length;++i) Time[hidden[i]]=Time[hidden[1]];
    data=DataList[version];
    for(i=data.length;i--;) v[data[i]]=stream[2][i];
    Achievementwatch()
