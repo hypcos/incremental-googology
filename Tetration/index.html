@@ -40,7 +40,7 @@
                <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
                Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{n1+2|showInt}}]
                {{BM0etcUnlockText1[n1]}}by {{BM0etcUnlockerEff[n1]|show}}×<br>
-               Requirement: {{n1+2|showInt}} {{BM0etcUnlockText[n1]}}'s
+               Requirement: {{BM0etcUnlockCost[n1]|showInt}} {{BM0etcUnlockText[n1]}}'s
             </button><buy v-for="(am,n) in amounts" :info="BM0etcInfo[n1][n]" :amount="['BM0etc',n1,n]"
             :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
          </div>
