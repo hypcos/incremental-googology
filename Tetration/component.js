@@ -51,7 +51,7 @@ Vue.component('buy',{
       }
    }
    ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="inf.tooltip">\
-      <b :style="{\'font-size\':tex+\'px\'}">{{Text}}</b><br>\
+      <b :style="{\'font-size\':tex+\'px\'}" v-html="Text"></b><br>\
       {{ShowAmount}}<br>\
       {{ShowMult}}×<br>\
       Cost: {{ShowCost}}\
