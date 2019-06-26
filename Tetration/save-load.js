@@ -79,8 +79,7 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
 ,Load = n=>{
    var i,stream=localStorage.getItem(''+n),hidden,current_hidden,data,version;
    if(!stream) return;
-   Cancel.map(x=>x());
-   RowCancel.map(x=>x());
+   AchievementOff();
    stream=FromStream(stream);
    version=Natural(stream[0]);
    if(!(version<=Version)) return;
@@ -90,5 +89,5 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
    for(i=hidden.length;i<current_hidden.length;++i) Time[hidden[i]]=Time[hidden[1]];
    data=DataList[version];
    for(i=data.length;i--;) v[data[i]]=stream[2][i];
-   Achievementwatch()
+   AchievementOn()
 }

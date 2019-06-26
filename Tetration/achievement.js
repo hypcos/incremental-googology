@@ -67,7 +67,7 @@ const Cancel=[]
       ,'Get multipliers of all zero-only\nbase-2 and base-4 BM (at least\n7 of them) equal (1% margin).\nReward: Power up unlock\nmultipliers by ^1.02'
    ]
 ]
-,Achievementwatch = ()=>{
+,AchievementOn = ()=>{
    var len=v.Achievement.length;
    Row0watch();
    if(len<=1){
@@ -94,6 +94,10 @@ const Cancel=[]
             Row2watch()
          })
    }else Row2watch();
+}
+,AchievementOff = ()=>{
+   Cancel.map(x=>x());
+   RowCancel.map(x=>x());
 }
 ,Row0watch = ()=>{
    var Achievement=v.Achievement;

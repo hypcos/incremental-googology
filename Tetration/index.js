@@ -212,12 +212,11 @@ const v = new Vue({
       }
       ,Reset:()=>{
          if(!confirm('Unlike other resets, you will lose all the progress WITHOUT ANY BONUS OR REWARD.\nDo you really want a FULL reset?')) return;
-         Cancel.map(x=>x());
-         RowCancel.map(x=>x());
+         AchievementOff();
          var init=InitialData();
          Object.getOwnPropertyNames(init).map(x=>v[x]=init[x]);
          Time=TimeRaw();
-         Achievementwatch();
+         AchievementOn();
          Save(0)
       }
       ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
