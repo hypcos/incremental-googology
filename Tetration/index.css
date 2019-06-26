@@ -25,7 +25,6 @@ button{
 }
 button[disabled]{
    background-color: #aaa;
-   color: #000;
    cursor: not-allowed;
 }
 select{
@@ -86,7 +85,6 @@ th,td{padding:0}
    vertical-align: text-top;
 }
 /*Special items*/
-.showtab,#setting button:hover{color:#fff}
 .tab button{
    background-color: #daf;
    padding: 0 12px 4px;
@@ -95,7 +93,10 @@ th,td{padding:0}
    font-size: 32px;
    font-weight: bold;
 }
-.tab button.showtab{background-color:#60a}
+.tab [disabled]{
+   background-color: #60a;
+   color: #fff;
+}
 .tab2 button{
    background-color: #adf;
    padding: 1px 9px 4px;
@@ -104,7 +105,10 @@ th,td{padding:0}
    font-size: 20px;
    font-weight: 520;
 }
-.tab2 button.showtab{background-color:#035}
+.tab2 [disabled]{
+   background-color: #035;
+   color: #fff;
+}
 #loading{
    background-color: #555;
    position: fixed;
@@ -130,7 +134,10 @@ th,td{padding:0}
    font-weight: 500;
    transition: .2s;
 }
-#setting button:hover{background-color:#20a}
+#setting button:hover{
+   background-color: #20a;
+   color: #fff;
+}
 #setting select{font-size:20px}
 #export{
    background-color: #555;

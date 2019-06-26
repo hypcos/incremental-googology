@@ -1,6 +1,6 @@
 'use strict';
 const Version=1
-,HiddenList=[
+,TimeList=[
    [
       'LastUpdate'
       ,'LastGame'
