@@ -21,8 +21,13 @@
       <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3" title="Bashicu matrix system">BMS</button>
    </div>
    <div v-if="CurrentTab==3">
+      <button v-if="Achievement.length>3" class="prestige" @mousedown="FGHPrestigeDo()"
+      :style="{visibility:FGHPrestigeCant?'hidden':'visible'}">
+         <b>FGH-prestige</b><br>
+         Get {{FGHNumberToGet|show}} FGH number
+      </button>
       <div class="left">
-         <button v-if="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
+         <button v-show="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
          title="Reset your number, all zero-only BM and unlockers">
             <b style="font-size:15px">(0)(1)[{{BM0c1|showInt}}]</b><br>
             Reset to unlock a new base number<br>
@@ -35,7 +40,7 @@
       <div class="left">
          <div v-for="(amounts,n1) in BM0etc"
          :class="{cellcolumn:BM0etc.length>4,column2:BM0etc.length==2,column3:BM0etc.length==3,column4:BM0etc.length==4}">
-            <button v-if="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
+            <button v-show="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
             :title="BM0etcUnlockTooltip[n1]">
                <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
                Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{n1+2|showInt}}]

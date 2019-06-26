@@ -71,7 +71,7 @@ const Cancel=[]
    var len=v.Achievement.length;
    Row0watch();
    if(len<=1){
-      if(v.BMSStage>=1){
+      if(v.FGHPrestige||v.BMSStage>=1){
          Vue.set(v.Achievement,1,0);
          Row1watch()
       }else
@@ -83,7 +83,7 @@ const Cancel=[]
          })
    }else Row1watch();
    if(len<=2){
-      if(v.BMSStage>=2){
+      if(v.FGHPrestige||v.BMSStage>=2){
          Vue.set(v.Achievement,2,0);
          Row2watch()
       }else
@@ -94,6 +94,16 @@ const Cancel=[]
             Row2watch()
          })
    }else Row2watch();
+   if(len<=3){
+      if(v.FGHPrestige)
+         Vue.set(v.Achievement,3,0);
+      else
+         RowCancel[2] = v.$watch(()=>LessEqualQ(1e100,v.MainNumber),x=>{
+            if(!x) return;
+            RowCancel[2]();
+            Vue.set(v.Achievement,3,0)
+         })
+   }
 }
 ,AchievementOff = ()=>{
    Cancel.map(x=>x());

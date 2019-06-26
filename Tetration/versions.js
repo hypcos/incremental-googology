@@ -1,5 +1,5 @@
 'use strict';
-const Version=1
+const Version=2
 ,TimeList=[
    [
       'LastUpdate'
@@ -7,6 +7,11 @@ const Version=1
    ],[
       'LastUpdate'
       ,'LastGame'
+   ],[
+      'LastUpdate'
+      ,'LastGame'
+      ,'LastFGHPrestige'
+      ,'LastFGHSpecialModifier'
    ]
 ]
 ,DataList=[
@@ -38,5 +43,26 @@ const Version=1
       ,'BM0etcLengthEver'
       ,'BM0etcUnlockTotal'
       ,'BM0c1'
+   ],[
+      'UpdateInterval'
+      ,'AutoSave'
+      ,'NumberBase'
+      ,'Precision'
+      ,'Hotkey'
+      ,'Achievement'
+      ,'Ach2r16'
+      ,'MainNumber'
+      ,'MainNumberEver'
+      ,'BMSStage'
+      ,'BM0etc'
+      ,'BM0etcBought'
+      ,'BM0etcLength'
+      ,'BM0etcLengthEver'
+      ,'BM0etcUnlockTotal'
+      ,'BM0c1'
+      ,'FGHNumber'
+      ,'FGHPrestige'
+      ,'FGHPrestigeFastest'
+      ,'FGHNumberRate'
    ]
 ]

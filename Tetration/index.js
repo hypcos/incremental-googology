@@ -9,6 +9,12 @@ const Grow = dt=>{
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt))
 }
+,TimeRaw = ()=>({
+   LastUpdate:Date.now()
+   ,LastGame:Date.now()
+   ,LastFGHPrestige:Date.now()
+   ,LastFGHSpecialModifier:Date.now()
+})
 ,InitialData = ()=>({
    ExportBox:false
    ,ExportContent:''
@@ -29,6 +35,10 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
+   ,FGHNumber:0
+   ,FGHPrestige:0
+   ,FGHPrestigeFastest:Infinity
+   ,FGHNumberRate:0
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -194,6 +204,12 @@ const v = new Vue({
          return Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2)))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
+      ,FGHPrestigeCant(){return LessQ(this.MainNumber,1e100)}
+      ,FGHNumberToGet(){
+         if(this.FGHPrestigeCant) return 0;
+         var x=Ln(this.MainNumber);
+         return Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715))
+      }
    }
    ,methods:{
       Save:n=>Save(n)
@@ -220,6 +236,7 @@ const v = new Vue({
          Save(0)
       }
       ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
+      ,FGHPrestigePlayed:()=>show((Date.now()-Time.LastFGHPrestige)*0.001)
       ,BM0etcMaxall:()=>{
          var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length;
          while(n1--)
@@ -239,8 +256,25 @@ const v = new Vue({
          Vue.set(v.BM0etcLengthEver,n,3);
          BM0etcReset(n+1)
       }
+      ,FGHPrestigeDo:()=>{
+         var t=(Date.now()-Time.LastFGHPrestige)*0.001;
+         v.FGHNumber=Plus(v.FGHNumber,v.FGHNumberToGet);
+         v.FGHPrestige++;
+         v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
+         v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
+         BMSReset()
+      }
    }
 })
+,BMSReset = ()=>{
+   v.Ach2r16=[0,0];
+   v.MainNumber=4;
+   v.BMSStage=0;
+   v.BM0etc=[[0]];
+   v.BM0etcBought=[[0]];
+   v.BM0etcLength=[3];
+   v.BM0c1=2
+}
 ,BM0etcReset = n=>{
    var BM0etcLength=v.BM0etcLength;
    while(n--) BM0etcLength[n]=3;
@@ -272,11 +306,7 @@ const v = new Vue({
       LastSave=Time.LastUpdate;
       Save(0)
    }
-}
-,TimeRaw = ()=>({
-   LastUpdate:Date.now()
-   ,LastGame:Date.now()
-});
+};
 var LastSave=Date.now()
 ,Time=TimeRaw();
 v.$watch('NumberBase',x=>{
