@@ -160,14 +160,14 @@ const v = new Vue({
          return arr1
       }
       ,BM0etcMult_Unlocker(){
-         var BM0etcLength=this.BM0etcLength,BM0etcUnlockerEff=this.BM0etcUnlockerEff
-         ,len,unlockereff
+         var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,BM0etcUnlockerEff=this.BM0etcUnlockerEff
+         ,top,unlockereff
          ,n,n1=BM0etcLength.length,arr,arr1=[];
          while(n1--){
-            n=len=BM0etcLength[n1];
+            top=(n=BM0etcLength[n1])-BM0etcLengthStart[n1];
             unlockereff=BM0etcUnlockerEff[n1];
             arr=[];
-            while(n--) arr[n]=Power(unlockereff,Max(len-3-n,0));
+            while(n--) arr[n]=Power(unlockereff,Max(top-n,0));
             arr1[n1]=arr
          }
          return arr1
@@ -186,16 +186,17 @@ const v = new Vue({
          }
          return arr1
       }
+      ,BM0etcLengthStart(){return this.BM0etcLengthEver.map(x=>3)}
       ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0etcUnlockText1(){return this.BM0etcLengthEver.map((x,n)=>n?'and base-'+showInt(n+1)+' unlocker ':'')}
       ,BM0etcUnlockTooltip(){return this.BM0etcLengthEver.map((x,n)=>'Reset your number'+(n?', all zero-only BM and previous unlockers':' and all zero-only BM'))}
       ,BM0etcUnlockCost(){return this.BM0etcLengthEver.map((x,n)=>n+2)}
       ,BM0etcCantUnlock(){return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,this.BM0etcUnlockCost[n]))}
       ,BM0etcUnlockerEff(){
-         var BM0etcLength=this.BM0etcLength,n=BM0etcLength.length-1,arr=[]
+         var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,n=BM0etcLength.length-1,arr=[]
          ,Overall=this.Achievement[2]&256?1.02:1;
          arr[n]=Overall;
-         while(n--) arr[n]=Times(Plus(Times(Plus(BM0etcLength[n+1],-3),arr[n+1]),1),Overall);
+         while(n--) arr[n]=Times(Plus(Times(Minus(BM0etcLength[n+1],BM0etcLengthStart[n+1]),arr[n+1]),1),Overall);
          return arr.map(x=>Power(2,x))
       }
       ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
@@ -253,7 +254,7 @@ const v = new Vue({
       }
       ,BM0c1Buy:()=>{
          var n=(++v.BM0c1)-2;
-         Vue.set(v.BM0etcLengthEver,n,3);
+         if(v.BM0etcLengthEver.length<n) Vue.set(v.BM0etcLengthEver,n,v.BM0etcLengthStart[n]||3);
          BM0etcReset(n+1)
       }
       ,FGHPrestigeDo:()=>{
@@ -273,12 +274,12 @@ const v = new Vue({
    v.BMSStage=0;
    v.BM0etc=[[0]];
    v.BM0etcBought=[[0]];
-   v.BM0etcLength=[3];
+   v.BM0etcLength=[v.BM0etcLengthStart[0]];
    v.BM0c1=2
 }
 ,BM0etcReset = n=>{
-   var BM0etcLength=v.BM0etcLength;
-   while(n--) BM0etcLength[n]=3;
+   var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart;
+   while(n--) BM0etcLength[n]=BM0etcLengthStart[n];
    Vue.set(BM0etcLength,0,BM0etcLength[0]);
    v.MainNumber=4;
    v.BM0etc=[[0]];
