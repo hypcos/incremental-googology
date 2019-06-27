@@ -78,11 +78,11 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
 }
 ,Load = n=>{
    var i,stream=localStorage.getItem(''+n),hidden,current_hidden,data,version;
+   AchievementOff();
    if(!stream) return AchievementOn();
    stream=FromStream(stream);
    version=Natural(stream[0]);
    if(!(version<=Version)) return AchievementOn();
-   AchievementOff();
    hidden=TimeList[version];
    for(i=hidden.length;i--;) Time[hidden[i]]=stream[1][i];
    current_hidden=TimeList[Version];
