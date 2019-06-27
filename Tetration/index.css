@@ -51,9 +51,24 @@ table{
 }
 th,td{padding:0}
 sup,sub{font-size:80%}
+.tooltip{
+   display: none;
+   background-color: rgba(0,0,0,0.8);
+   color: #fff;
+   position: absolute;
+   bottom: 90%;
+   left: 0;
+   z-index: 1073741824;
+   padding: 2px 5px;
+   text-align: left;
+   font-size: 12px;
+   font-weight: normal;
+}
+:hover>.tooltip{display:inline-block}
 /*General items*/
 .cell{
    height: 172px;
+   position: relative;
    padding: 4px;
    margin: 0;
    vertical-align:text-top;
@@ -112,7 +127,7 @@ sup,sub{font-size:80%}
    vertical-align: text-top;
 }
 /*Special items*/
-.tab button{
+.tab>button{
    background-color: #daf;
    padding: 0 12px 4px;
    border: 2px solid #90f;
@@ -120,11 +135,11 @@ sup,sub{font-size:80%}
    font-size: 32px;
    font-weight: bold;
 }
-.tab [disabled]{
+.tab>[disabled]{
    background-color: #60a;
    color: #fff;
 }
-.tab2 button{
+.tab2>button{
    background-color: #adf;
    padding: 1px 9px 4px;
    border: 2px solid #09f;
@@ -132,7 +147,7 @@ sup,sub{font-size:80%}
    font-size: 20px;
    font-weight: 520;
 }
-.tab2 [disabled]{
+.tab2>[disabled]{
    background-color: #035;
    color: #fff;
 }
@@ -177,20 +192,23 @@ sup,sub{font-size:80%}
    border-radius: 20px;
    padding: 15px;
 }
-#export textarea{
+#export>textarea{
    height: 75%;
    width: 99%;
    margin: 0 0 15px;
    font-size: 12px;
 }
-#export button{min-width:auto}
+#export>button{min-width:auto}
 .ach{
-   height: 98px;
+   height: 90px;
    width: 98px;
+   position: relative;
+   padding: 8px 0 0;
    border: 1px solid #000;
    border-radius: 12px;
    margin: 5px;
 }
+.ach>.tooltip{width:150%}
 .achieved{
    background-color:#ff0;
    color:#000;

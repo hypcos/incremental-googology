@@ -18,8 +18,10 @@
       <button @mousedown="CurrentTab=0" :disabled="CurrentTab==0">Options</button>
       <button @mousedown="CurrentTab=1" :disabled="CurrentTab==1">Achievements</button>
       <button @mousedown="CurrentTab=2" :disabled="CurrentTab==2">Statistics</button>
-      <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3" title="Bashicu matrix system">BMS</button>
-      <button v-if="Achievement.length>3" @mousedown="CurrentTab=4" :disabled="CurrentTab==4" title="fast-growing hierarchy">FGH</button>
+      <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3"
+      style="position:relative">BMS<span class="tooltip">Bashicu matrix system</span></button>
+      <button v-if="Achievement.length>3" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
+      style="position:relative">FGH<span class="tooltip">fast-growing hierarchy</span></button>
    </div>
    <div v-if="CurrentTab==3">
       <button v-if="Achievement.length>3" class="prestige" @mousedown="FGHPrestigeDo()"
@@ -28,11 +30,11 @@
          Get {{FGHNumberToGet|show}} FGH number
       </button>
       <div class="left">
-         <button v-show="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()"
-         title="Reset your number, all zero-only BM and unlockers">
+         <button v-show="BMSStage>=2" class="cell cell4" :disabled="BM0c1Cant" @mousedown="BM0c1Buy()">
             <b class="big">(0)(1)[{{BM0c1|showInt}}]</b><br>
             Reset to unlock a new base number<br>
             Requirement: {{BM0c1Cost|showInt}}
+            <span class="tooltip">Reset your number, all zero-only BM and unlockers</span>
          </button>
       </div>
       <button class="celldark itemrow2" style="font-size:24px" @mousedown="BM0etcMaxall()">
@@ -41,12 +43,12 @@
       <div class="left">
          <div v-for="(amounts,n1) in BM0etc"
          :class="{cellcolumn:BM0etc.length>4,column2:BM0etc.length==2,column3:BM0etc.length==3,column4:BM0etc.length==4}">
-            <button v-show="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)"
-            :title="BM0etcUnlockTooltip[n1]">
+            <button v-show="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)">
                <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
                Reset to boost {{BM0etcLength[n1]-2}} initial (0)...(0)[{{n1+2|showInt}}]
                {{BM0etcUnlockText1[n1]}}by {{BM0etcUnlockerEff[n1]|show}}×<br>
                Requirement: {{BM0etcUnlockCost[n1]|showInt}} {{BM0etcUnlockText[n1]}}'s
+               <span class="tooltip" v-html="BM0etcUnlockTooltip[n1]"></span>
             </button><buy v-for="(am,n) in amounts" :info="BM0etcInfo[n1][n]" :amount="['BM0etc',n1,n]"
             :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
          </div>
@@ -143,8 +145,9 @@ both mantissa and exponent count into significant digits">
       <table>
          <tr v-for="y in 3">
             <td v-for="x in 9" :class="{ach1:AchieveCell[y-1][x-1],ach2:AchieveRow[y-1],ach3:AchieveColumn[x-1]}">
-               <div class="ach" :class="{achieved:AchieveSingle[y-1][x-1]}" :title="Achievement.length>=y?AchievementTooltip[y-1][x-1]:''">
+               <div class="ach" :class="{achieved:AchieveSingle[y-1][x-1]}">
                   {{Achievement.length>=y?AchievementName[y-1][x-1]:'LOCKED'}}
+                  <span class="tooltip" v-html="Achievement.length>=y?AchievementTooltip[y-1][x-1]:''"></span>
                </div>
             </td>
          </tr>

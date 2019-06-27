@@ -50,10 +50,10 @@ Vue.component('buy',{
          Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],delta))
       }
    }
-   ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()" :title="inf.tooltip">\
+   ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()">\
       <b :style="{\'font-size\':tex+\'px\'}" v-html="Text"></b><br>\
       {{ShowAmount}}<br>\
       {{ShowMult}}×<br>\
       Cost: {{ShowCost}}\
-   <slot></slot></button>'
+   <slot></slot><span class="tooltip" v-html="inf.tooltip"></span></button>'
 })

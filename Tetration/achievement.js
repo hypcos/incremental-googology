@@ -39,32 +39,32 @@ const Cancel=[]
       'Buy a (0)[2].'
       ,'Buy a (0)(0)[2].'
       ,'Buy a (0)(0)(0)[2].'
-      ,"Buy 4 (0)[2]'s at once.\nReward: (0)[2] is 5% stronger"
-      ,"Have 4 (0)(0)(0)[2]'s without\nseeing (0)(0)(0)(0)[2].\nReward: (0)(0)(0)[2] is 5%\nstronger"
-      ,'Display your number as "ee...e"\nwithout other symbol.'
-      ,'Get multipliers of\n(0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...\nReward: zero-only base-2 BM\nare 2% stronger'
-      ,'Get amounts of\n(0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...\nReward: zero-only base-2 BM\nare 5% stronger'
-      ,'Have multiplier exceeding amount of\nevery zero-only base-2 BM over 2.\nReward: zero-only base-2 BM are\n10% stronger'
+      ,"Buy 4 (0)[2]'s at once. Reward: (0)[2] is 5% stronger"
+      ,"Have 4 (0)(0)(0)[2]'s without seeing (0)(0)(0)(0)[2].<br>Reward: (0)(0)(0)[2] is 5% stronger"
+      ,'Display your number as "ee...e" without other symbol.'
+      ,'Get multipliers of (0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...<br>Reward: zero-only base-2 BM are 2% stronger'
+      ,'Get amounts of (0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...<br>Reward: zero-only base-2 BM are 5% stronger'
+      ,'Have multiplier exceeding amount of every zero-only base-2 BM over 2.<br>Reward: zero-only base-2 BM are 10% stronger'
    ],[
       'Buy a (0)(0)(0)(0)[2].'
       ,'Buy a (0)(0)(0)(0)(0)(0)[2].'
       ,'Buy a (0)(0)(0)(0)(0)(0)(0)(0)[2].'
-      ,'Have 16 different kinds of\nzero-only BM.\nReward: zero-only BM are\n1% stronger'
-      ,'Unlock 16 times in total.\nReward: (0)(0)(0)(0)[2]\nis 5% stronger'
+      ,'Have 16 different kinds of zero-only BM.<br>Reward: zero-only BM are 1% stronger'
+      ,'Unlock 16 times in total.<br>Reward: (0)(0)(0)(0)[2] is 5% stronger'
       ,'Boost (0)[2] by 65536× from unlocker.'
-      ,'Buy a (0)(0)(0)(0)(0)(0)(0)[2]\nwithout seeing (0)(0)[3].\nReward: (0)(0)(0)(0)(0)(0)(0)[2]\nis 20% stronger'
-      ,'Unlock with only (0)[2] and highest\nzero-only base-2 BM bought.\nReward: (0)(0)[2] is 10% stronger'
-      ,'Get multipliers of all zero-only\nbase-2 BM (at least 4 of them)\nequal (1% margin).\nReward: zero-only base-2 BM\nare 70% stronger'
+      ,'Buy a (0)(0)(0)(0)(0)(0)(0)[2] without seeing (0)(0)[3].<br>Reward: (0)(0)(0)(0)(0)(0)(0)[2] is 20% stronger'
+      ,'Unlock with only (0)[2] and highest zero-only base-2 BM bought.<br>Reward: (0)(0)[2] is 10% stronger'
+      ,'Get multipliers of all zero-only base-2 BM (at least 4 of them) equal (1% margin).<br>Reward: zero-only base-2 BM are 70% stronger'
    ],[
       'Buy a (0)(0)[3].'
       ,'Buy a (0)(0)(0)(0)(0)[3].'
-      ,'Make the least multiplier of\nzero-only base-3 BM larger\nthan any zero-only base-2 BM.\nReward: zero-only base-3 BM\nare 2% stronger'
-      ,'Make the least amount of\nzero-only base-3 BM larger\nthan any zero-only base-2 BM.\nReward: zero-only base-3 BM\nare 5% stronger'
-      ,'Unlock zero-only base-3 BM\nmore times than base-2.\nReward: zero-only base-3\nBM are 10% stronger'
-      ,'Unlock zero-only base-3 BM\nwith only (0)[2] and highest\nzero-only base-3 BM bought.\nReward: (0)(0)[3] and\n(0)(0)(0)[3] are 20% stronger'
-      ,'Get multipliers of all zero-only\nbase-2 and base-3 BM (at least\n7 of them) equal (1% margin).\nReward: multipliers when buying\nbase-3 BM increase by 0.1'
+      ,'Make the least multiplier of zero-only base-3 BM larger than any zero-only base-2 BM.<br>Reward: zero-only base-3 BM are 2% stronger'
+      ,'Make the least amount of zero-only base-3 BM larger than any zero-only base-2 BM.<br>Reward: zero-only base-3 BM are 5% stronger'
+      ,'Unlock zero-only base-3 BM more times than base-2.<br>Reward: zero-only base-3 BM are 10% stronger'
+      ,'Unlock zero-only base-3 BM with only (0)[2] and highest zero-only base-3 BM bought.<br>Reward: (0)(0)[3] and (0)(0)(0)[3] are 20% stronger'
+      ,'Get multipliers of all zero-only base-2 and base-3 BM (at least 7 of them) equal (1% margin).<br>Reward: multipliers when buying base-3 BM increase by 0.1'
       ,'Buy a (0)(0)(0)[4].'
-      ,'Get multipliers of all zero-only\nbase-2 and base-4 BM (at least\n7 of them) equal (1% margin).\nReward: Power up unlock\nmultipliers by ^1.02'
+      ,'Get multipliers of all zero-only base-2 and base-4 BM (at least 7 of them) equal (1% margin).<br>Reward: Power up unlock multipliers by ^1.02'
    ]
 ]
 ,AchievementOn = ()=>{
