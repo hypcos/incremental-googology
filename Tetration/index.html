@@ -19,6 +19,7 @@
       <button @mousedown="CurrentTab=1" :disabled="CurrentTab==1">Achievements</button>
       <button @mousedown="CurrentTab=2" :disabled="CurrentTab==2">Statistics</button>
       <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3" title="Bashicu matrix system">BMS</button>
+      <button v-if="Achievement.length>3" @mousedown="CurrentTab=4" :disabled="CurrentTab==4" title="fast-growing hierarchy">FGH</button>
    </div>
    <div v-if="CurrentTab==3">
       <button v-if="Achievement.length>3" class="prestige" @mousedown="FGHPrestigeDo()"
@@ -50,6 +51,9 @@
             :bought="['BM0etcBought',n1,n]" :mult="['BM0etcMult',n1,n]"></buy>
          </div>
       </div>
+   </div>
+   <div v-else-if="CurrentTab==4">
+      Your fast-growing hierarchy number is <span style="font-size:44px">{{FGHNumber|show}}</span>
    </div>
    <div v-else-if="CurrentTab==0" id="setting">
       <div class="itemrow">

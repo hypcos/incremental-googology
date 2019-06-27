@@ -258,6 +258,7 @@ const v = new Vue({
       }
       ,FGHPrestigeDo:()=>{
          var t=(Date.now()-Time.LastFGHPrestige)*0.001;
+         Time.LastFGHPrestige=Date.now();
          v.FGHNumber=Plus(v.FGHNumber,v.FGHNumberToGet);
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);

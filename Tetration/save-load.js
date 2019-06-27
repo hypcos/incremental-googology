@@ -87,6 +87,8 @@ const NumberToStream = x=>{//Works for 4/MAX <= x <= MAX
    for(i=hidden.length;i--;) Time[hidden[i]]=stream[1][i];
    current_hidden=TimeList[Version];
    for(i=hidden.length;i<current_hidden.length;++i) Time[current_hidden[i]]=Time[current_hidden[1]];
+   data=InitialData();
+   DataList[Version].map(x=>v[x]=data[x]);
    data=DataList[version];
    for(i=data.length;i--;) v[data[i]]=stream[2][i];
    AchievementOn()
