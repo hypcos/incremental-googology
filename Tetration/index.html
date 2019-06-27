@@ -125,6 +125,12 @@ both mantissa and exponent count into significant digits">
          so far.<br>
          You have ever unlocked zero-only BM {{BM0etcUnlockTotal|showInt}} times in total.
       </div>
+      <div v-show="FGHPrestige">
+         <br>
+         You have spent {{FGHPrestigePlayed()}} seconds since previous FGH-prestige.<br>
+         You have FGH-prestiged {{FGHPrestige|showInt}} times.<br>
+         Your fastest FGH-prestige is {{FGHPrestigeFastest|show}} seconds.
+      </div>
    </div>
 </div>
 <script src="arithmetic.js"></script>
