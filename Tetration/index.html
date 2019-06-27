@@ -90,9 +90,10 @@ both mantissa and exponent count into significant digits">
          <div class="itemrow4"><button @mousedown="Hotkey^=1">Hotkey: {{Hotkey?'On':'Off'}}</button></div>
       </div>
       Hotkey:
-      <b>0</b> to buy max of all zero-only BM,
+      <b>0</b> to buy max of all zero-only BM<span v-if="Achievement.length>1">,
       <b>2</b> ~ <b>9</b> to unlock BM with corresponding base number,
-      <b>1</b> to buy (0)(1)[n].<br>
+      <b>1</b> to buy (0)(1)[n]</span><span v-if="Achievement.length>3">,
+      <b>P</b> to FGH-prestige</span>.<br>
       Double click on something to buy max of it.
       <div v-if="ExportBox" id="export">
          <textarea v-model="ExportContent"></textarea>

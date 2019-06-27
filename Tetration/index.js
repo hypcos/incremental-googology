@@ -345,8 +345,9 @@ window.addEventListener('keydown',e=>{
       return
    }
    switch(k){
-      case 48: v.BM0etcMaxall(); return;
-      case 49: if(v.BM0c1Cant===false) v.BM0c1Buy(); return;
+      case 48: return v.BM0etcMaxall();
+      case 49: return v.BM0c1Cant||v.BM0c1Buy();
+      case 80: return v.FGHPrestigeCant||v.FGHPrestigeDo();
    }
 });
 //Initialization
