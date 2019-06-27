@@ -1,6 +1,7 @@
 'use strict';
 const Grow = dt=>{
    var a1,a2,n,n1=v.BM0etc.length;
+   if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
    while(n1--){
       n=(a1=v.BM0etc[n1]).length;
       a2=v.BM0etcMult[n1];
@@ -39,6 +40,8 @@ const Grow = dt=>{
    ,FGHPrestige:0
    ,FGHPrestigeFastest:Infinity
    ,FGHNumberRate:0
+   ,FGHTab:0
+   ,AlphaSeries:0
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -211,6 +214,12 @@ const v = new Vue({
          var x=Ln(this.MainNumber);
          return Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715))
       }
+      ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
+      ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}
+      ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
+      ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
+      ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
+      ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -265,6 +274,10 @@ const v = new Vue({
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
          BMSReset()
+      }
+      ,AlphaSeriesBuy:n=>{
+         v.FGHNumber=Minus(v.FGHNumber,[1,2,11,20,10240][n]);
+         v.AlphaSeries|=1<<n
       }
    }
 })

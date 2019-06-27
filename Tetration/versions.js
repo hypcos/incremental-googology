@@ -64,5 +64,6 @@ const Version=2
       ,'FGHPrestige'
       ,'FGHPrestigeFastest'
       ,'FGHNumberRate'
+      ,'AlphaSeries'
    ]
 ]

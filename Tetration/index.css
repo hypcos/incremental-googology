@@ -1,5 +1,6 @@
 :focus{outline:none}
 .left{text-align:left}
+.big{font-size:125%}
 body{
    background-color: #555;
    color: #fff;
@@ -49,6 +50,7 @@ table{
    border-collapse: collapse;
 }
 th,td{padding:0}
+sup,sub{font-size:80%}
 /*General items*/
 .cell{
    height: 172px;
@@ -62,13 +64,29 @@ th,td{padding:0}
    font-size: 15px;
    font-weight: bold;
 }
+.cell1{
+   background-color: #afa;
+   border: 1px solid #0f0;
+}
+.cell1.already{
+   background-color: #050;
+   color: #fff;
+}
 .cell2{
    background-color: #cfa;
    border: 1px solid #6f0;
 }
+.cell3{
+   background-color: #efa;
+   border: 1px solid #cf0;
+}
 .cell4{
    background-color: #fea;
    border: 1px solid #fc0;
+}
+.cell5{
+   background-color: #fca;
+   border: 1px solid #f60;
 }
 .prestige{
    min-height: 65px;
