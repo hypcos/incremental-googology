@@ -63,18 +63,18 @@
       <div v-if="FGHTab==0">
          <button class="cell cell1" :class="{already:AlphaSeries&1}" :disabled="FGH00Cant" @mousedown="AlphaSeriesBuy(0)">
             <b class="big">f<sub>0</sub>(0)</b><br>
-            Boost zero-only BM based on FGH-prestige amount<br>
-            Current: {{1|show}}×<br>
+            Boost zero-only BM based on zero-only BM unlock count ever<br>
+            Current: {{FGH00Eff|show}}×<br>
             Cost: {{1|showInt}} FGHN
          </button><button class="cell cell1" :class="{already:AlphaSeries&2}" :disabled="FGHbase1Cant" @mousedown="AlphaSeriesBuy(1)">
             <b class="big">f<sub>α</sub>(1)</b><br>
-            Boost zero-only BM based on fastest FGH-prestige<br>
-            Current: {{1|show}}×<br>
+            Boost zero-only BM based on FGH-prestige count<br>
+            Current: {{FGHbase1Eff|show}}×<br>
             Cost: {{2|showInt}} FGHN
          </button><button class="cell cell1" :class="{already:AlphaSeries&4}" :disabled="ZeralumCant" @mousedown="AlphaSeriesBuy(2)">
             <b class="big">zeralum</b><br>
             Boost (0)[{{2|showInt}}] based on unspent fast-growing hierarchy number<br>
-            Current: {{1|show}}×<br>
+            Current: {{ZeralumEff|show}}×<br>
             Cost: {{11|showInt}} FGHN
          </button><button class="cell cell1" :class="{already:AlphaSeries&8}" :disabled="UnalumCant" @mousedown="AlphaSeriesBuy(3)">
             <b class="big">unalum</b><br>

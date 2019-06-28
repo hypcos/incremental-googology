@@ -164,13 +164,14 @@ const v = new Vue({
       }
       ,BM0etcMult_Unlocker(){
          var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,BM0etcUnlockerEff=this.BM0etcUnlockerEff
+         ,FGH00Eff=this.AlphaSeries&1?this.FGH00Eff:1
          ,top,unlockereff
          ,n,n1=BM0etcLength.length,arr,arr1=[];
          while(n1--){
             top=(n=BM0etcLength[n1])-BM0etcLengthStart[n1];
             unlockereff=BM0etcUnlockerEff[n1];
             arr=[];
-            while(n--) arr[n]=Power(unlockereff,Max(top-n,0));
+            while(n--) arr[n]=Times(Power(unlockereff,Max(top-n,0)),FGH00Eff);
             arr1[n1]=arr
          }
          return arr1
@@ -184,9 +185,13 @@ const v = new Vue({
             ach=Ach[n1];
             n=(bought=Bought[n1]).length;
             unlocker=Unlocker[n1];
-            while(n--) arr[n]=Times(bought[n],Times(ach[n],unlocker[n]));
+            while(n--){
+               arr[n]=Times(bought[n],Times(ach[n],unlocker[n]));
+               if(this.AlphaSeries&2) arr[n]=Times(arr[n],this.FGHbase1Eff)
+            }
             arr1[n1]=arr
          }
+         if(this.AlphaSeries&4) arr1[0][0]=Times(arr1[0][0],this.ZeralumEff);
          return arr1
       }
       ,BM0etcLengthStart(){return this.BM0etcLengthEver.map(x=>3)}
@@ -219,6 +224,9 @@ const v = new Vue({
       ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
       ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
       ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
+      ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.3)}
+      ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
+      ,ZeralumEff(){return Plus(Times(this.FGHNumber,0.25),1)}
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
    }
    ,methods:{
