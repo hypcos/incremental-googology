@@ -42,6 +42,11 @@ const Grow = dt=>{
    ,FGHNumberRate:0
    ,FGHTab:0
    ,AlphaSeries:0
+   ,FGH0:[0]
+   ,FGH1:[0]
+   ,FGH2iter1:0
+   ,FGH2:[0]
+   ,FGH3:[0]
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -176,17 +181,30 @@ const v = new Vue({
          }
          return arr1
       }
+      ,BM0etcMult_NumEver(){
+         var FGH0=this.FGH0,FGH0Eff=this.FGH0Eff,BM0etcLengthEver=this.BM0etcLengthEver
+         ,n,n1=BM0etcLengthEver.length,arr,arr1=[];
+         while(n1--){
+            arr=[];
+            n=BM0etcLengthEver[n1];
+            while(--n>=FGH0[n1]||0) arr[n]=1;
+            for(;n>=0;--n) arr[n]=FGH0Eff;
+            arr1[n1]=arr
+         }
+         return arr1
+      }
       ,BM0etcMult(){
-         var Ach=this.BM0etcMult_Ach,Bought=this.BM0etcMult_Bought,Unlocker=this.BM0etcMult_Unlocker
-         ,ach,bought,unlocker
+         var Ach=this.BM0etcMult_Ach,Bought=this.BM0etcMult_Bought,Unlocker=this.BM0etcMult_Unlocker,NumEver=this.BM0etcMult_NumEver
+         ,ach,bought,unlocker,numever
          ,n,n1=Bought.length,arr,arr1=[];
          while(n1--){
             arr=[];
             ach=Ach[n1];
             n=(bought=Bought[n1]).length;
             unlocker=Unlocker[n1];
+            numever=NumEver[n1];
             while(n--){
-               arr[n]=Times(bought[n],Times(ach[n],unlocker[n]));
+               arr[n]=Times(Times(ach[n],bought[n]),Times(unlocker[n],numever[n]));
                if(this.AlphaSeries&2) arr[n]=Times(arr[n],this.FGHbase1Eff)
             }
             arr1[n1]=arr
@@ -199,7 +217,10 @@ const v = new Vue({
       ,BM0etcUnlockText1(){return this.BM0etcLengthEver.map((x,n)=>n?'and base-'+showInt(n+1)+' unlocker ':'')}
       ,BM0etcUnlockTooltip(){return this.BM0etcLengthEver.map((x,n)=>'Reset your number'+(n?', all zero-only BM and previous unlockers':' and all zero-only BM'))}
       ,BM0etcUnlockCost(){return this.BM0etcLengthEver.map((x,n)=>n+2)}
-      ,BM0etcCantUnlock(){return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,this.BM0etcUnlockCost[n]))}
+      ,BM0etcCantUnlock(){
+         var BM0etcUnlockCost=this.BM0etcUnlockCost;
+         return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,BM0etcUnlockCost[n]))
+      }
       ,BM0etcUnlockerEff(){
          var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,n=BM0etcLength.length-1,arr=[]
          ,Overall=this.Achievement[2]&256?1.02:1;
@@ -222,12 +243,21 @@ const v = new Vue({
       ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
       ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}
       ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
-      ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
+      ,UnalumPre(){return !this.FGH0[8]||LessQ(this.FGH0[8],9)}
+      ,UnalumCant(){return this.UnalumPre||this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
       ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
       ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.3)}
       ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
       ,ZeralumEff(){return Plus(Times(this.FGHNumber,0.25),1)}
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
+      ,FGH0Html(){return this.FGH0.map((x,n)=>'f<sub>0</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
+      ,FGH0Text(){return this.FGH0.map((x,n)=>LessQ(Plus(x,n),17)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
+      ,FGH0Cost(){return this.FGH0.map((x,n)=>Plus(x,n+3))}
+      ,FGH0Cant(){
+         var FGHNumber=this.FGHNumber;
+         return this.FGH0Cost.map(x=>LessQ(FGHNumber,x))
+      }
+      ,FGH0Eff(){return Log(1e100,this.MainNumberEver)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -287,6 +317,16 @@ const v = new Vue({
          v.FGHNumber=Minus(v.FGHNumber,[1,2,11,20,10240][n]);
          v.AlphaSeries|=1<<n
       }
+      ,FGH0Buy:n=>{
+         var FGH0=v.FGH0;
+         v.FGHNumber=Minus(v.FGHNumber,v.FGH0Cost[n]);
+         Vue.set(FGH0,n,Plus(FGH0[n],1));
+         if(n+1==FGH0.length) Vue.set(FGH0,n+1,0)
+      }
+      ,FGH0Buymax:n=>{
+         Buymax(['FGH0',n],['FGHNumber'],x=>Times(Plus(n+2.5,Times(x,0.5)),x),Y=>Plus(Power(Plus(Plus(Y,Y),(n+2.5)*(n+2.5)),0.5),-n-2.5));
+         if(n+1==v.FGH0.length) Vue.set(v.FGH0,n+1,0)
+      }
    }
 })
 ,BMSReset = ()=>{
@@ -305,6 +345,19 @@ const v = new Vue({
    v.MainNumber=4;
    v.BM0etc=[[0]];
    v.BM0etcBought=[[0]]
+}
+,Buymax = (Amount,Costo,sum,solve)=>{
+   const amount=Pointer(v,Amount),costo=Pointer(v,Costo);
+   var delta=Floor(Minus(solve(Plus(costo[0][costo[1]],sum(amount[0][amount[1]]))),amount[0][amount[1]]));
+   if(Sign(delta)<0) delta=0;
+   if(costo[0]===v){
+      v[costo[1]]=Minus(v[costo[1]],Minus(sum(Plus(amount[0][amount[1]],delta)),sum(amount[0][amount[1]])));
+      if(Sign(v[costo[1]])<0) v[costo[1]]=0;
+   }else{
+      Vue.set(costo[0],costo[1],Minus(costo[0][costo[1]],Minus(sum(Plus(amount[0][amount[1]],delta)),sum(amount[0][amount[1]]))))
+      if(Sign(costo[0][costo[1]])<0) Vue.set(costo[0],costo[1],0);
+   }
+   Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],delta))
 }
 ,BuyMax = (Amount,Bought,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),bought=Pointer(v,Bought),costo=Pointer(v,Costo);

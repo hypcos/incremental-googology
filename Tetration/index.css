@@ -51,6 +51,7 @@ table{
 }
 th,td{padding:0}
 sup,sub{font-size:80%}
+sub+sup{margin-left:-1ch}
 .tooltip{
    display: none;
    background-color: rgba(0,0,0,0.8);
