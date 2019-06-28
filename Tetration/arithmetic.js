@@ -214,4 +214,25 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
       Times(-0.00277777777777777778,Plus(Minus(Power(sum,-3),Power(sm,-3)),Minus(Power(n,-3),Power(sd,-3))))))
       ),Simplex(m,n))
 }
+,LambertW = x=>{
+   if(!LessQ(-0.36787944117144232,x)) return NaN;
+   if(x===Infinity) return Infinity;
+   var x1,x2,ex,mi;
+   if(LessQ(x,1.571)) x1=Times(Plus(Times(Plus(Times(1.5,x),-1),x),1),x);
+   else{
+      x1=Ln(x);
+      x2=Ln(x1);
+      x1=Plus(Times(Plus(Divide(Plus(Times(x2,0.5),-1),x1),1),Divide(x2,x1)),Minus(x1,x2))
+   }
+   ex=Exp(x1);
+   x2=Plus(x1,Divide(Minus(x,Times(x1,ex)),Times(Plus(x1,1),ex)));
+   mi=Times(0.5,Plus(x1,x2));
+   while(!EqualQ(x1,mi)&&!EqualQ(x2,mi)){
+      x1=x2;
+      ex=Exp(x1);
+      x2=Plus(x1,Divide(Minus(x,Times(x1,ex)),Times(Plus(x1,1),ex)));
+      mi=Times(0.5,Plus(x1,x2))
+   }
+   return x2
+}
 //TODO: More googological functions may join
