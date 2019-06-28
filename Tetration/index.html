@@ -169,6 +169,10 @@ both mantissa and exponent count into significant digits">
          You have FGH-prestiged {{FGHPrestige|showInt}} times.<br>
          Your fastest FGH-prestige is {{FGHPrestigeFastest|show}} seconds.
       </div>
+      <div v-if="Achievement.length>3">
+         <br>
+         Your best fast-growing hierarchy number gain is {{FGHNumberRate|show}}/s.
+      </div>
    </div>
 </div>
 <script src="arithmetic.js"></script>
