@@ -263,7 +263,7 @@ const v = new Vue({
       }
       ,BM0c1Buy:()=>{
          var n=(++v.BM0c1)-2;
-         if(v.BM0etcLengthEver.length<n) Vue.set(v.BM0etcLengthEver,n,v.BM0etcLengthStart[n]||3);
+         if(v.BM0etcLengthEver.length<=n) Vue.set(v.BM0etcLengthEver,n,v.BM0etcLengthStart[n]||3);
          BM0etcReset(n+1)
       }
       ,FGHPrestigeDo:()=>{

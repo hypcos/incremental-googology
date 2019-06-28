@@ -147,7 +147,7 @@ both mantissa and exponent count into significant digits">
             <td v-for="x in 9" :class="{ach1:AchieveCell[y-1][x-1],ach2:AchieveRow[y-1],ach3:AchieveColumn[x-1]}">
                <div class="ach" :class="{achieved:AchieveSingle[y-1][x-1]}">
                   {{Achievement.length>=y?AchievementName[y-1][x-1]:'LOCKED'}}
-                  <span class="tooltip" v-html="Achievement.length>=y?AchievementTooltip[y-1][x-1]:''"></span>
+                  <span v-if="Achievement.length>=y" class="tooltip" v-html="Achievement.length>=y?AchievementTooltip[y-1][x-1]:''"></span>
                </div>
             </td>
          </tr>
