@@ -269,7 +269,10 @@ const v = new Vue({
       ,BalumCant(){return this.BalumPre||this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
       ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.3)}
       ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
-      ,ZeralumEff(){return Plus(Times(this.FGHNumber,0.25),1)}
+      ,ZeralumEff(){
+         var x=Plus(Times(this.FGHNumber,0.25),1);
+         return Times(x,x)
+      }
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
       ,FGH0Html(){return this.FGH0.map((x,n)=>'f<sub>0</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
       ,FGH0Text(){return this.FGH0.map((x,n)=>LessQ(Plus(x,n),16)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
