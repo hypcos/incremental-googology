@@ -250,7 +250,7 @@ const v = new Vue({
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber);
-         return Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715))
+         return Times(Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715)),this.FGH2iter1Eff)
       }
       ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
       ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}
@@ -279,6 +279,13 @@ const v = new Vue({
          return this.FGH1Cost.map(x=>LessQ(FGHNumber,x))
       }
       ,FGH1Eff(){return Math.min(1+256*Math.pow(this.FGHPrestigeFastest,-0.75),2048)}
+      ,FGH2iter1Text(){return showInt(Plus(this.FGH2iter1,2))}
+      ,FGH2iter1Cost(){
+         var n=Plus(this.FGH2iter1,2);
+         return Times(n,Power(2,n))
+      }
+      ,FGH2iter1Cant(){return LessQ(this.FGHNumber,this.FGH2iter1Cost)}
+      ,FGH2iter1Eff(){return Power(1.1,this.FGH2iter1)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -358,6 +365,11 @@ const v = new Vue({
          Buymax(['FGH1',n],['FGHNumber'],x=>Times(n+2,Plus(Power(2,Plus(x,1)),-2)),Y=>Plus(Log(2,Plus(Divide(Y,n+2),2)),-1));
          if(n+1==v.FGH0.length) Vue.set(v.FGH0,n+1,0)
       }
+      ,FGH2iter1Buy:()=>{
+         v.FGHNumber=Minus(v.FGHNumber,v.FGH2iter1Cost);
+         v.FGH2iter1=Plus(v.FGH2iter1,1)
+      }
+      ,FGH2iter1Buymax:()=>Buymax(['FGH2iter1'],['FGHNumber'],x=>Times(x,Power(2,Plus(x,2))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
    }
 })
 ,BMSReset = ()=>{

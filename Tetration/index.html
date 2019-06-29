@@ -105,6 +105,12 @@
                Cost: {{FGH1Cost[n]|showInt}} FGHN
             </button>
          </div><div class="column4">
+            <button class="cell cell3" :disabled="FGH2iter1Cant" @mousedown="FGH2iter1Buy()" @dblclick="FGH2iter1Buymax()">
+               <b class="big">f<sub>2</sub>({{FGH2iter1Text}})</b><br>
+               Get {{1.1|show}}× fast-growing hierarchy number when FGH-prestige<br>
+               Current: {{FGH2iter1Eff|show}}×<br>
+               Cost: {{FGH2iter1Cost|showInt}} FGHN
+            </button>
          </div><div class="column4">
          </div>
       </div>
