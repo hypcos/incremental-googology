@@ -127,6 +127,12 @@ sub+sup{margin-left:-1ch}
    display: inline-block;
    vertical-align: text-top;
 }
+.alter{
+   color: #f0f;
+   font-size: 18px;
+   font-weight: 600;
+   text-shadow: 0 -1px 3px;
+}
 /*Special items*/
 .tab>button{
    background-color: #daf;

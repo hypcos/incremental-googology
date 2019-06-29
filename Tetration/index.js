@@ -45,7 +45,7 @@ const Grow = dt=>{
    ,FGH0:[0]
    ,FGH1:[0]
    ,FGH2iter1:0
-   ,FGH2:[0]
+   ,FGH2:[]
    ,FGH3:[0]
 })
 ,vPre = InitialData()
@@ -224,7 +224,11 @@ const v = new Vue({
          if(this.AlphaSeries&4) arr1[0][0]=Times(arr1[0][0],this.ZeralumEff);
          return arr1
       }
-      ,BM0etcLengthStart(){return this.BM0etcLengthEver.map(x=>3)}
+      ,BM0etcLengthStart(){
+         var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
+         while(n--) arr[n]=3+(FGH2[n]||0);
+         return arr
+      }
       ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0etcUnlockText1(){return this.BM0etcLengthEver.map((x,n)=>n?'and base-'+showInt(n+1)+' unlocker ':'')}
       ,BM0etcUnlockTooltip(){return this.BM0etcLengthEver.map((x,n)=>'Reset your number'+(n?', all zero-only BM and previous unlockers':' and all zero-only BM'))}
@@ -286,6 +290,13 @@ const v = new Vue({
       }
       ,FGH2iter1Cant(){return LessQ(this.FGHNumber,this.FGH2iter1Cost)}
       ,FGH2iter1Eff(){return Power(1.1,this.FGH2iter1)}
+      ,FGH2Html(){return this.FGH2.map((x,n)=>'f<sub>2</sub><sup>'+showInt(n+2)+'</sup>('+showInt(Plus(x,2))+')')}
+      ,FGH2Text(){return this.FGH2.map((x,n)=>'(0)'.repeat(Plus(x,n+4))+'['+showInt(n+2)+']')}
+      ,FGH2Cost(){return this.FGH2.map((x,n)=>IteratedFGH2(Plus(x,2),n+2))}
+      ,FGH2Cant(){
+         var FGHNumber=this.FGHNumber;
+         return this.FGH2Cost.map(x=>LessQ(FGHNumber,x))
+      }
    }
    ,methods:{
       Save:n=>Save(n)
@@ -370,6 +381,12 @@ const v = new Vue({
          v.FGH2iter1=Plus(v.FGH2iter1,1)
       }
       ,FGH2iter1Buymax:()=>Buymax(['FGH2iter1'],['FGHNumber'],x=>Times(x,Power(2,Plus(x,2))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
+      ,FGH2Buy:n=>{
+         var FGH2=v.FGH2;
+         v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
+         Vue.set(FGH2,n,Plus(FGH2[n],1))
+      }
+      ,FGH2Discard:n=>Vue.set(v.FGH2,n,0)
    }
 })
 ,BMSReset = ()=>{
@@ -455,6 +472,11 @@ v.$watch('MainNumber',x=>{
       }
    }
 });
+v.$watch('FGHNumber',x=>{
+   var FGH2=v.FGH2,n=(x.pt||0)+1;
+   while(LessQ(x,IteratedFGH2(2,--n+2))&&n>=0);
+   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,0);
+})
 window.addEventListener('keydown',e=>{
    if(!v.Hotkey||e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) return;
    var k=e.keyCode;

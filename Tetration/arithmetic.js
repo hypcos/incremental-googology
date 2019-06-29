@@ -235,4 +235,19 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
    }
    return x2
 }
+,IteratedFGH2 = (x,iter)=>{
+   var b = Natural(iter);
+   if(b===0) return x;
+   var i,n,n1=x,n2=x;
+   n=Times(x,Power(2,x));
+   for(i=1;LessQ(i,b);++i){
+      if(EqualQ(n,n1)||Number.isNaN(n)&&Number.isNaN(n1)) return n;
+      if(EqualQ(n,n2)) return (typeof b=='object'?i%2:(b-i)%2) ? n1 : n;
+      if(typeof n1=='object'&&n.neg===n1.neg&&n.recip===n1.recip&&n.val===n1.val&&n.pt===n1.pt+1) return ({neg:n.neg,recip:n.recip,val:n.val,pt:Plus(n.pt-i,b)});
+      n2=n1;
+      n1=n;
+      n=Times(n,Power(2,n))
+   }
+   return n
+}
 //TODO: More googological functions may join
