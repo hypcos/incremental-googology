@@ -114,8 +114,8 @@ const v = new Vue({
                   text:((n1,n)=>()=>'(0)'.repeat(n)+'['+showInt(n1)+']')(n1+2,n+1+n1)
                   ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+showInt(n1+2)+']':'Make your number grow'
                   ,costo:['MainNumber']
-                  ,cost:(b16=>x=>Power(b16,Plus(x,0.5)))(b16)
-                  ,sum:((b16,sumk)=>x=>Times(sumk,Plus(Power(b16,x),-1)))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
+                  ,cost:(b16=>x=>Natural(Power(b16,Plus(x,0.5))))(b16)
+                  ,sum:((b16,sumk)=>x=>Natural(Times(sumk,Plus(Power(b16,x),-1))))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
                   ,solve:((b16,solvek)=>Y=>Log(b16,Plus(Times(solvek,Y),1)))(b16,Divide(Plus(b16,-1),Power(n1+2,Power(2,Plus(Plus(n1,1),n)))))
                }
             }
@@ -251,7 +251,7 @@ const v = new Vue({
       ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0c1Cost(){
          var BM0c1=this.BM0c1;
-         return Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2)))
+         return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
       ,FGHPrestigeCant(){return LessQ(this.MainNumber,1e100)}
@@ -276,7 +276,7 @@ const v = new Vue({
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
       ,FGH0Html(){return this.FGH0.map((x,n)=>'f<sub>0</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
       ,FGH0Text(){return this.FGH0.map((x,n)=>LessQ(Plus(x,n),16)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
-      ,FGH0Cost(){return this.FGH0.map((x,n)=>Plus(x,n+3))}
+      ,FGH0Cost(){return this.FGH0.map((x,n)=>Natural(Plus(x,n+3)))}
       ,FGH0Cant(){
          var FGHNumber=this.FGHNumber;
          return this.FGH0Cost.map(x=>LessQ(FGHNumber,x))
@@ -284,7 +284,7 @@ const v = new Vue({
       ,FGH0Eff(){return Log(1e100,this.MainNumberEver)}
       ,FGH1Html(){return this.FGH1.map((x,n)=>'f<sub>1</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
       ,FGH1Text(){return this.FGH1.map((x,n)=>LessQ(Plus(x,n),16)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
-      ,FGH1Cost(){return this.FGH1.map((x,n)=>Times(n+2,Power(2,Plus(x,1))))}
+      ,FGH1Cost(){return this.FGH1.map((x,n)=>Natural(Times(n+2,Power(2,Plus(x,1)))))}
       ,FGH1Cant(){
          var FGHNumber=this.FGHNumber;
          return this.FGH1Cost.map(x=>LessQ(FGHNumber,x))
@@ -293,18 +293,18 @@ const v = new Vue({
       ,FGH2iter1Text(){return showInt(Plus(this.FGH2iter1,2))}
       ,FGH2iter1Cost(){
          var n=Plus(this.FGH2iter1,2);
-         return Times(n,Power(2,n))
+         return Natural(Times(n,Power(2,n)))
       }
       ,FGH2iter1Cant(){return LessQ(this.FGHNumber,this.FGH2iter1Cost)}
       ,FGH2iter1Eff(){return Power(1.1,this.FGH2iter1)}
       ,FGH2Html(){return this.FGH2.map((x,n)=>'f<sub>2</sub><sup>'+showInt(n+2)+'</sup>('+showInt(x)+')')}
       ,FGH2Text(){return this.FGH2.map((x,n)=>'(0)'.repeat(Plus(x,n+2))+'['+showInt(n+2)+']')}
-      ,FGH2Cost(){return this.FGH2.map((x,n)=>IteratedFGH2(x,n+2))}
+      ,FGH2Cost(){return this.FGH2.map((x,n)=>Natural(IteratedFGH2(x,n+2)))}
       ,FGH2Cant(){
          var FGHNumber=this.FGHNumber;
          return this.FGH2Cost.map(x=>LessQ(FGHNumber,x))
       }
-      ,FGH3Cost(){return IteratedFGH2(this.FGH3,this.FGH3)}
+      ,FGH3Cost(){return Natural(IteratedFGH2(this.FGH3,this.FGH3))}
       ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
    }
    ,methods:{
@@ -372,7 +372,7 @@ const v = new Vue({
          if(n+1==FGH0.length) Vue.set(FGH0,n+1,0)
       }
       ,FGH0Buymax:n=>{
-         Buymax(['FGH0',n],['FGHNumber'],x=>Times(Plus(n+2.5,Times(x,0.5)),x),Y=>Plus(Power(Plus(Plus(Y,Y),(n+2.5)*(n+2.5)),0.5),-n-2.5));
+         Buymax(['FGH0',n],['FGHNumber'],x=>Natural(Times(Plus(n+2.5,Times(x,0.5)),x)),Y=>Plus(Power(Plus(Plus(Y,Y),(n+2.5)*(n+2.5)),0.5),-n-2.5));
          if(n+1==v.FGH0.length) Vue.set(v.FGH0,n+1,0)
       }
       ,FGH1Buy:n=>{
@@ -382,14 +382,14 @@ const v = new Vue({
          if(n+1==FGH1.length) Vue.set(FGH1,n+1,0)
       }
       ,FGH1Buymax:n=>{
-         Buymax(['FGH1',n],['FGHNumber'],x=>Times(n+2,Plus(Power(2,Plus(x,1)),-2)),Y=>Plus(Log(2,Plus(Divide(Y,n+2),2)),-1));
+         Buymax(['FGH1',n],['FGHNumber'],x=>Natural(Times(n+2,Plus(Power(2,Plus(x,1)),-2))),Y=>Plus(Log(2,Plus(Divide(Y,n+2),2)),-1));
          if(n+1==v.FGH0.length) Vue.set(v.FGH0,n+1,0)
       }
       ,FGH2iter1Buy:()=>{
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2iter1Cost);
          v.FGH2iter1=Plus(v.FGH2iter1,1)
       }
-      ,FGH2iter1Buymax:()=>Buymax(['FGH2iter1'],['FGHNumber'],x=>Times(x,Power(2,Plus(x,2))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
+      ,FGH2iter1Buymax:()=>Buymax(['FGH2iter1'],['FGHNumber'],x=>Natural(Times(x,Power(2,Plus(x,2)))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
