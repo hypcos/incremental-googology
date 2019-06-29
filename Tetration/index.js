@@ -46,7 +46,7 @@ const Grow = dt=>{
    ,FGH1:[0]
    ,FGH2iter1:0
    ,FGH2:[]
-   ,FGH3:[0]
+   ,FGH3:2
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -232,7 +232,11 @@ const v = new Vue({
       ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0etcUnlockText1(){return this.BM0etcLengthEver.map((x,n)=>n?'and base-'+showInt(n+1)+' unlocker ':'')}
       ,BM0etcUnlockTooltip(){return this.BM0etcLengthEver.map((x,n)=>'Reset your number'+(n?', all zero-only BM and previous unlockers':' and all zero-only BM'))}
-      ,BM0etcUnlockCost(){return this.BM0etcLengthEver.map((x,n)=>n+2)}
+      ,BM0etcUnlockCost(){
+         var FGH3=this.FGH3,n=Math.max(this.BM0etcLengthEver.length,FGH3-1),arr=[];
+         while(n--) arr[n]=n+(n&&n+2<=FGH3?1:2);
+         return arr
+      }
       ,BM0etcCantUnlock(){
          var BM0etcUnlockCost=this.BM0etcUnlockCost;
          return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,BM0etcUnlockCost[n]))
@@ -297,6 +301,8 @@ const v = new Vue({
          var FGHNumber=this.FGHNumber;
          return this.FGH2Cost.map(x=>LessQ(FGHNumber,x))
       }
+      ,FGH3Cost(){return IteratedFGH2(this.FGH3,this.FGH3)}
+      ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -387,6 +393,10 @@ const v = new Vue({
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
       ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)
+      ,FGH3Buy:()=>{
+         v.FGHNumber=Minus(v.FGHNumber,v.FGH3Cost);
+         v.FGH3=Plus(v.FGH3,1)
+      }
    }
 })
 ,BMSReset = ()=>{

@@ -88,35 +88,40 @@
             Cost: {{10240|showInt}} FGHN
             <span v-show="BalumPre" class="tooltip">See f<sub>1</sub><sup>10</sup>(10), then you can buy this</span>
          </button>
-      </div>
-      <div class="left">
-         <div class="column4">
-            <button v-for="(x,n) in FGH0" class="cell cell3" :disabled="FGH0Cant[n]" @mousedown="FGH0Buy(n)" @dblclick="FGH0Buymax(n)">
-               <b class="big" v-html="FGH0Html[n]"></b><br>
-               Boost {{FGH0Text[n]}} based on your number ever reached<br>
-               Current: {{FGH0Eff|show}}×<br>
-               Cost: {{FGH0Cost[n]|showInt}} FGHN
-            </button>
-         </div><div class="column4">
-            <button v-for="(x,n) in FGH1" class="cell cell3" :disabled="FGH1Cant[n]" @mousedown="FGH1Buy(n)" @dblclick="FGH1Buymax(n)">
-               <b class="big" v-html="FGH1Html[n]"></b><br>
-               Boost {{FGH1Text[n]}} based on your fastest FGH-prestige<br>
-               Current: {{FGH1Eff|show}}×<br>
-               Cost: {{FGH1Cost[n]|showInt}} FGHN
-            </button>
-         </div><div class="column4">
-            <button class="cell cell3" :disabled="FGH2iter1Cant" @mousedown="FGH2iter1Buy()" @dblclick="FGH2iter1Buymax()">
-               <b class="big">f<sub>2</sub>({{FGH2iter1Text}})</b><br>
-               Get {{1.1|show}}× fast-growing hierarchy number when FGH-prestige<br>
-               Current: {{FGH2iter1Eff|show}}×<br>
-               Cost: {{FGH2iter1Cost|showInt}} FGHN
-            </button><button v-for="(x,n) in FGH2" class="cell cell3" :disabled="FGH2Cant[n]" @mousedown="FGH2Buy(n)">
-               <b class="big" v-html="FGH2Html[n]"></b><br>
-               Start with {{FGH2Text[n]}} available<br>
-               Cost: {{FGH2Cost[n]|showInt}} FGHN<br v-show="x!=2">
-               <span v-show="x!=2" class="alter" @mousedown.stop="FGH2Discard(n)">Discard</span>
-            </button>
-         </div><div class="column4">
+         <div class="left">
+            <div class="column4">
+               <button v-for="(x,n) in FGH0" class="cell cell3" :disabled="FGH0Cant[n]" @mousedown="FGH0Buy(n)" @dblclick="FGH0Buymax(n)">
+                  <b class="big" v-html="FGH0Html[n]"></b><br>
+                  Boost {{FGH0Text[n]}} based on your number ever reached<br>
+                  Current: {{FGH0Eff|show}}×<br>
+                  Cost: {{FGH0Cost[n]|showInt}} FGHN
+               </button>
+            </div><div class="column4">
+               <button v-for="(x,n) in FGH1" class="cell cell3" :disabled="FGH1Cant[n]" @mousedown="FGH1Buy(n)" @dblclick="FGH1Buymax(n)">
+                  <b class="big" v-html="FGH1Html[n]"></b><br>
+                  Boost {{FGH1Text[n]}} based on your fastest FGH-prestige<br>
+                  Current: {{FGH1Eff|show}}×<br>
+                  Cost: {{FGH1Cost[n]|showInt}} FGHN
+               </button>
+            </div><div class="column4">
+               <button class="cell cell3" :disabled="FGH2iter1Cant" @mousedown="FGH2iter1Buy()" @dblclick="FGH2iter1Buymax()">
+                  <b class="big">f<sub>2</sub>({{FGH2iter1Text}})</b><br>
+                  Get {{1.1|show}}× fast-growing hierarchy number when FGH-prestige<br>
+                  Current: {{FGH2iter1Eff|show}}×<br>
+                  Cost: {{FGH2iter1Cost|showInt}} FGHN
+               </button><button v-for="(x,n) in FGH2" class="cell cell3" :disabled="FGH2Cant[n]" @mousedown="FGH2Buy(n)">
+                  <b class="big" v-html="FGH2Html[n]"></b><br>
+                  Start with {{FGH2Text[n]}} available<br>
+                  Cost: {{FGH2Cost[n]|showInt}} FGHN<br v-show="x!=2">
+                  <span v-show="x!=2" class="alter" @mousedown.stop="FGH2Discard(n)">Discard</span>
+               </button>
+            </div><div class="column4">
+               <button class="cell cell3" :disabled="FGH3Cant" @mousedown="FGH3Buy()">
+                  <b class="big">f<sub>3</sub>({{FGH3|showInt}})</b><br>
+                  Reduce the requirement to unlock zero-only base-{{FGH3+1|showInt}} BM by 1<br>
+                  Cost: {{FGH3Cost|showInt}} FGHN
+               </button>
+            </div>
          </div>
       </div>
    </div>
