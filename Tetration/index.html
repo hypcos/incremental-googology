@@ -113,8 +113,8 @@
             </button><button v-for="(x,n) in FGH2" class="cell cell3" :disabled="FGH2Cant[n]" @mousedown="FGH2Buy(n)">
                <b class="big" v-html="FGH2Html[n]"></b><br>
                Start with {{FGH2Text[n]}} available<br>
-               Cost: {{FGH2Cost[n]|showInt}} FGHN<br v-show="x">
-               <span v-show="x" class="alter" @mousedown.stop="FGH2Discard(n)">Discard</span>
+               Cost: {{FGH2Cost[n]|showInt}} FGHN<br v-show="x!=2">
+               <span v-show="x!=2" class="alter" @mousedown.stop="FGH2Discard(n)">Discard</span>
             </button>
          </div><div class="column4">
          </div>

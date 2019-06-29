@@ -226,7 +226,7 @@ const v = new Vue({
       }
       ,BM0etcLengthStart(){
          var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
-         while(n--) arr[n]=3+(FGH2[n]||0);
+         while(n--) arr[n]=1+(FGH2[n]||2);
          return arr
       }
       ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
@@ -290,9 +290,9 @@ const v = new Vue({
       }
       ,FGH2iter1Cant(){return LessQ(this.FGHNumber,this.FGH2iter1Cost)}
       ,FGH2iter1Eff(){return Power(1.1,this.FGH2iter1)}
-      ,FGH2Html(){return this.FGH2.map((x,n)=>'f<sub>2</sub><sup>'+showInt(n+2)+'</sup>('+showInt(Plus(x,2))+')')}
-      ,FGH2Text(){return this.FGH2.map((x,n)=>'(0)'.repeat(Plus(x,n+4))+'['+showInt(n+2)+']')}
-      ,FGH2Cost(){return this.FGH2.map((x,n)=>IteratedFGH2(Plus(x,2),n+2))}
+      ,FGH2Html(){return this.FGH2.map((x,n)=>'f<sub>2</sub><sup>'+showInt(n+2)+'</sup>('+showInt(x)+')')}
+      ,FGH2Text(){return this.FGH2.map((x,n)=>'(0)'.repeat(Plus(x,n+2))+'['+showInt(n+2)+']')}
+      ,FGH2Cost(){return this.FGH2.map((x,n)=>IteratedFGH2(x,n+2))}
       ,FGH2Cant(){
          var FGHNumber=this.FGHNumber;
          return this.FGH2Cost.map(x=>LessQ(FGHNumber,x))
@@ -386,7 +386,7 @@ const v = new Vue({
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
-      ,FGH2Discard:n=>Vue.set(v.FGH2,n,0)
+      ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)
    }
 })
 ,BMSReset = ()=>{
@@ -475,7 +475,7 @@ v.$watch('MainNumber',x=>{
 v.$watch('FGHNumber',x=>{
    var FGH2=v.FGH2,n=(x.pt||0)+1;
    while(LessQ(x,IteratedFGH2(2,--n+2))&&n>=0);
-   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,0);
+   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
 })
 window.addEventListener('keydown',e=>{
    if(!v.Hotkey||e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) return;
