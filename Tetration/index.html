@@ -86,6 +86,7 @@
             FGHN grows passively by 1/{{10|showInt}} of your best FGHN/s<br>
             Current: {{BalumEff|show}}/s<br>
             Cost: {{10240|showInt}} FGHN
+            <span v-show="BalumPre" class="tooltip">See f<sub>1</sub><sup>10</sup>(10), then you can buy this</span>
          </button>
       </div>
       <div class="left">
@@ -97,6 +98,12 @@
                Cost: {{FGH0Cost[n]|showInt}} FGHN
             </button>
          </div><div class="column4">
+            <button v-for="(x,n) in FGH1" class="cell cell3" :disabled="FGH1Cant[n]" @mousedown="FGH1Buy(n)" @dblclick="FGH1Buymax(n)">
+               <b class="big" v-html="FGH1Html[n]"></b><br>
+               Boost {{FGH1Text[n]}} based on your fastest FGH-prestige<br>
+               Current: {{FGH1Eff|show}}×<br>
+               Cost: {{FGH1Cost[n]|showInt}} FGHN
+            </button>
          </div><div class="column4">
          </div><div class="column4">
          </div>
