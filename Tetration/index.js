@@ -1,9 +1,11 @@
 'use strict';
 const Grow = dt=>{
    var SpecialRun=v.SpecialRun,Special8Eff
-   ,a1,a2,a3,n,n1=v.BM0etc.length
-   ,AutoPool=v.AutoPool,AutoActive=v.AutoActive;
+   ,AutoPool=v.AutoPool,AutoActive=v.AutoActive
+   ,a1,a2,a3,n,n1;
+   for(n1=AutoActive.length,n=0;n<n1;++n) AutoPool[AutoActive[n]].act();
    if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
+   n1=v.BM0etc.length;
    if(SpecialRun&252){
       if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
       if(SpecialRun&16) v.Special16Eff=Power(v.Special16Base,Date.now()-Time.LastBought);
@@ -30,7 +32,6 @@ const Grow = dt=>{
       }
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt));
-   for(n1=AutoActive.length,n=0;n<n1;++n) AutoPool[AutoActive[n]].act();
 }
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
@@ -383,8 +384,8 @@ const v = new Vue({
       ,FGHSpecialText6(){return 'Reach '+show(1e100)+' to unlock FGH-outside items'}
       ,FGHSpecialText7(){return 'Reach '+show(1e100)+' to unlock FGH-sides items'}
       ,FGHSpecialText8(){return 'Reach '+show(1e100)+', then you start with only 2 BM available for every base number'}
-      ,AutoPool:()=>[
-         {text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
+      ,AutoPool:()=>[null
+         ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
          ,{text:'Automatic unlock zero-only BM',act:()=>{
             var n=v.BM0etcLengthEver.length;
             while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n);
@@ -394,10 +395,10 @@ const v = new Vue({
       ]
       ,AutoAvailable(){
          var FGHSpecial=this.FGHSpecial,arr=[];
-         if(FGHSpecial&3) arr.push(0);
-         if(FGHSpecial&12) arr.push(1);
-         if(FGHSpecial&48) arr.push(2);
-         if(FGHSpecial&192) arr.push(3);
+         if(FGHSpecial&3) arr.push(1);
+         if(FGHSpecial&12) arr.push(2);
+         if(FGHSpecial&48) arr.push(3);
+         if(FGHSpecial&192) arr.push(4);
          return arr
       }
    }
