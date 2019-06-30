@@ -104,6 +104,10 @@ sub+sup{margin-left:-1ch}
    background-color: #fca;
    border: 1px solid #f60;
 }
+.cell5.already{
+   background-color: #520;
+   color: #fff;
+}
 .prestige{
    min-height: 65px;
    min-width: 25%;
@@ -157,6 +161,15 @@ sub+sup{margin-left:-1ch}
 .tab2>[disabled]{
    background-color: #035;
    color: #fff;
+}
+.special{
+   height: 172px;
+   width: 300px;
+   padding: 4px;
+   border-width: 2px;
+   margin: 0;
+   vertical-align:text-top;
+   font-size: 15px;
 }
 #loading{
    background-color: #555;

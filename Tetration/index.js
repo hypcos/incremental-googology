@@ -58,24 +58,25 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
-   ,FGHNumber:0
-   ,FGHPrestige:0
-   ,FGHPrestigeFastest:Infinity
-   ,FGHNumberRate:0
-   ,FGHTab:0
-   ,AlphaSeries:0
-   ,FGH0:[0]
-   ,FGH1:[0]
-   ,FGH2iter1:0
-   ,FGH2:[]
-   ,FGH3:2
-   ,SpecialRun:0
+   ,SpecialRun:0 //auto max all:2, auto unlock:16, auto (0)(1)[n]:8, auto FGH-prestige:32, start with:4, inside:128, outside:64, sides:1
    ,Special4Eff:[[]]
    ,Special8Eff:1
    ,Special16Eff:1
    ,Special32Eff:1
    ,Special16Base:1
    ,Special32Base:1
+   ,FGHNumber:0
+   ,FGHPrestige:0
+   ,FGHPrestigeFastest:Infinity
+   ,FGHNumberRate:0
+   ,FGHTab:0
+   ,AlphaSeries:0 //1 bit for every item
+   ,FGH0:[0]
+   ,FGH1:[0]
+   ,FGH2iter1:0
+   ,FGH2:[]
+   ,FGH3:2
+   ,FGHSpecial:0 //2 bits for every item
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -372,6 +373,14 @@ const v = new Vue({
       }
       ,FGH3Cost(){return Natural(IteratedFGH2(this.FGH3,this.FGH3))}
       ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
+      ,FGHSpecialText1(){return 'Reach '+show(1e100)+' to get automatic buy max of all zero-only BM'}
+      ,FGHSpecialText2(){return 'Reach '+show(1e100)+' to get automatic unlock zero-only BM'}
+      ,FGHSpecialText3(){return 'Reach '+show(1e100)+' to get (0)(1)[n] autobuyer'}
+      ,FGHSpecialText4(){return 'Reach '+show(1e100)+' to get automatic FGH-prestige'}
+      ,FGHSpecialText5(){return 'Reach '+show(1e100)+' to unlock FGH-inside items'}
+      ,FGHSpecialText6(){return 'Reach '+show(1e100)+' to unlock FGH-outside items'}
+      ,FGHSpecialText7(){return 'Reach '+show(1e100)+' to unlock FGH-sides items'}
+      ,FGHSpecialText8(){return 'Reach '+show(1e100)+', then you start with only 2 BM available for every base number'}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -479,6 +488,19 @@ const v = new Vue({
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
+         if(v.SpecialRun&255){
+            switch(v.SpecialRun){
+               case 2: v.FGHSpecial&3||(v.FGHSpecial|=1); break;
+               case 16: v.FGHSpecial&12||(v.FGHSpecial|=4); break;
+               case 8: v.FGHSpecial&48||(v.FGHSpecial|=16); break;
+               case 32: v.FGHSpecial&192||(v.FGHSpecial|=64); break;
+               case 128: v.FGHSpecial&768||(v.FGHSpecial|=256); break;
+               case 64: v.FGHSpecial&3072||(v.FGHSpecial|=1024); break;
+               case 1: v.FGHSpecial&12288||(v.FGHSpecial|=4096); break;
+               case 4: v.FGHSpecial&49152||(v.FGHSpecial|=16384); break;
+            }
+            v.FGHSpecialExit()
+         }
          BMSReset()
       }
       ,AlphaSeriesBuy:n=>{
@@ -520,6 +542,17 @@ const v = new Vue({
          v.FGHNumber=Minus(v.FGHNumber,v.FGH3Cost);
          v.FGH3=Plus(v.FGH3,1)
       }
+      ,FGHSpecialEnter:n=>{
+         Time.LastFGHPrestige=Date.now();
+         BMSReset();
+         v.SpecialRun|=[2,16,8,32,128,64,1,4][n-1]
+      }
+      ,FGHSpecialExit:()=>{
+         if(v.SpecialRun&4) v.Special4Eff=[[]];
+         if(v.SpecialRun&16) v.Special16Base=1;
+         if(v.SpecialRun&32) v.Special32Base=1;
+         v.SpecialRun&=(~255)
+      }
    }
 })
 ,BMSReset = ()=>{
@@ -534,7 +567,7 @@ const v = new Vue({
 ,BM0etcReset = n=>{
    var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart
    ,SpecialRun=v.SpecialRun;
-   if(SpecialRun){
+   if(SpecialRun&36){
       if(SpecialRun&32){
          v.Special32Base=Root(Times(v.MainNumber,0.25),Date.now()-Time.LastBM0etcUnlock);
          Time.LastBM0etcUnlock=Date.now()
