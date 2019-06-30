@@ -489,7 +489,7 @@ const v = new Vue({
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
          if(v.SpecialRun&255){
-            switch(v.SpecialRun){
+            switch(v.SpecialRun&255){
                case 2: v.FGHSpecial&3||(v.FGHSpecial|=1); break;
                case 16: v.FGHSpecial&12||(v.FGHSpecial|=4); break;
                case 8: v.FGHSpecial&48||(v.FGHSpecial|=16); break;
