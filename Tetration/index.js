@@ -2,7 +2,7 @@
 const Grow = dt=>{
    var SpecialRun=v.SpecialRun,Special8Eff
    ,a1,a2,a3,n,n1=v.BM0etc.length
-   ,AutoActive=v.AutoActive;
+   ,AutoPool=v.AutoPool,AutoActive=v.AutoActive;
    if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
    if(SpecialRun&252){
       if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
@@ -30,7 +30,7 @@ const Grow = dt=>{
       }
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt));
-   for(n1=AutoActive.length,n=0;n<n1;++n) AutoActive[n].act();
+   for(n1=AutoActive.length,n=0;n<n1;++n) AutoPool[AutoActive[n]].act();
 }
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
@@ -383,23 +383,21 @@ const v = new Vue({
       ,FGHSpecialText6(){return 'Reach '+show(1e100)+' to unlock FGH-outside items'}
       ,FGHSpecialText7(){return 'Reach '+show(1e100)+' to unlock FGH-sides items'}
       ,FGHSpecialText8(){return 'Reach '+show(1e100)+', then you start with only 2 BM available for every base number'}
-      ,AutoPool(){
+      ,AutoPool:()=>[
+         {text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
+         ,{text:'Automatic unlock zero-only BM',act:()=>{
+            var n=v.BM0etcLengthEver.length;
+            while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n);
+         }}
+         ,{text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
+         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||v.FGHPrestigeDo()}
+      ]
+      ,AutoAvailable(){
          var FGHSpecial=this.FGHSpecial,arr=[];
-         if(FGHSpecial&3){
-            arr.push({text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()})
-         }
-         if(FGHSpecial&12){
-            arr.push({text:'Automatic unlock zero-only BM',act:()=>{
-               var n=v.BM0etcLengthEver.length;
-               while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n);
-            }})
-         }
-         if(FGHSpecial&48){
-            arr.push({text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()})
-         }
-         if(FGHSpecial&192){
-            arr.push({text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||v.FGHPrestigeDo()})
-         }
+         if(FGHSpecial&3) arr.push(0);
+         if(FGHSpecial&12) arr.push(1);
+         if(FGHSpecial&48) arr.push(2);
+         if(FGHSpecial&192) arr.push(3);
          return arr
       }
    }
@@ -669,20 +667,11 @@ v.$watch('MainNumber',x=>{
       }
    }
 });
-v.$watch('AutoPool',AutoPool=>{
-   var AutoActive=v.AutoActive,n=AutoActive.length,i;
-   while(n--)
-      for(i=AutoPool.length;i--;)
-         if(AutoActive[n].text===AutoPool[i].text){
-            AutoActive[n]=AutoPool[i];
-            break
-         }
-})
 v.$watch('FGHNumber',x=>{
    var FGH2=v.FGH2,n=(x.pt||0)+1;
    while(LessQ(x,IteratedFGH2(2,--n+2))&&n>=0);
    for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
-})
+});
 window.addEventListener('keydown',e=>{
    if(!v.Hotkey||e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) return;
    var k=e.keyCode;

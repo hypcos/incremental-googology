@@ -59,23 +59,24 @@ Vue.component('buy',{
 });
 Vue.component('automaton-select',{
    data(){return{
-      PoolSelected:undefined
+      AvailableSelected:undefined
       ,ActiveSelected:undefined
    }}
    ,computed:{
       AutoPool(){return this.$root.AutoPool}
+      ,AutoAvailable(){return this.$root.AutoAvailable}
       ,AutoActive(){return this.$root.AutoActive}
    }
    ,methods:{
       EnableItem(){
-         var PoolSelected=this.PoolSelected,AutoActive;
-         if(!PoolSelected) return;
+         var AvailableSelected=this.AvailableSelected,AutoActive;
+         if(!AvailableSelected) return;
          AutoActive=this.$root.AutoActive;
-         if(AutoActive.indexOf(PoolSelected)==-1) AutoActive.push(PoolSelected)
+         if(AutoActive.indexOf(AvailableSelected)==-1) AutoActive.push(AvailableSelected)
       }
       ,EnableAll(){
-         var AutoPool=this.$root.AutoPool,AutoActive=this.$root.AutoActive,l=AutoPool.length,n;
-         for(n=0;n<l;++n) if(AutoActive.indexOf(AutoPool[n])==-1) AutoActive.push(AutoPool[n])
+         var AutoAvailable=this.$root.AutoAvailable,AutoActive=this.$root.AutoActive,l=AutoAvailable.length,n;
+         for(n=0;n<l;++n) if(AutoActive.indexOf(AutoAvailable[n])==-1) AutoActive.push(AutoAvailable[n])
       }
       ,DisableItem(){
          var ActiveSelected=this.ActiveSelected,AutoActive,idx;
@@ -124,14 +125,14 @@ Vue.component('automaton-select',{
       }
    }
    ,template:`<div><div class="column2">
-      <select class="column2" size="27" style="height:320px" v-model="PoolSelected">
-         <option v-for="item in AutoPool" :value="item">{{item.text}}</option>
+      <select class="column2" size="27" style="height:320px" v-model="AvailableSelected">
+         <option v-for="item in AutoAvailable" :value="item">{{AutoPool[item].text}}</option>
       </select><br>
       <button class="cell3 column4" @mousedown="EnableItem()">Enable</button><br>
       <button class="cell3 column4" @mousedown="EnableAll()">Enable All</button>
    </div><div class="column2">
       <select class="column2" size="27" style="height:320px" v-model="ActiveSelected">
-         <option v-for="item in AutoActive" :value="item">{{item.text}}</option>
+         <option v-for="item in AutoActive" :value="item">{{AutoPool[item].text}}</option>
       </select><br>
       <button class="cell3" @mousedown="ItemTop()">Priority Top</button>
       <button class="cell3" @mousedown="ItemUp()">Priority Up</button>
