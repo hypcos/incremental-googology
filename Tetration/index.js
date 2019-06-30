@@ -1,12 +1,33 @@
 'use strict';
 const Grow = dt=>{
-   var a1,a2,n,n1=v.BM0etc.length;
+   var SpecialRun=v.SpecialRun
+   ,Special8Eff
+   ,a1,a2,a3,n,n1=v.BM0etc.length;
    if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
-   while(n1--){
-      n=(a1=v.BM0etc[n1]).length;
-      a2=v.BM0etcMult[n1];
-      while(--n) a1[n-1]=Plus(a1[n-1],Times(Times(a1[n],a2[n]),dt*0.2))
-   }
+   if(SpecialRun&252){
+      if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
+      if(SpecialRun&16) v.Special16Eff=Power(v.Special16Base,Date.now()-Time.LastBought);
+      if(SpecialRun&32) v.Special32Eff=Power(v.Special32Base,Date.now()-Time.LastBM0etcUnlock);
+      Special8Eff=v.Special8Eff;
+      if(SpecialRun&244)
+         while(n1--){
+            n=(a1=v.BM0etc[n1]).length;
+            a2=v.BM0etcMult[n1];
+            a3=v.BM0etcDivider[n1];
+            while(--n) a1[n-1]=Plus(a1[n-1],Times(Divide(Power(Times(a1[n],a2[n]),SpecialRun&8?Special8Eff:1),a3[n]),dt*0.2))
+         }
+      else
+         while(n1--){
+            n=(a1=v.BM0etc[n1]).length;
+            a2=v.BM0etcMult[n1];
+            while(--n) a1[n-1]=Plus(a1[n-1],Times(Power(Times(a1[n],a2[n]),SpecialRun&8?Special8Eff:1),dt*0.2))
+         }
+   }else
+      while(n1--){
+         n=(a1=v.BM0etc[n1]).length;
+         a2=v.BM0etcMult[n1];
+         while(--n) a1[n-1]=Plus(a1[n-1],Times(Times(a1[n],a2[n]),dt*0.2))
+      }
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt))
 }
@@ -14,7 +35,8 @@ const Grow = dt=>{
    LastUpdate:Date.now()
    ,LastGame:Date.now()
    ,LastFGHPrestige:Date.now()
-   ,LastFGHSpecialModifier:Date.now()
+   ,LastBought:Date.now()
+   ,LastBM0etcUnlock:Date.now()
 })
 ,InitialData = ()=>({
    ExportBox:false
@@ -47,6 +69,13 @@ const Grow = dt=>{
    ,FGH2iter1:0
    ,FGH2:[]
    ,FGH3:2
+   ,SpecialRun:0
+   ,Special4Eff:[[]]
+   ,Special8Eff:1
+   ,Special16Eff:1
+   ,Special32Eff:1
+   ,Special16Base:1
+   ,Special32Base:1
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -58,8 +87,16 @@ const v = new Vue({
    ,data:vPre
    ,computed:{
       Growth(){
-         var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult,n=BM0etc.length,s=Times(BM0etc[0][0],BM0etcMult[0][0]);
-         while(--n) s=Times(s,Plus(Times(BM0etc[n][0],BM0etcMult[n][0])||0,1));
+         var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult
+         ,SpecialRun=this.SpecialRun,Special8Eff=this.Special8Eff,BM0etcDivider=this.BM0etcDivider
+         ,n=BM0etc.length,s;
+         s=SpecialRun&252?
+            Times(BM0etc[0][0],Divide(Power(BM0etcMult[0][0],SpecialRun&8?Special8Eff:1),SpecialRun&244?BM0etcDivider[0][0]:1))||0
+            :Times(BM0etc[0][0],BM0etcMult[0][0])||0;
+         if(SpecialRun&252)
+            while(--n) s=Times(s,Plus(Times(BM0etc[n][0],Divide(Power(BM0etcMult[n][0],SpecialRun&8?Special8Eff:1),SpecialRun&244?BM0etcDivider[n][0]:1))||0,1));
+         else
+            while(--n) s=Times(s,Plus(Times(BM0etc[n][0],BM0etcMult[n][0])||0,1));
          return s
       }
       ,AchievementName:GetAchievementName
@@ -105,7 +142,7 @@ const v = new Vue({
       ,AchieveColumnN(){return this.AchieveColumn.reduce((x,y)=>x+y)}
       ,AchieveCellEff(){return Math.pow(1.3333333333333333,this.AchieveCellN)}
       ,BM0etcInfo(){
-         var b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
+         var SpecialRun=this.SpecialRun,b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
          while(n1--){
             arr=[];
             for(n=this.BM0etcLengthEver[n1];n--;){
@@ -113,7 +150,7 @@ const v = new Vue({
                arr[n]={
                   text:((n1,n)=>()=>'(0)'.repeat(n)+'['+showInt(n1)+']')(n1+2,n+1+n1)
                   ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+showInt(n1+2)+']':'Make your number grow'
-                  ,costo:['MainNumber']
+                  ,costo:SpecialRun&1&&n?['BM0etc',n1,n-1]:['MainNumber']
                   ,cost:(b16=>x=>Natural(Power(b16,Plus(x,0.5))))(b16)
                   ,sum:((b16,sumk)=>x=>Natural(Times(sumk,Plus(Power(b16,x),-1))))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
                   ,solve:((b16,solvek)=>Y=>Log(b16,Plus(Times(solvek,Y),1)))(b16,Divide(Plus(b16,-1),Power(n1+2,Power(2,Plus(Plus(n1,1),n)))))
@@ -222,6 +259,35 @@ const v = new Vue({
             arr1[n1]=arr
          }
          if(this.AlphaSeries&4) arr1[0][0]=Times(arr1[0][0],this.ZeralumEff);
+         return arr1
+      }
+      ,BM0etcDivider(){
+         var BM0etc=this.BM0etc,SpecialRun=this.SpecialRun,Special4Eff=this.Special4Eff,Special16Eff=this.Special16Eff,Special32Eff=this.Special32Eff
+         ,n,n1=BM0etc.length,i1,arr,arr1=[];
+         if(!(SpecialRun&252)) return;
+         while(n1--){
+            arr=[];
+            n=BM0etc[n1].length;
+            while(n--){
+               arr[n]=SpecialRun&64?Plus(BM0etc[n1][n+1]||0,1):1;
+               if(SpecialRun&128) for(i1=BM0etc.length;i1--;) i1===n1||(arr[n]=Times(arr[n],Plus(BM0etc[i1][n-i1+n1]||0,1)));
+               if(SpecialRun&4) arr[n]=Times(arr[n],Special4Eff[n1]&&Special4Eff[n1][n]||1);
+               if(SpecialRun&16) arr[n]=Times(arr[n],Special16Eff);
+               if(SpecialRun&32) arr[n]=Times(arr[n],Special32Eff)
+            }
+            arr1[n1]=arr
+         }
+         return arr1
+      }
+      ,BM0etcModifierHtml(){
+         var SpecialRun=this.SpecialRun,Special8Eff=this.Special8Eff,BM0etcDivider=this.BM0etcDivider,n,n1=BM0etcDivider.length,arr,arr1=[];
+         if(!(SpecialRun&252)) return;
+         while(n1--){
+            arr=[];
+            n=BM0etcDivider[n1].length;
+            while(n--) arr[n]=(SpecialRun&8?'^'+show(Special8Eff):'')+(SpecialRun&244?'/'+show(BM0etcDivider[n1][n]):'')
+            arr1[n1]=arr
+         }
          return arr1
       }
       ,BM0etcLengthStart(){
@@ -333,8 +399,62 @@ const v = new Vue({
       }
       ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
       ,FGHPrestigePlayed:()=>show((Date.now()-Time.LastFGHPrestige)*0.001)
+      ,BM0etcBuying:(n1,n,delta)=>{
+         var SpecialRun=v.SpecialRun,BM0etcBought=v.BM0etcBought,BM0etcInfo,Special4Eff
+         ,amount,bought,b16,excess,i,i1;
+         if(SpecialRun&2){
+            v.MainNumber=4;
+            amount=v.BM0etc[n1];
+            bought=BM0etcBought[n1];
+            for(i=n;i--;){
+               amount[i]=0;
+               bought[i]=0
+            }
+            Vue.set(amount,0,amount[0]);
+            Vue.set(bought,0,bought[0])
+         }
+         if(SpecialRun&4){
+            bought=Minus(BM0etcBought[n1][n],delta);
+            b16=Power(n1+2,Power(2,Plus(Plus(n1,2),n)));
+            BM0etcInfo=v.BM0etcInfo;
+            Special4Eff=v.Special4Eff;
+            for(i1=BM0etcBought.length;i1--;){
+               if(!Special4Eff[i1]) Special4Eff[i1]=[];
+               for(i=BM0etcBought[i1].length;i--;){
+                  if(i1===n1&&i===n) continue;
+                  excess=Min(Natural(Minus(Log(b16,BM0etcInfo[i1][i].cost(BM0etcBought[i1][i])),bought)),delta);
+                  if(Sign(excess)>0) Special4Eff[i1][i]=Times(Special4Eff[i1][i]||1,Power(2,excess))
+               }
+            }
+            Vue.set(Special4Eff,0,Special4Eff[0])
+         }
+         if(SpecialRun&24){
+            if(SpecialRun&16) v.Special16Base=Exp(Divide(10,LessQ(delta,1.01)?16+Date.now()-Time.LastBought:16));
+            Time.LastBought=Date.now();
+         }
+      }
       ,BM0etcMaxall:()=>{
-         var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length;
+         var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length
+         ,SpecialRun=v.SpecialRun,BM0etcBought,delta;
+         if(SpecialRun&31){
+            if(SpecialRun&2){
+               BM0etcBought=v.BM0etcBought;
+               while(n1--)
+                  for(n=BM0etc[n1].length;n--;)
+                     if(LessEqualQ(BM0etcInfo[n1][n].cost(BM0etcBought[n1][n]),SpecialRun&1&&n?BM0etc[n1][n-1]:v.MainNumber)){
+                        Vue.set(BM0etc[n1],n,Plus(BM0etc[n1][n],1));
+                        Vue.set(BM0etcBought[n1],n,Plus(BM0etcBought[n1][n],1));
+                        v.BM0etcBuying(n1,n,1)
+                     }
+               return
+            }
+            while(n1--)
+               for(n=BM0etc[n1].length;n--;){
+                  delta=BuyMax(['BM0etc',n1,n],['BM0etcBought',n1,n],SpecialRun&1&&n?['BM0etc',n1,n-1]:['MainNumber'],BM0etcInfo[n1][n].sum,BM0etcInfo[n1][n].solve);
+                  delta&&SpecialRun&30&&v.BM0etcBuying(n1,n,delta)
+               }
+            return
+         }
          while(n1--)
             for(n=BM0etc[n1].length;n--;)
                BuyMax(['BM0etc',n1,n],['BM0etcBought',n1,n],['MainNumber'],BM0etcInfo[n1][n].sum,BM0etcInfo[n1][n].solve)
@@ -412,7 +532,15 @@ const v = new Vue({
    v.BM0c1=2
 }
 ,BM0etcReset = n=>{
-   var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart;
+   var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart
+   ,SpecialRun=v.SpecialRun;
+   if(SpecialRun){
+      if(SpecialRun&32){
+         v.Special32Base=Root(Times(v.MainNumber,0.25),Date.now()-Time.LastBM0etcUnlock);
+         Time.LastBM0etcUnlock=Date.now()
+      }
+      if(SpecialRun&4) v.Special4Eff=[[]];
+   }
    while(n--) BM0etcLength[n]=BM0etcLengthStart[n];
    Vue.set(BM0etcLength,0,BM0etcLength[0]);
    v.MainNumber=4;
@@ -430,7 +558,8 @@ const v = new Vue({
       Vue.set(costo[0],costo[1],Minus(costo[0][costo[1]],Minus(sum(Plus(amount[0][amount[1]],delta)),sum(amount[0][amount[1]]))))
       if(Sign(costo[0][costo[1]])<0) Vue.set(costo[0],costo[1],0);
    }
-   Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],delta))
+   Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],delta));
+   return delta
 }
 ,BuyMax = (Amount,Bought,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),bought=Pointer(v,Bought),costo=Pointer(v,Costo);
@@ -444,7 +573,8 @@ const v = new Vue({
       if(Sign(costo[0][costo[1]])<0) Vue.set(costo[0],costo[1],0);
    }
    Vue.set(amount[0],amount[1],Plus(amount[0][amount[1]],delta));
-   Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],delta))
+   Vue.set(bought[0],bought[1],Plus(bought[0][bought[1]],delta));
+   return delta
 }
 ,Loop = ()=>{
    setTimeout(Loop,v.UpdateInterval);

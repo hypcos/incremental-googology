@@ -11,7 +11,8 @@ const Version=2
       'LastUpdate'
       ,'LastGame'
       ,'LastFGHPrestige'
-      ,'LastFGHSpecialModifier'
+      ,'LastBought'
+      ,'LastBM0etcUnlock'
    ]
 ]
 ,DataList=[
@@ -70,5 +71,12 @@ const Version=2
       ,'FGH2iter1'
       ,'FGH2'
       ,'FGH3'
+      ,'SpecialRun'
+      ,'Special4Eff'
+      ,'Special8Eff'
+      ,'Special16Eff'
+      ,'Special32Eff'
+      ,'Special16Base'
+      ,'Special32Base'
    ]
 ]
