@@ -1,8 +1,8 @@
 'use strict';
 const Grow = dt=>{
-   var SpecialRun=v.SpecialRun
-   ,Special8Eff
-   ,a1,a2,a3,n,n1=v.BM0etc.length;
+   var SpecialRun=v.SpecialRun,Special8Eff
+   ,a1,a2,a3,n,n1=v.BM0etc.length
+   ,AutoActive=v.AutoActive;
    if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
    if(SpecialRun&252){
       if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
@@ -29,7 +29,8 @@ const Grow = dt=>{
          while(--n) a1[n-1]=Plus(a1[n-1],Times(Times(a1[n],a2[n]),dt*0.2))
       }
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
-   v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt))
+   v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt));
+   for(n1=AutoActive.length,n=0;n<n1;++n) AutoActive[n].act();
 }
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
@@ -77,6 +78,7 @@ const Grow = dt=>{
    ,FGH2:[]
    ,FGH3:2
    ,FGHSpecial:0 //2 bits for every item
+   ,AutoActive:[]
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -305,8 +307,8 @@ const v = new Vue({
          return arr
       }
       ,BM0etcCantUnlock(){
-         var BM0etcUnlockCost=this.BM0etcUnlockCost;
-         return this.BM0etc.map((x,n)=>LessQ(x[x.length-1]||0,BM0etcUnlockCost[n]))
+         var BM0etcUnlockCost=this.BM0etcUnlockCost,BM0etcLength=this.BM0etcLength;
+         return this.BM0etc.map((x,n)=>LessQ(x[BM0etcLength[n]-1]||0,BM0etcUnlockCost[n]))
       }
       ,BM0etcUnlockerEff(){
          var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,n=BM0etcLength.length-1,arr=[]
@@ -381,6 +383,25 @@ const v = new Vue({
       ,FGHSpecialText6(){return 'Reach '+show(1e100)+' to unlock FGH-outside items'}
       ,FGHSpecialText7(){return 'Reach '+show(1e100)+' to unlock FGH-sides items'}
       ,FGHSpecialText8(){return 'Reach '+show(1e100)+', then you start with only 2 BM available for every base number'}
+      ,AutoPool(){
+         var FGHSpecial=this.FGHSpecial,arr=[];
+         if(FGHSpecial&3){
+            arr.push({text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()})
+         }
+         if(FGHSpecial&12){
+            arr.push({text:'Automatic unlock zero-only BM',act:()=>{
+               var n=v.BM0etcLengthEver.length;
+               while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n);
+            }})
+         }
+         if(FGHSpecial&48){
+            arr.push({text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()})
+         }
+         if(FGHSpecial&192){
+            arr.push({text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||v.FGHPrestigeDo()})
+         }
+         return arr
+      }
    }
    ,methods:{
       Save:n=>Save(n)
@@ -648,6 +669,15 @@ v.$watch('MainNumber',x=>{
       }
    }
 });
+v.$watch('AutoPool',AutoPool=>{
+   var AutoActive=v.AutoActive,n=AutoActive.length,i;
+   while(n--)
+      for(i=AutoPool.length;i--;)
+         if(AutoActive[n].text===AutoPool[i].text){
+            AutoActive[n]=AutoPool[i];
+            break
+         }
+})
 v.$watch('FGHNumber',x=>{
    var FGH2=v.FGH2,n=(x.pt||0)+1;
    while(LessQ(x,IteratedFGH2(2,--n+2))&&n>=0);

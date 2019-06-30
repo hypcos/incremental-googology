@@ -79,5 +79,6 @@ const Version=2
       ,'FGH2'
       ,'FGH3'
       ,'FGHSpecial'
+      ,'AutoActive'
    ]
 ]

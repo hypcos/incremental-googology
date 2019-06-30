@@ -50,10 +50,94 @@ Vue.component('buy',{
          delta&&this.$emit('buying',delta)
       }
    }
-   ,template:'<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()">\
-      <b :style="{\'font-size\':tex+\'px\'}" v-html="Text"></b><br>\
-      {{ShowAmount}}<br>\
-      ×{{ShowMult}}<span v-html="modifier"></span><br>\
-      Cost: {{ShowCost}}\
-   <slot></slot><span class="tooltip" v-html="info.tooltip"></span></button>'
+   ,template:`<button class="cell" :disabled="Cant" @mousedown.stop="Buy()" @dblclick.stop="BuyMax()">
+      <b :style="{'font-size':tex+'px'}" v-html="Text"></b><br>
+      {{ShowAmount}}<br>
+      ×{{ShowMult}}<span v-html="modifier"></span><br>
+      Cost: {{ShowCost}}
+   <slot></slot><span class="tooltip" v-html="info.tooltip"></span></button>`
+});
+Vue.component('automaton-select',{
+   data(){return{
+      PoolSelected:undefined
+      ,ActiveSelected:undefined
+   }}
+   ,computed:{
+      AutoPool(){return this.$root.AutoPool}
+      ,AutoActive(){return this.$root.AutoActive}
+   }
+   ,methods:{
+      EnableItem(){
+         var PoolSelected=this.PoolSelected,AutoActive;
+         if(!PoolSelected) return;
+         AutoActive=this.$root.AutoActive;
+         if(AutoActive.indexOf(PoolSelected)==-1) AutoActive.push(PoolSelected)
+      }
+      ,EnableAll(){
+         var AutoPool=this.$root.AutoPool,AutoActive=this.$root.AutoActive,l=AutoPool.length,n;
+         for(n=0;n<l;++n) if(AutoActive.indexOf(AutoPool[n])==-1) AutoActive.push(AutoPool[n])
+      }
+      ,DisableItem(){
+         var ActiveSelected=this.ActiveSelected,AutoActive,idx;
+         if(!ActiveSelected) return;
+         AutoActive=this.$root.AutoActive;
+         idx=AutoActive.indexOf(ActiveSelected);
+         if(idx==-1) return;
+         AutoActive.splice(idx,1)
+      }
+      ,DisableAll(){this.$root.AutoActive=[]}
+      ,ItemTop(){
+         var ActiveSelected=this.ActiveSelected,AutoActive,idx;
+         if(!ActiveSelected) return;
+         AutoActive=this.$root.AutoActive;
+         idx=AutoActive.indexOf(ActiveSelected);
+         if(idx==-1) return;
+         AutoActive.splice(idx,1);
+         AutoActive.unshift(ActiveSelected)
+      }
+      ,ItemBottom(){
+         var ActiveSelected=this.ActiveSelected,AutoActive,idx;
+         if(!ActiveSelected) return;
+         AutoActive=this.$root.AutoActive;
+         idx=AutoActive.indexOf(ActiveSelected);
+         if(idx==-1) return;
+         AutoActive.splice(idx,1);
+         AutoActive.push(ActiveSelected)
+      }
+      ,ItemUp(){
+         var ActiveSelected=this.ActiveSelected,AutoActive,idx;
+         if(!ActiveSelected) return;
+         AutoActive=this.$root.AutoActive;
+         idx=AutoActive.indexOf(ActiveSelected);
+         if(idx==-1||idx==0) return;
+         AutoActive.splice(idx,1);
+         AutoActive.splice(idx-1,0,ActiveSelected)
+      }
+      ,ItemDown(){
+         var ActiveSelected=this.ActiveSelected,AutoActive,idx;
+         if(!ActiveSelected) return;
+         AutoActive=this.$root.AutoActive;
+         idx=AutoActive.indexOf(ActiveSelected);
+         if(idx==-1||idx==AutoActive.length-1) return;
+         AutoActive.splice(idx,1);
+         AutoActive.splice(idx+1,0,ActiveSelected)
+      }
+   }
+   ,template:`<div><div class="column2">
+      <select class="column2" size="27" style="height:320px" v-model="PoolSelected">
+         <option v-for="item in AutoPool" :value="item">{{item.text}}</option>
+      </select><br>
+      <button class="cell3 column4" @mousedown="EnableItem()">Enable</button><br>
+      <button class="cell3 column4" @mousedown="EnableAll()">Enable All</button>
+   </div><div class="column2">
+      <select class="column2" size="27" style="height:320px" v-model="ActiveSelected">
+         <option v-for="item in AutoActive" :value="item">{{item.text}}</option>
+      </select><br>
+      <button class="cell3" @mousedown="ItemTop()">Priority Top</button>
+      <button class="cell3" @mousedown="ItemUp()">Priority Up</button>
+      <button class="cell3" @mousedown="ItemDown()">Priority Down</button>
+      <button class="cell3" @mousedown="ItemBottom()">Priority Bottom</button><br>
+      <button class="cell3" @mousedown="DisableItem()">Disable</button>
+      <button class="cell3" @mousedown="DisableAll()">Disable All</button>
+   </div></div>`
 })

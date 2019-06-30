@@ -22,6 +22,7 @@
       style="position:relative">BMS<span class="tooltip">Bashicu matrix system</span></button>
       <button v-if="Achievement.length>3" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
       style="position:relative">FGH<span class="tooltip">fast-growing hierarchy</span></button>
+      <button v-if="Achievement.length>4" @mousedown="CurrentTab=5" :disabled="CurrentTab==5">Automatons</button>
    </div>
    <div v-if="CurrentTab==3">
       <button v-if="Achievement.length>3" class="prestige" @mousedown="FGHPrestigeDo()"
@@ -170,6 +171,9 @@
             {{FGHSpecialText8}}
          </button>
       </div>
+   </div>
+   <div v-else-if="CurrentTab==5">
+      <automaton-select></automaton-select>
    </div>
    <div v-else-if="CurrentTab==0" id="setting">
       <div class="itemrow">
