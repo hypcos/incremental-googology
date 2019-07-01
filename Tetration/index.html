@@ -107,7 +107,7 @@
                </button>
             </div><div class="column4">
                <button class="cell cell3" :disabled="FGH2iter1Cant" @mousedown="FGH2iter1Buy()" @dblclick="FGH2iter1Buymax()">
-                  <b class="big">f<sub>2</sub>({{FGH2iter1Text}})</b><br>
+                  <b class="big">f<sub>{{2|showInt}}</sub>({{FGH2iter1Text}})</b><br>
                   Get ×{{1.1|show}} fast-growing hierarchy number when FGH-prestige<br>
                   Current: ×{{FGH2iter1Eff|show}}<br>
                   Cost: {{FGH2iter1Cost|showInt}} FGHN
@@ -119,7 +119,7 @@
                </button>
             </div><div class="column4">
                <button class="cell cell3" :disabled="FGH3Cant" @mousedown="FGH3Buy()">
-                  <b class="big">f<sub>3</sub>({{FGH3|showInt}})</b><br>
+                  <b class="big">f<sub>{{3|showInt}}</sub>({{FGH3|showInt}})</b><br>
                   Reduce the requirement to unlock zero-only base-{{FGH3+1|showInt}} BM by 1<br>
                   Cost: {{FGH3Cost|showInt}} FGHN
                </button>
@@ -132,46 +132,71 @@
             Exit current special run
          </button><br>
          <div style="display:inline-block;width:630px">
-            <button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(1)"
+            <button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(2)"
             :class="{already:FGHSpecial&1&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==2?'#f95':''}">
                Special: Buying any BM resets your number and lower BM.<br><br>
                Reach {{1e160|show}} to get automatic buy max of all zero-only BM
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(2)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(16)"
             :class="{already:FGHSpecial&2&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==16?'#f95':''}">
                Special: BM produce normally after purchase, but then multipliers decay exponentially
                based on the interval of your previous two purchases.<br><br>
                Reach {{1e160|show}} to get automatic unlock zero-only BM
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(3)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(8)"
             :class="{already:FGHSpecial&4&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==8?'#f95':''}">
                Special: Buying any zero-only BM disables multipliers, exponentially coming back in one minute.<br><br>
                Reach {{1e160|show}} to get (0)(1)[n] autobuyer
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(4)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(32)"
             :class="{already:FGHSpecial&8&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==32?'#f95':''}">
                Special: Multipliers of all BM decay exponentially based on how fast your number grew in previous reset.<br><br>
                Reach {{1e160|show}} to get automatic FGH-prestige
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(5)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(128)"
             :class="{already:FGHSpecial&16&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==128?'#f95':''}">
                Special: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
                Reach {{1e160|show}} to unlock FGH-inside items
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(6)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(64)"
             :class="{already:FGHSpecial&32&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==64?'#f95':''}">
                Special: The more Z(0)[n] you have, the weaker Z[n] is (where Z is a string of (0)'s).<br><br>
                Reach {{1e160|show}} to unlock FGH-outside items
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(7)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(1)"
             :class="{already:FGHSpecial&64&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==1?'#f95':''}">
                Special: You spend Z[n] to buy Z(0)[n] (where Z is a string of (0)'s).<br><br>
                Reach {{1e160|show}} to unlock FGH-sides items
-            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(8)"
+            </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(4)"
             :class="{already:FGHSpecial&128&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==4?'#f95':''}">
                Special: When buying any zero-only BM, those with greaterequal costs will be weaken by a half.<br><br>
-               Reach {{1e160|show}}, then you start with only 2 BM available for every base number<br v-show="FGHSpecial&128">
+               Reach {{1e160|show}}, then you start with only {{2|showInt}} BM available for every base number<br v-show="FGHSpecial&128">
                <span v-show="FGHSpecial&128" class="alter" @mousedown.stop="FGHSpecial&=~128">Discard</span>
+            </button><button v-show="FGHSpecial&2" class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(24)"
+            :class="{already:FGHSpecial&256&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==24?'#f95':''}">
+               Special: Automatic unlock zero-only BM and (0)(1)[n] autobuyer special runs together.<br><br>
+               Reach {{1e160|show}} to enable threshold of automatic unlock zero-only BM
+            </button><button v-show="FGHSpecial&8" class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(40)"
+            :class="{already:FGHSpecial&512&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==40?'#f95':''}">
+               Special: Automatic FGH-prestige and (0)(1)[n] autobuyer special runs together.<br><br>
+               Reach {{1e160|show}} to enable threshold of automatic FGH-prestige
             </button>
          </div>
       </div>
    </div>
    <div v-else-if="CurrentTab==5">
       <automaton-select></automaton-select>
+      <div class="column2">
+         <div v-show="FGHSpecial&256" class="bigrow">
+            Options for automatic unlock zero-only BM
+            <div v-for="(x,n) in BM0etcLengthEver">
+               Unlock (0)...(0)[{{n+2|showInt}}] at most
+               <input v-model="AutoBM0etcUnlockThresholdInput[n]" @keydown.stop @blur="AutoBM0etcUnlockThresholdChange(n)">
+               times.
+            </div>
+         </div>
+      </div><div class="column2">
+         <div v-show="FGHSpecial&512" class="bigrow">
+            Options for automatic FGH-prestige<br>
+            FGH-prestige to get at least
+            <input v-model="AutoFGHPrestigeThresholdInput[0]" @keydown.stop @blur="AutoFGHPrestigeThresholdChange()">
+            fast-growing hierarchy number.
+         </div>
+      </div>
    </div>
    <div v-else-if="CurrentTab==0" id="setting">
       <div class="itemrow">
@@ -237,7 +262,8 @@ both mantissa and exponent count into significant digits">
             </td>
          </tr>
       </table>
-      <div class="bigrow">Rows reward:<br>
+      <div class="bigrow">
+         Rows reward:<br>
          1 row: automatic buy max of (0)[2]<br>
          <span v-if="Achievement.length>=2">2 rows: automatic unlock (0)...(0)[2]<br></span>
          <span v-if="Achievement.length>=3">3 rows: automatic buy max of (0)(0)[3]<br></span>

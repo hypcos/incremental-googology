@@ -80,6 +80,8 @@ const Grow = dt=>{
    ,FGH3:2
    ,FGHSpecial:0 //1 bit for every item
    ,AutoActive:[]
+   ,AutoBM0etcUnlockThreshold:[]
+   ,AutoFGHPrestigeThreshold:0
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -289,7 +291,7 @@ const v = new Vue({
          while(n1--){
             arr=[];
             n=BM0etcDivider[n1].length;
-            while(n--) arr[n]=(SpecialRun&8?'^'+show(Special8Eff):'')+(SpecialRun&244?'/'+show(BM0etcDivider[n1][n]):'')
+            while(n--) arr[n]=(SpecialRun&8?'^'+show(Special8Eff):'')+(SpecialRun&244?' /'+show(BM0etcDivider[n1][n]):'')
             arr1[n1]=arr
          }
          return arr1
@@ -380,11 +382,12 @@ const v = new Vue({
       ,AutoPool:()=>[null
          ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
          ,{text:'Automatic unlock zero-only BM',act:()=>{
-            var n=v.BM0etcLengthEver.length;
-            while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n)
+            var BM0etcCantUnlock=v.BM0etcCantUnlock,BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart
+            ,threshold=v.AutoBM0etcUnlockThreshold,n=BM0etcLength.length;
+            while(n--) if(BM0etcCantUnlock[n]===false&&!LessEqualQ(threshold[n],Minus(BM0etcLength[n],BM0etcLengthStart[n]))) v.BM0etcUnlock(n)
          }}
          ,{text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
-         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||v.FGHPrestigeDo()}
+         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet)&&v.FGHPrestigeDo()}
          ,{text:'Automatic buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
          ,{text:'Automatic unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
          ,{text:'Automatic buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
@@ -408,6 +411,8 @@ const v = new Vue({
          if(AchieveRowN>=4) arr.push(8);
          return arr
       }
+      ,AutoBM0etcUnlockThresholdInput(){return this.AutoBM0etcUnlockThreshold.map(showInt)}
+      ,AutoFGHPrestigeThresholdInput(){return [show(this.AutoFGHPrestigeThreshold)]}
    }
    ,methods:{
       Save:n=>Save(n)
@@ -528,6 +533,8 @@ const v = new Vue({
                v.FGH2.map((x,n)=>v.FGH2Discard(n));
                v.FGHSpecial|=128;
                break;
+               case 24: v.FGHSpecial|=256; break;
+               case 40: v.FGHSpecial|=512; break;
             }
             v.FGHSpecialExit()
          }
@@ -576,13 +583,25 @@ const v = new Vue({
       ,FGHSpecialEnter:n=>{
          Time.LastFGHPrestige=Date.now();
          BMSReset();
-         v.SpecialRun|=[2,16,8,32,128,64,1,4][n-1]
+         v.SpecialRun|=n
       }
       ,FGHSpecialExit:()=>{
          if(v.SpecialRun&4) v.Special4Eff=[[]];
          if(v.SpecialRun&16) v.Special16Base=1;
          if(v.SpecialRun&32) v.Special32Base=1;
          v.SpecialRun&=~255
+      }
+      ,AutoBM0etcUnlockThresholdChange:n=>{
+         var NumberBase=v.NumberBase,input=v.AutoBM0etcUnlockThresholdInput[n],threshold=v.AutoBM0etcUnlockThreshold,s;
+         if(input==='') return Vue.set(threshold,n,Infinity);
+         s=AntiShow(input,NumberBase,true);
+         if(!Number.isNaN(s)) Vue.set(threshold,n,s)
+      }
+      ,AutoFGHPrestigeThresholdChange:()=>{
+         var NumberBase=v.NumberBase,input=v.AutoFGHPrestigeThresholdInput[0],s;
+         if(input==='') return v.AutoFGHPrestigeThreshold=0;
+         s=AntiShow(input,NumberBase);
+         if(!Number.isNaN(s)) v.AutoFGHPrestigeThreshold=s
       }
    }
 })

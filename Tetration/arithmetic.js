@@ -110,6 +110,8 @@ const LnMaxValue = Math.log(Number.MAX_VALUE)
 }
 ,Divide = (x,y)=> Times(x,Recip(y))
 ,Power = (x,y)=>{
+   var res;
+   if(Number.isFinite(x)&&Number.isFinite(y)&&(res=Math.pow(x,y))&&Number.isFinite(res)) return Normal(res);
    if(Sign(x)<0){
       if(Number.isFinite(y)){
          if(y!==Math.round(y)) return NaN;

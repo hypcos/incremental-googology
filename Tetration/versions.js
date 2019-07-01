@@ -80,5 +80,7 @@ const Version=2
       ,'FGH3'
       ,'FGHSpecial'
       ,'AutoActive'
+      ,'AutoBM0etcUnlockThreshold'
+      ,'AutoFGHPrestigeThreshold'
    ]
 ]

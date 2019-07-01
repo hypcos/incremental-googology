@@ -47,6 +47,37 @@ const _ShowNum = (x,precision,base,integer=false)=>{
    }
    return _ShowNum(x,precision,base,integer)
 }
+,AntiShow = (str,base,integer=false)=>{
+   var legal = '+-.e0123456789abcdefghijklmnopqrstuvwxyz'.substr(0,4+base)
+   ,parts,part,point,res=0,i;
+   if(str==''||!(str.split('').reduce((tmp,x)=>legal.includes(x)&&tmp,true))) return NaN;
+   parts=str.split('e');
+   if(base>14){
+      i=parts.length;
+      while(--i) if(parts[i][0]!='+'&&parts[i][0]!='-') parts.splice(i-1,2,parts[i-1]+'e'+parts[i])
+   }
+   i=parts.length;
+   if(parts[i-1]=='') return NaN;
+   while(i--){
+      if(parts[i]==''||parts[i]=='+'){
+         res=Power(base,res);
+         continue
+      }else if(parts[i]=='-'){
+         res=Neg(Power(base,res));
+         continue
+      }
+      part = parts[i][0]=='+'||parts[i][0]=='-'?parts[i].substr(1):parts[i];
+      if(part.includes('+')||part.includes('-')) return NaN;
+      point=part.indexOf('.');
+      if(point==0||part.lastIndexOf('.')==part.length-1||point!=part.lastIndexOf('.')) return NaN;
+      res=Times(Power(base,res),
+         point==-1?
+         parseInt(part,base):
+         parseInt(part.substr(0,point),base)+parseInt(part.substr(point+1),base)*Math.pow(base,point+1-part.length));
+      if(parts[i][0]=='-') res=Neg(res)
+   }
+   return integer?Sign(res)<0?Neg(Natural(Neg(res))):Natural(res):res
+}
 ,ShowExE = (precision,fixed,expo)=>{
    var lo = Math.pow(10,precision-fixed);
    return x=>{
