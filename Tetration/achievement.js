@@ -101,13 +101,6 @@ const Cancel=[]
          Vue.set(v.Achievement,3,0)
       })
    }
-   if(len<=4){
-      RowCancel[3] = v.$watch(()=>v.FGHSpecial&255,x=>{
-         if(!x) return;
-         RowCancel[3]();
-         Vue.set(v.Achievement,4,0)
-      })
-   }
 }
 ,AchievementOff = ()=>{
    Cancel.map(x=>x());

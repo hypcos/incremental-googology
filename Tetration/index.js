@@ -78,7 +78,7 @@ const Grow = dt=>{
    ,FGH2iter1:0
    ,FGH2:[]
    ,FGH3:2
-   ,FGHSpecial:0 //2 bits for every item
+   ,FGHSpecial:0 //1 bit for every item
    ,AutoActive:[]
 })
 ,vPre = InitialData()
@@ -324,7 +324,7 @@ const v = new Vue({
          return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
-      ,FGHPrestigeCant(){return LessQ(this.MainNumber,1e100)}
+      ,FGHPrestigeCant(){return LessQ(this.MainNumber,this.SpecialRun&255?1e160:1e100)}
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber);
@@ -376,29 +376,43 @@ const v = new Vue({
       }
       ,FGH3Cost(){return Natural(IteratedFGH2(this.FGH3,this.FGH3))}
       ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
-      ,FGHSpecialText1(){return 'Reach '+show(1e100)+' to get automatic buy max of all zero-only BM'}
-      ,FGHSpecialText2(){return 'Reach '+show(1e100)+' to get automatic unlock zero-only BM'}
-      ,FGHSpecialText3(){return 'Reach '+show(1e100)+' to get (0)(1)[n] autobuyer'}
-      ,FGHSpecialText4(){return 'Reach '+show(1e100)+' to get automatic FGH-prestige'}
-      ,FGHSpecialText5(){return 'Reach '+show(1e100)+' to unlock FGH-inside items'}
-      ,FGHSpecialText6(){return 'Reach '+show(1e100)+' to unlock FGH-outside items'}
-      ,FGHSpecialText7(){return 'Reach '+show(1e100)+' to unlock FGH-sides items'}
-      ,FGHSpecialText8(){return 'Reach '+show(1e100)+', then you start with only 2 BM available for every base number'}
+      ,FGHSpecialText1(){return 'Reach '+show(1e160)+' to get automatic buy max of all zero-only BM'}
+      ,FGHSpecialText2(){return 'Reach '+show(1e160)+' to get automatic unlock zero-only BM'}
+      ,FGHSpecialText3(){return 'Reach '+show(1e160)+' to get (0)(1)[n] autobuyer'}
+      ,FGHSpecialText4(){return 'Reach '+show(1e160)+' to get automatic FGH-prestige'}
+      ,FGHSpecialText5(){return 'Reach '+show(1e160)+' to unlock FGH-inside items'}
+      ,FGHSpecialText6(){return 'Reach '+show(1e160)+' to unlock FGH-outside items'}
+      ,FGHSpecialText7(){return 'Reach '+show(1e160)+' to unlock FGH-sides items'}
+      ,FGHSpecialText8(){return 'Reach '+show(1e160)+', then you start with only 2 BM available for every base number'}
       ,AutoPool:()=>[null
          ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
          ,{text:'Automatic unlock zero-only BM',act:()=>{
             var n=v.BM0etcLengthEver.length;
-            while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n);
+            while(n--) if(v.BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n)
          }}
          ,{text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
          ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||v.FGHPrestigeDo()}
+         ,{text:'Automatic buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
+         ,{text:'Automatic unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
+         ,{text:'Automatic buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
+         ,{text:'Automatic buy max (0)...(0)[2]',act:()=>{
+            var amount=v.BM0etc[0],n,info;
+            if(!amount) return;
+            n=amount.length;
+            info=v.BM0etcInfo[0]
+            while(n--) BuyMax(['BM0etc',0,n],['BM0etcBought',0,n],['MainNumber'],info[n].sum,info[n].solve)
+         }}
       ]
       ,AutoAvailable(){
-         var FGHSpecial=this.FGHSpecial,arr=[];
-         if(FGHSpecial&3) arr.push(1);
-         if(FGHSpecial&12) arr.push(2);
-         if(FGHSpecial&48) arr.push(3);
-         if(FGHSpecial&192) arr.push(4);
+         var AchieveRowN=this.AchieveRowN,FGHSpecial=this.FGHSpecial,arr=[];
+         if(FGHSpecial&1) arr.push(1);
+         if(FGHSpecial&2) arr.push(2);
+         if(FGHSpecial&4) arr.push(3);
+         if(FGHSpecial&8) arr.push(4);
+         if(AchieveRowN>=1) arr.push(5);
+         if(AchieveRowN>=2) arr.push(6);
+         if(AchieveRowN>=3) arr.push(7);
+         if(AchieveRowN>=4) arr.push(8);
          return arr
       }
    }
@@ -510,14 +524,14 @@ const v = new Vue({
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
          if(v.SpecialRun&255){
             switch(v.SpecialRun&255){
-               case 2: v.FGHSpecial&3||(v.FGHSpecial|=1); break;
-               case 16: v.FGHSpecial&12||(v.FGHSpecial|=4); break;
-               case 8: v.FGHSpecial&48||(v.FGHSpecial|=16); break;
-               case 32: v.FGHSpecial&192||(v.FGHSpecial|=64); break;
-               case 128: v.FGHSpecial&768||(v.FGHSpecial|=256); break;
-               case 64: v.FGHSpecial&3072||(v.FGHSpecial|=1024); break;
-               case 1: v.FGHSpecial&12288||(v.FGHSpecial|=4096); break;
-               case 4: v.FGHSpecial&49152||(v.FGHSpecial|=16384); break;
+               case 2: v.FGHSpecial|=1; break;
+               case 16: v.FGHSpecial|=2; break;
+               case 8: v.FGHSpecial|=4; break;
+               case 32: v.FGHSpecial|=8; break;
+               case 128: v.FGHSpecial|=16; break;
+               case 64: v.FGHSpecial|=32; break;
+               case 1: v.FGHSpecial|=64; break;
+               case 4: v.FGHSpecial|=128; break;
             }
             v.FGHSpecialExit()
          }
