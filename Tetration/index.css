@@ -179,7 +179,6 @@ sub+sup{margin-left:-1ch}
    border-width: 2px;
    margin: 0;
    vertical-align:text-top;
-   font-size: 15px;
 }
 #loading{
    background-color: #555;

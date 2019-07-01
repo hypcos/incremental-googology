@@ -1,7 +1,10 @@
 'use strict';
 const Grow = dt=>{
    var SpecialRun=v.SpecialRun,Special8Eff
-   ,a1,a2,a3,n,n1=v.BM0etc.length;
+   ,AutoPool=v.AutoPool
+   ,a1,a2,a3,n,n1;
+   v.AutoActive.map(x=>AutoPool[x].act());
+   n1=v.BM0etc.length;
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
       var FGH2=v.FGH2,FGHNumber=v.FGHNumber;
@@ -68,8 +71,6 @@ const Grow = dt=>{
                v.BM0etcBuying(n1,n,1)
             }
    }
-   var AutoPool=v.AutoPool;
-   v.AutoActive.map(x=>AutoPool[x].act())
 }
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
