@@ -125,13 +125,13 @@ Vue.component('automaton-select',{
       }
    }
    ,template:`<div><div class="column2">
-      <select class="column2" size="27" style="height:320px" v-model="AvailableSelected">
+      <select class="column2" size="18" style="height:220px" v-model="AvailableSelected">
          <option v-for="item in AutoAvailable" :value="item">{{AutoPool[item].text}}</option>
       </select><br>
       <button class="cell3 column4" @mousedown="EnableItem()">Enable</button><br>
       <button class="cell3 column4" @mousedown="EnableAll()">Enable All</button>
    </div><div class="column2">
-      <select class="column2" size="27" style="height:320px" v-model="ActiveSelected">
+      <select class="column2" size="18" style="height:220px" v-model="ActiveSelected">
          <option v-for="item in AutoActive" :value="item">{{AutoPool[item].text}}</option>
       </select><br>
       <button class="cell3" @mousedown="ItemTop()">Priority Top</button>

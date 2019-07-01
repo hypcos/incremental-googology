@@ -60,7 +60,7 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
-   ,SpecialRun:0 //auto max all:2, auto unlock:16, auto (0)(1)[n]:8, auto FGH-prestige:32, inside:128, outside:64, sides:1, start with:4
+   ,SpecialRun:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
    ,Special4Eff:[[]]
    ,Special8Eff:1
    ,Special16Eff:1
@@ -382,12 +382,16 @@ const v = new Vue({
       ,AutoPool:()=>[null
          ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
          ,{text:'Automatic unlock zero-only BM',act:()=>{
-            var BM0etcCantUnlock=v.BM0etcCantUnlock,BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart
-            ,threshold=v.AutoBM0etcUnlockThreshold,n=BM0etcLength.length;
-            while(n--) if(BM0etcCantUnlock[n]===false&&!LessEqualQ(threshold[n],Minus(BM0etcLength[n],BM0etcLengthStart[n]))) v.BM0etcUnlock(n)
+            var BM0etcCantUnlock=v.BM0etcCantUnlock,BM0etcLength=v.BM0etcLength,n=BM0etcLength.length;
+            if(v.FGHSpecial&256){
+               var BM0etcLengthStart=v.BM0etcLengthStart,threshold=v.AutoBM0etcUnlockThreshold;
+               while(n--) if(BM0etcCantUnlock[n]===false&&!LessEqualQ(threshold[n],Minus(BM0etcLength[n],BM0etcLengthStart[n]))) v.BM0etcUnlock(n)
+            }else{
+               while(n--) if(BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n)
+            }
          }}
          ,{text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
-         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet)&&v.FGHPrestigeDo()}
+         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHSpecial&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet))&&v.FGHPrestigeDo()}
          ,{text:'Automatic buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
          ,{text:'Automatic unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
          ,{text:'Automatic buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
@@ -523,9 +527,9 @@ const v = new Vue({
          if(v.SpecialRun&255){
             switch(v.SpecialRun&255){
                case 2: v.FGHSpecial|=1; break;
-               case 16: v.FGHSpecial|=2; break;
+               case 32: v.FGHSpecial|=2; break;
                case 8: v.FGHSpecial|=4; break;
-               case 32: v.FGHSpecial|=8; break;
+               case 16: v.FGHSpecial|=8; break;
                case 128: v.FGHSpecial|=16; break;
                case 64: v.FGHSpecial|=32; break;
                case 1: v.FGHSpecial|=64; break;
@@ -533,8 +537,8 @@ const v = new Vue({
                v.FGH2.map((x,n)=>v.FGH2Discard(n));
                v.FGHSpecial|=128;
                break;
-               case 24: v.FGHSpecial|=256; break;
-               case 40: v.FGHSpecial|=512; break;
+               case 40: v.FGHSpecial|=256; break;
+               case 24: v.FGHSpecial|=512; break;
             }
             v.FGHSpecialExit()
          }
@@ -592,15 +596,15 @@ const v = new Vue({
          v.SpecialRun&=~255
       }
       ,AutoBM0etcUnlockThresholdChange:n=>{
-         var NumberBase=v.NumberBase,input=v.AutoBM0etcUnlockThresholdInput[n],threshold=v.AutoBM0etcUnlockThreshold,s;
+         var input=v.AutoBM0etcUnlockThresholdInput[n],threshold=v.AutoBM0etcUnlockThreshold,s;
          if(input==='') return Vue.set(threshold,n,Infinity);
-         s=AntiShow(input,NumberBase,true);
+         s=AntiShow(input,v.NumberBase,true);
          if(!Number.isNaN(s)) Vue.set(threshold,n,s)
       }
       ,AutoFGHPrestigeThresholdChange:()=>{
-         var NumberBase=v.NumberBase,input=v.AutoFGHPrestigeThresholdInput[0],s;
+         var input=v.AutoFGHPrestigeThresholdInput[0],s;
          if(input==='') return v.AutoFGHPrestigeThreshold=0;
-         s=AntiShow(input,NumberBase);
+         s=AntiShow(input,v.NumberBase);
          if(!Number.isNaN(s)) v.AutoFGHPrestigeThreshold=s
       }
    }
