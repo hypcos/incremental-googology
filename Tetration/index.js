@@ -1,11 +1,14 @@
 'use strict';
 const Grow = dt=>{
    var SpecialRun=v.SpecialRun,Special8Eff
-   ,AutoPool=v.AutoPool,AutoActive=v.AutoActive
-   ,a1,a2,a3,n,n1;
-   for(n1=AutoActive.length,n=0;n<n1;++n) AutoPool[AutoActive[n]].act();
-   if(v.AlphaSeries&16) v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
-   n1=v.BM0etc.length;
+   ,a1,a2,a3,n,n1=v.BM0etc.length;
+   if(v.AlphaSeries&16){
+      v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
+      var FGH2=v.FGH2,FGHNumber=v.FGHNumber;
+      n=(FGHNumber.pt||0)+1;
+      while(LessQ(FGHNumber,IteratedFGH2(2,--n+2))&&n>=0);
+      for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
+   }
    if(SpecialRun&252){
       if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
       if(SpecialRun&16) v.Special16Eff=Power(v.Special16Base,Date.now()-Time.LastBought);
@@ -32,6 +35,41 @@ const Grow = dt=>{
       }
    Vue.set(v.BM0etc,0,v.BM0etc[0]);
    v.MainNumber=Plus(v.MainNumber,Times(v.Growth,dt));
+   var MainNumber=v.MainNumber,amount=v.BM0etc,bought=v.BM0etcBought,lens=v.BM0etcLength,m=lens.length;
+   n1=amount.length;
+   if(LessQ(v.MainNumberEver,MainNumber)) v.MainNumberEver=MainNumber;
+   if(v.BMSStage<2){
+      if(LessEqualQ(18446744073709551616,MainNumber)) v.BMSStage=2;
+      else if(v.BMSStage<1&&LessEqualQ(16777216,MainNumber)) v.BMSStage=1;
+   }
+   while(LessQ(MainNumber,Power(--m+2,Power(2,m+1))));
+   while(n1<=m){
+      Vue.set(amount,n1,[]);
+      Vue.set(bought,n1,[]);
+      ++n1
+   }
+   while(n1--){
+      amount=v.BM0etc[n1];
+      bought=v.BM0etcBought[n1];
+      lens=v.BM0etcLength[n1];
+      while((n=amount.length)<lens&&LessEqualQ(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),MainNumber)){
+         Vue.set(amount,n,0);
+         Vue.set(bought,n,0)
+      }
+   }
+   if(SpecialRun&2){
+      var BM0etcInfo=v.BM0etcInfo;
+      amount=v.BM0etc,bought=v.BM0etcBought;
+      for(n1=0;n1<amount.length;++n1)
+         for(n=0;n<amount[n1].length;++n)
+            if(LessEqualQ(BM0etcInfo[n1][n].cost(bought[n1][n]),SpecialRun&1&&n?amount[n1][n-1]:v.MainNumber)){
+               Vue.set(amount[n1],n,Plus(amount[n1][n],1));
+               Vue.set(bought[n1],n,Plus(bought[n1][n],1));
+               v.BM0etcBuying(n1,n,1)
+            }
+   }
+   var AutoPool=v.AutoPool;
+   v.AutoActive.map(x=>AutoPool[x].act())
 }
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
@@ -678,34 +716,6 @@ var LastSave=Date.now()
 v.$watch('NumberBase',x=>{
    var pmax=29.9336062089226/Math.log(x);
    if(pmax<v.Precision) v.Precision=Math.floor(pmax)
-});
-v.$watch('MainNumber',x=>{
-   var amount=v.BM0etc,bought=v.BM0etcBought,lens=v.BM0etcLength,n,n1=amount.length,m=lens.length;
-   if(LessQ(v.MainNumberEver,x)) v.MainNumberEver=x;
-   if(v.BMSStage<2){
-      if(LessEqualQ(18446744073709551616,x)) v.BMSStage=2;
-      else if(v.BMSStage<1&&LessEqualQ(16777216,x)) v.BMSStage=1;
-   }
-   while(LessQ(x,Power(--m+2,Power(2,m+1))));
-   while(n1<=m){
-      Vue.set(amount,n1,[]);
-      Vue.set(bought,n1,[]);
-      ++n1
-   }
-   while(n1--){
-      amount=v.BM0etc[n1];
-      bought=v.BM0etcBought[n1];
-      lens=v.BM0etcLength[n1];
-      while((n=amount.length)<lens&&LessEqualQ(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),x)){
-         Vue.set(amount,n,0);
-         Vue.set(bought,n,0)
-      }
-   }
-});
-v.$watch('FGHNumber',x=>{
-   var FGH2=v.FGH2,n=(x.pt||0)+1;
-   while(LessQ(x,IteratedFGH2(2,--n+2))&&n>=0);
-   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
 });
 window.addEventListener('keydown',e=>{
    if(!v.Hotkey||e.ctrlKey||e.altKey||e.shiftKey||e.metaKey) return;

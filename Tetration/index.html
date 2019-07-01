@@ -134,7 +134,7 @@
          <div style="display:inline-block;width:630px">
             <button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(2)"
             :class="{already:FGHSpecial&1&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==2?'#f95':''}">
-               Special: Buying any BM resets your number and lower BM.<br><br>
+               Special: Automatic buy max of zero-only BM from lower to higher, but buying any BM resets your number and lower BM.<br><br>
                Reach {{1e160|show}} to get automatic buy max of all zero-only BM
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(32)"
             :class="{already:FGHSpecial&2&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==32?'#f95':''}">
