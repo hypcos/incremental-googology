@@ -336,10 +336,8 @@ const v = new Vue({
       ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
       ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}
       ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
-      ,UnalumPre(){return !this.FGH0[8]||LessQ(this.FGH0[8],9)}
-      ,UnalumCant(){return this.UnalumPre||this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
-      ,BalumPre(){return !this.FGH1[8]||LessQ(this.FGH1[8],9)}
-      ,BalumCant(){return this.BalumPre||this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
+      ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
+      ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
       ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.3)}
       ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
       ,ZeralumEff(){

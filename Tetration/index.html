@@ -84,13 +84,11 @@
             <b class="big">unalum</b><br>
             Unlock special runs<br>
             Cost: {{20|showInt}} FGHN
-            <span v-show="UnalumPre" class="tooltip">See f<sub>0</sub><sup>10</sup>(10), then you can buy this</span>
          </button><button class="cell cell1" :class="{already:AlphaSeries&16}" :disabled="BalumCant" @mousedown="AlphaSeriesBuy(4)">
             <b class="big">balum</b><br>
             FGHN grows passively by 1/{{10|showInt}} of your best FGHN/s<br>
             Current: {{BalumEff|show}}/s<br>
             Cost: {{10240|showInt}} FGHN
-            <span v-show="BalumPre" class="tooltip">See f<sub>1</sub><sup>10</sup>(10), then you can buy this</span>
          </button>
          <div class="left">
             <div class="column4">
