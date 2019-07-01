@@ -1,7 +1,6 @@
 'use strict';
 const Grow = dt=>{
-   var SpecialRun=v.SpecialRun,Special8Eff
-   ,AutoPool=v.AutoPool
+   var AutoPool=v.AutoPool,Challenge=v.Challenge
    ,a1,a2,a3,n,n1;
    v.AutoActive.map(x=>AutoPool[x].act());
    n1=v.BM0etc.length;
@@ -12,23 +11,23 @@ const Grow = dt=>{
       while(LessQ(FGHNumber,IteratedFGH2(2,--n+2))&&n>=0);
       for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
    }
-   if(SpecialRun&252){
-      if(SpecialRun&8) v.Special8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
-      if(SpecialRun&16) v.Special16Eff=Power(v.Special16Base,Date.now()-Time.LastBought);
-      if(SpecialRun&32) v.Special32Eff=Power(v.Special32Base,Date.now()-Time.LastBM0etcUnlock);
-      Special8Eff=v.Special8Eff;
-      if(SpecialRun&244)
+   if(Challenge&252){
+      if(Challenge&8) v.Chal8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
+      if(Challenge&16) v.Chal16Eff=Power(v.Chal16Base,Date.now()-Time.LastBought);
+      if(Challenge&32) v.Chal32Eff=Power(v.Chal32Base,Date.now()-Time.LastBM0etcUnlock);
+      var Chal8Eff=v.Chal8Eff;
+      if(Challenge&244)
          while(n1--){
             n=(a1=v.BM0etc[n1]).length;
             a2=v.BM0etcMult[n1];
             a3=v.BM0etcDivider[n1];
-            while(--n) a1[n-1]=Plus(a1[n-1],Times(Divide(Power(Times(a1[n],a2[n]),SpecialRun&8?Special8Eff:1),a3[n]),dt*0.2))
+            while(--n) a1[n-1]=Plus(a1[n-1],Times(Divide(Power(Times(a1[n],a2[n]),Challenge&8?Chal8Eff:1),a3[n]),dt*0.2))
          }
       else
          while(n1--){
             n=(a1=v.BM0etc[n1]).length;
             a2=v.BM0etcMult[n1];
-            while(--n) a1[n-1]=Plus(a1[n-1],Times(Power(Times(a1[n],a2[n]),SpecialRun&8?Special8Eff:1),dt*0.2))
+            while(--n) a1[n-1]=Plus(a1[n-1],Times(Power(Times(a1[n],a2[n]),Challenge&8?Chal8Eff:1),dt*0.2))
          }
    }else
       while(n1--){
@@ -60,12 +59,12 @@ const Grow = dt=>{
          Vue.set(bought,n,0)
       }
    }
-   if(SpecialRun&2){
+   if(Challenge&2){
       var BM0etcInfo=v.BM0etcInfo;
       amount=v.BM0etc,bought=v.BM0etcBought;
       for(n1=0;n1<amount.length;++n1)
          for(n=0;n<amount[n1].length;++n)
-            if(LessEqualQ(BM0etcInfo[n1][n].cost(bought[n1][n]),SpecialRun&1&&n?amount[n1][n-1]:v.MainNumber)){
+            if(LessEqualQ(BM0etcInfo[n1][n].cost(bought[n1][n]),Challenge&1&&n?amount[n1][n-1]:v.MainNumber)){
                Vue.set(amount[n1],n,Plus(amount[n1][n],1));
                Vue.set(bought[n1],n,Plus(bought[n1][n],1));
                v.BM0etcBuying(n1,n,1)
@@ -99,13 +98,13 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
-   ,SpecialRun:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
-   ,Special4Eff:[[]]
-   ,Special8Eff:1
-   ,Special16Eff:1
-   ,Special32Eff:1
-   ,Special16Base:1
-   ,Special32Base:1
+   ,Challenge:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
+   ,Chal4Eff:[[]]
+   ,Chal8Eff:1
+   ,Chal16Eff:1
+   ,Chal32Eff:1
+   ,Chal16Base:1
+   ,Chal32Base:1
    ,FGHNumber:0
    ,FGHPrestige:0
    ,FGHPrestigeFastest:Infinity
@@ -117,7 +116,7 @@ const Grow = dt=>{
    ,FGH2iter1:0
    ,FGH2:[]
    ,FGH3:2
-   ,FGHSpecial:0 //1 bit for every item
+   ,FGHChal:0 //1 bit for every item
    ,AutoActive:[]
    ,AutoBM0etcUnlockThreshold:[]
    ,AutoFGHPrestigeThreshold:0
@@ -133,13 +132,13 @@ const v = new Vue({
    ,computed:{
       Growth(){
          var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult
-         ,SpecialRun=this.SpecialRun,Special8Eff=this.Special8Eff,BM0etcDivider=this.BM0etcDivider
+         ,Challenge=this.Challenge,Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider
          ,n=BM0etc.length,s;
-         s=SpecialRun&252?
-            Times(BM0etc[0][0],Divide(Power(BM0etcMult[0][0],SpecialRun&8?Special8Eff:1),SpecialRun&244?BM0etcDivider[0][0]:1))||0
+         s=Challenge&252?
+            Times(BM0etc[0][0],Divide(Power(BM0etcMult[0][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[0][0]:1))||0
             :Times(BM0etc[0][0],BM0etcMult[0][0])||0;
-         if(SpecialRun&252)
-            while(--n) s=Times(s,Plus(Times(BM0etc[n][0],Divide(Power(BM0etcMult[n][0],SpecialRun&8?Special8Eff:1),SpecialRun&244?BM0etcDivider[n][0]:1))||0,1));
+         if(Challenge&252)
+            while(--n) s=Times(s,Plus(Times(BM0etc[n][0],Divide(Power(BM0etcMult[n][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[n][0]:1))||0,1));
          else
             while(--n) s=Times(s,Plus(Times(BM0etc[n][0],BM0etcMult[n][0])||0,1));
          return s
@@ -187,7 +186,7 @@ const v = new Vue({
       ,AchieveColumnN(){return this.AchieveColumn.reduce((x,y)=>x+y)}
       ,AchieveCellEff(){return Math.pow(1.3333333333333333,this.AchieveCellN)}
       ,BM0etcInfo(){
-         var SpecialRun=this.SpecialRun,b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
+         var Challenge=this.Challenge,b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
          while(n1--){
             arr=[];
             for(n=this.BM0etcLengthEver[n1];n--;){
@@ -195,7 +194,7 @@ const v = new Vue({
                arr[n]={
                   text:((n1,n)=>()=>'(0)'.repeat(n)+'['+showInt(n1)+']')(n1+2,n+1+n1)
                   ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+showInt(n1+2)+']':'Make your number grow'
-                  ,costo:SpecialRun&1&&n?['BM0etc',n1,n-1]:['MainNumber']
+                  ,costo:Challenge&1&&n?['BM0etc',n1,n-1]:['MainNumber']
                   ,cost:(b16=>x=>Natural(Power(b16,Plus(x,0.5))))(b16)
                   ,sum:((b16,sumk)=>x=>Natural(Times(sumk,Plus(Power(b16,x),-1))))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
                   ,solve:((b16,solvek)=>Y=>Log(b16,Plus(Times(solvek,Y),1)))(b16,Divide(Plus(b16,-1),Power(n1+2,Power(2,Plus(Plus(n1,1),n)))))
@@ -307,37 +306,37 @@ const v = new Vue({
          return arr1
       }
       ,BM0etcDivider(){
-         var BM0etc=this.BM0etc,SpecialRun=this.SpecialRun,Special4Eff=this.Special4Eff,Special16Eff=this.Special16Eff,Special32Eff=this.Special32Eff
+         var BM0etc=this.BM0etc,Challenge=this.Challenge,Chal4Eff=this.Chal4Eff,Chal16Eff=this.Chal16Eff,Chal32Eff=this.Chal32Eff
          ,n,n1=BM0etc.length,i1,arr,arr1=[];
-         if(!(SpecialRun&252)) return;
+         if(!(Challenge&252)) return;
          while(n1--){
             arr=[];
             n=BM0etc[n1].length;
             while(n--){
-               arr[n]=SpecialRun&64?Plus(BM0etc[n1][n+1]||0,1):1;
-               if(SpecialRun&128) for(i1=BM0etc.length;i1--;) i1===n1||(arr[n]=Times(arr[n],Plus(BM0etc[i1][n-i1+n1]||0,1)));
-               if(SpecialRun&4) arr[n]=Times(arr[n],Special4Eff[n1]&&Special4Eff[n1][n]||1);
-               if(SpecialRun&16) arr[n]=Times(arr[n],Special16Eff);
-               if(SpecialRun&32) arr[n]=Times(arr[n],Special32Eff)
+               arr[n]=Challenge&64?Plus(BM0etc[n1][n+1]||0,1):1;
+               if(Challenge&128) for(i1=BM0etc.length;i1--;) i1===n1||(arr[n]=Times(arr[n],Plus(BM0etc[i1][n-i1+n1]||0,1)));
+               if(Challenge&4) arr[n]=Times(arr[n],Chal4Eff[n1]&&Chal4Eff[n1][n]||1);
+               if(Challenge&16) arr[n]=Times(arr[n],Chal16Eff);
+               if(Challenge&32) arr[n]=Times(arr[n],Chal32Eff)
             }
             arr1[n1]=arr
          }
          return arr1
       }
       ,BM0etcModifierHtml(){
-         var SpecialRun=this.SpecialRun,Special8Eff=this.Special8Eff,BM0etcDivider=this.BM0etcDivider,n,n1=BM0etcDivider.length,arr,arr1=[];
-         if(!(SpecialRun&252)) return;
+         var Challenge=this.Challenge,Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider,n,n1=BM0etcDivider.length,arr,arr1=[];
+         if(!(Challenge&252)) return;
          while(n1--){
             arr=[];
             n=BM0etcDivider[n1].length;
-            while(n--) arr[n]=(SpecialRun&8?'^'+show(Special8Eff):'')+(SpecialRun&244?' /'+show(BM0etcDivider[n1][n]):'')
+            while(n--) arr[n]=(Challenge&8?'^'+show(Chal8Eff):'')+(Challenge&244?' /'+show(BM0etcDivider[n1][n]):'')
             arr1[n1]=arr
          }
          return arr1
       }
       ,BM0etcLengthStart(){
          var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
-         if(this.FGHSpecial&128)
+         if(this.FGHChal&128)
             while(n--) arr[n]=2;
          else
             while(n--) arr[n]=1+(FGH2[n]||2);
@@ -368,7 +367,7 @@ const v = new Vue({
          return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
-      ,FGHPrestigeCant(){return LessQ(this.MainNumber,this.SpecialRun&255?1e160:1e100)}
+      ,FGHPrestigeCant(){return LessQ(this.MainNumber,this.Challenge&255?1e160:1e100)}
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber);
@@ -419,22 +418,22 @@ const v = new Vue({
       ,FGH3Cost(){return Natural(IteratedFGH2(this.FGH3,this.FGH3))}
       ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
       ,AutoPool:()=>[null
-         ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
-         ,{text:'Automatic unlock zero-only BM',act:()=>{
+         ,{text:'Buy max all zero-only BM',act:()=>v.BM0etcMaxall()}
+         ,{text:'Unlock zero-only BM',act:()=>{
             var BM0etcCantUnlock=v.BM0etcCantUnlock,BM0etcLength=v.BM0etcLength,n=BM0etcLength.length;
-            if(v.FGHSpecial&256){
+            if(v.FGHChal&256){
                var BM0etcLengthStart=v.BM0etcLengthStart,threshold=v.AutoBM0etcUnlockThreshold;
                while(n--) if(BM0etcCantUnlock[n]===false&&!LessEqualQ(threshold[n],Minus(BM0etcLength[n],BM0etcLengthStart[n]))) v.BM0etcUnlock(n)
             }else{
                while(n--) if(BM0etcCantUnlock[n]===false) v.BM0etcUnlock(n)
             }
          }}
-         ,{text:'Automatic buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
-         ,{text:'Automatic FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHSpecial&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet))&&v.FGHPrestigeDo()}
-         ,{text:'Automatic buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
-         ,{text:'Automatic unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
-         ,{text:'Automatic buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
-         ,{text:'Automatic buy max (0)...(0)[2]',act:()=>{
+         ,{text:'Buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
+         ,{text:'FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHChal&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet))&&v.FGHPrestigeDo()}
+         ,{text:'Buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
+         ,{text:'Unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
+         ,{text:'Buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
+         ,{text:'Buy max (0)...(0)[2]',act:()=>{
             var amount=v.BM0etc[0],n,info;
             if(!amount) return;
             n=amount.length;
@@ -443,11 +442,11 @@ const v = new Vue({
          }}
       ]
       ,AutoAvailable(){
-         var AchieveRowN=this.AchieveRowN,FGHSpecial=this.FGHSpecial,arr=[];
-         if(FGHSpecial&1) arr.push(1);
-         if(FGHSpecial&2) arr.push(2);
-         if(FGHSpecial&4) arr.push(3);
-         if(FGHSpecial&8) arr.push(4);
+         var AchieveRowN=this.AchieveRowN,FGHChal=this.FGHChal,arr=[];
+         if(FGHChal&1) arr.push(1);
+         if(FGHChal&2) arr.push(2);
+         if(FGHChal&4) arr.push(3);
+         if(FGHChal&8) arr.push(4);
          if(AchieveRowN>=1) arr.push(5);
          if(AchieveRowN>=2) arr.push(6);
          if(AchieveRowN>=3) arr.push(7);
@@ -484,9 +483,9 @@ const v = new Vue({
       ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
       ,FGHPrestigePlayed:()=>show((Date.now()-Time.LastFGHPrestige)*0.001)
       ,BM0etcBuying:(n1,n,delta)=>{
-         var SpecialRun=v.SpecialRun,BM0etcBought=v.BM0etcBought,BM0etcInfo,Special4Eff
+         var Challenge=v.Challenge,BM0etcBought=v.BM0etcBought,BM0etcInfo,Chal4Eff
          ,amount,bought,b16,excess,i,i1;
-         if(SpecialRun&2){
+         if(Challenge&2){
             v.MainNumber=4;
             amount=v.BM0etc[n1];
             bought=BM0etcBought[n1];
@@ -497,35 +496,35 @@ const v = new Vue({
             Vue.set(amount,0,amount[0]);
             Vue.set(bought,0,bought[0])
          }
-         if(SpecialRun&4){
+         if(Challenge&4){
             bought=Minus(BM0etcBought[n1][n],delta);
             b16=Power(n1+2,Power(2,Plus(Plus(n1,2),n)));
             BM0etcInfo=v.BM0etcInfo;
-            Special4Eff=v.Special4Eff;
+            Chal4Eff=v.Chal4Eff;
             for(i1=BM0etcBought.length;i1--;){
-               if(!Special4Eff[i1]) Special4Eff[i1]=[];
+               if(!Chal4Eff[i1]) Chal4Eff[i1]=[];
                for(i=BM0etcBought[i1].length;i--;){
                   if(i1===n1&&i===n) continue;
                   excess=Min(Natural(Minus(Log(b16,BM0etcInfo[i1][i].cost(BM0etcBought[i1][i])),bought)),delta);
-                  if(Sign(excess)>0) Special4Eff[i1][i]=Times(Special4Eff[i1][i]||1,Power(2,excess))
+                  if(Sign(excess)>0) Chal4Eff[i1][i]=Times(Chal4Eff[i1][i]||1,Power(2,excess))
                }
             }
-            Vue.set(Special4Eff,0,Special4Eff[0])
+            Vue.set(Chal4Eff,0,Chal4Eff[0])
          }
-         if(SpecialRun&24){
-            if(SpecialRun&16) v.Special16Base=Exp(Divide(10,LessQ(delta,1.01)?16+Date.now()-Time.LastBought:16));
+         if(Challenge&24){
+            if(Challenge&16) v.Chal16Base=Exp(Divide(10,LessQ(delta,1.01)?16+Date.now()-Time.LastBought:16));
             Time.LastBought=Date.now();
          }
       }
       ,BM0etcMaxall:()=>{
          var BM0etc=v.BM0etc,BM0etcInfo=v.BM0etcInfo,n,n1=BM0etc.length
-         ,SpecialRun=v.SpecialRun,BM0etcBought,delta;
-         if(SpecialRun&31){
-            if(SpecialRun&2){
+         ,Challenge=v.Challenge,BM0etcBought,delta;
+         if(Challenge&31){
+            if(Challenge&2){
                BM0etcBought=v.BM0etcBought;
                while(n1--)
                   for(n=BM0etc[n1].length;n--;)
-                     if(LessEqualQ(BM0etcInfo[n1][n].cost(BM0etcBought[n1][n]),SpecialRun&1&&n?BM0etc[n1][n-1]:v.MainNumber)){
+                     if(LessEqualQ(BM0etcInfo[n1][n].cost(BM0etcBought[n1][n]),Challenge&1&&n?BM0etc[n1][n-1]:v.MainNumber)){
                         Vue.set(BM0etc[n1],n,Plus(BM0etc[n1][n],1));
                         Vue.set(BM0etcBought[n1],n,Plus(BM0etcBought[n1][n],1));
                         v.BM0etcBuying(n1,n,1)
@@ -534,8 +533,8 @@ const v = new Vue({
             }
             while(n1--)
                for(n=BM0etc[n1].length;n--;){
-                  delta=BuyMax(['BM0etc',n1,n],['BM0etcBought',n1,n],SpecialRun&1&&n?['BM0etc',n1,n-1]:['MainNumber'],BM0etcInfo[n1][n].sum,BM0etcInfo[n1][n].solve);
-                  delta&&SpecialRun&30&&v.BM0etcBuying(n1,n,delta)
+                  delta=BuyMax(['BM0etc',n1,n],['BM0etcBought',n1,n],Challenge&1&&n?['BM0etc',n1,n-1]:['MainNumber'],BM0etcInfo[n1][n].sum,BM0etcInfo[n1][n].solve);
+                  delta&&Challenge&30&&v.BM0etcBuying(n1,n,delta)
                }
             return
          }
@@ -563,23 +562,23 @@ const v = new Vue({
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
-         if(v.SpecialRun&255){
-            switch(v.SpecialRun&255){
-               case 2: v.FGHSpecial|=1; break;
-               case 32: v.FGHSpecial|=2; break;
-               case 8: v.FGHSpecial|=4; break;
-               case 16: v.FGHSpecial|=8; break;
-               case 128: v.FGHSpecial|=16; break;
-               case 64: v.FGHSpecial|=32; break;
-               case 1: v.FGHSpecial|=64; break;
+         if(v.Challenge&255){
+            switch(v.Challenge&255){
+               case 2: v.FGHChal|=1; break;
+               case 32: v.FGHChal|=2; break;
+               case 8: v.FGHChal|=4; break;
+               case 16: v.FGHChal|=8; break;
+               case 128: v.FGHChal|=16; break;
+               case 64: v.FGHChal|=32; break;
+               case 1: v.FGHChal|=64; break;
                case 4:
                v.FGH2.map((x,n)=>v.FGH2Discard(n));
-               v.FGHSpecial|=128;
+               v.FGHChal|=128;
                break;
-               case 40: v.FGHSpecial|=256; break;
-               case 24: v.FGHSpecial|=512; break;
+               case 40: v.FGHChal|=256; break;
+               case 24: v.FGHChal|=512; break;
             }
-            v.FGHSpecialExit()
+            v.FGHChalExit()
          }
          BMSReset()
       }
@@ -615,7 +614,7 @@ const v = new Vue({
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
-         v.FGHSpecial&=~128;
+         v.FGHChal&=~128;
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
       ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)
@@ -623,16 +622,16 @@ const v = new Vue({
          v.FGHNumber=Minus(v.FGHNumber,v.FGH3Cost);
          v.FGH3=Plus(v.FGH3,1)
       }
-      ,FGHSpecialEnter:n=>{
+      ,FGHChalEnter:n=>{
          Time.LastFGHPrestige=Date.now();
          BMSReset();
-         v.SpecialRun|=n
+         v.Challenge|=n
       }
-      ,FGHSpecialExit:()=>{
-         if(v.SpecialRun&4) v.Special4Eff=[[]];
-         if(v.SpecialRun&16) v.Special16Base=1;
-         if(v.SpecialRun&32) v.Special32Base=1;
-         v.SpecialRun&=~255
+      ,FGHChalExit:()=>{
+         if(v.Challenge&4) v.Chal4Eff=[[]];
+         if(v.Challenge&16) v.Chal16Base=1;
+         if(v.Challenge&32) v.Chal32Base=1;
+         v.Challenge&=~255
       }
       ,AutoBM0etcUnlockThresholdChange:n=>{
          var input=v.AutoBM0etcUnlockThresholdInput[n],threshold=v.AutoBM0etcUnlockThreshold,s;
@@ -659,13 +658,13 @@ const v = new Vue({
 }
 ,BM0etcReset = n=>{
    var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart
-   ,SpecialRun=v.SpecialRun;
-   if(SpecialRun&36){
-      if(SpecialRun&32){
-         v.Special32Base=Root(Times(v.MainNumber,0.25),Date.now()-Time.LastBM0etcUnlock);
+   ,Challenge=v.Challenge;
+   if(Challenge&36){
+      if(Challenge&32){
+         v.Chal32Base=Root(Times(v.MainNumber,0.25),Date.now()-Time.LastBM0etcUnlock);
          Time.LastBM0etcUnlock=Date.now()
       }
-      if(SpecialRun&4) v.Special4Eff=[[]];
+      if(Challenge&4) v.Chal4Eff=[[]];
    }
    while(n--) BM0etcLength[n]=BM0etcLengthStart[n];
    Vue.set(BM0etcLength,0,BM0etcLength[0]);
