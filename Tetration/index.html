@@ -135,36 +135,36 @@
             <button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(1)"
             :class="{already:FGHSpecial&1&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==2?'#f95':''}">
                Special: Buying any BM resets your number and lower BM.<br><br>
-               {{FGHSpecialText1}}
+               Reach {{1e160|show}} to get automatic buy max of all zero-only BM
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(2)"
             :class="{already:FGHSpecial&2&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==16?'#f95':''}">
                Special: BM produce normally after purchase, but then multipliers decay exponentially
                based on the interval of your previous two purchases.<br><br>
-               {{FGHSpecialText2}}
+               Reach {{1e160|show}} to get automatic unlock zero-only BM
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(3)"
             :class="{already:FGHSpecial&4&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==8?'#f95':''}">
                Special: Buying any zero-only BM disables multipliers, exponentially coming back in one minute.<br><br>
-               {{FGHSpecialText3}}
+               Reach {{1e160|show}} to get (0)(1)[n] autobuyer
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(4)"
             :class="{already:FGHSpecial&8&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==32?'#f95':''}">
                Special: Multipliers of all BM decay exponentially based on how fast your number grew in previous reset.<br><br>
-               {{FGHSpecialText4}}
+               Reach {{1e160|show}} to get automatic FGH-prestige
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(5)"
             :class="{already:FGHSpecial&16&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==128?'#f95':''}">
                Special: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
-               {{FGHSpecialText5}}
+               Reach {{1e160|show}} to unlock FGH-inside items
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(6)"
             :class="{already:FGHSpecial&32&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==64?'#f95':''}">
                Special: The more Z(0)[n] you have, the weaker Z[n] is (where Z is a string of (0)'s).<br><br>
-               {{FGHSpecialText6}}
+               Reach {{1e160|show}} to unlock FGH-outside items
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(7)"
             :class="{already:FGHSpecial&64&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==1?'#f95':''}">
                Special: You spend Z[n] to buy Z(0)[n] (where Z is a string of (0)'s).<br><br>
-               {{FGHSpecialText7}}
+               Reach {{1e160|show}} to unlock FGH-sides items
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(8)"
             :class="{already:FGHSpecial&128&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==4?'#f95':''}">
                Special: When buying any zero-only BM, those with greaterequal costs will be weaken by a half.<br><br>
-               {{FGHSpecialText8}}<br v-show="FGHSpecial&128">
+               Reach {{1e160|show}}, then you start with only 2 BM available for every base number<br v-show="FGHSpecial&128">
                <span v-show="FGHSpecial&128" class="alter" @mousedown.stop="FGHSpecial&=~128">Discard</span>
             </button>
          </div>

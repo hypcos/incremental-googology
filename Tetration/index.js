@@ -377,14 +377,6 @@ const v = new Vue({
       }
       ,FGH3Cost(){return Natural(IteratedFGH2(this.FGH3,this.FGH3))}
       ,FGH3Cant(){return LessQ(this.FGHNumber,this.FGH3Cost)}
-      ,FGHSpecialText1(){return 'Reach '+show(1e160)+' to get automatic buy max of all zero-only BM'}
-      ,FGHSpecialText2(){return 'Reach '+show(1e160)+' to get automatic unlock zero-only BM'}
-      ,FGHSpecialText3(){return 'Reach '+show(1e160)+' to get (0)(1)[n] autobuyer'}
-      ,FGHSpecialText4(){return 'Reach '+show(1e160)+' to get automatic FGH-prestige'}
-      ,FGHSpecialText5(){return 'Reach '+show(1e160)+' to unlock FGH-inside items'}
-      ,FGHSpecialText6(){return 'Reach '+show(1e160)+' to unlock FGH-outside items'}
-      ,FGHSpecialText7(){return 'Reach '+show(1e160)+' to unlock FGH-sides items'}
-      ,FGHSpecialText8(){return 'Reach '+show(1e160)+', then you start with only 2 BM available for every base number'}
       ,AutoPool:()=>[null
          ,{text:'Automatic max all zero-only BM',act:()=>v.BM0etcMaxall()}
          ,{text:'Automatic unlock zero-only BM',act:()=>{
