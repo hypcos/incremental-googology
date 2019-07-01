@@ -166,7 +166,8 @@
             </button><button class="special cell5" :disabled="!!(SpecialRun&255)" @mousedown="FGHSpecialEnter(8)"
             :class="{already:FGHSpecial&128&&!(SpecialRun&255)}" :style="{'background-color':(SpecialRun&255)==4?'#f95':''}">
                Special: When buying any zero-only BM, those with greaterequal costs will be weaken by a half.<br><br>
-               {{FGHSpecialText8}}
+               {{FGHSpecialText8}}<br v-show="FGHSpecial&128">
+               <span v-show="FGHSpecial&128" class="alter" @mousedown.stop="FGHSpecial&=~128">Discard</span>
             </button>
          </div>
       </div>

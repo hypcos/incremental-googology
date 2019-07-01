@@ -60,7 +60,7 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
-   ,SpecialRun:0 //auto max all:2, auto unlock:16, auto (0)(1)[n]:8, auto FGH-prestige:32, start with:4, inside:128, outside:64, sides:1
+   ,SpecialRun:0 //auto max all:2, auto unlock:16, auto (0)(1)[n]:8, auto FGH-prestige:32, inside:128, outside:64, sides:1, start with:4
    ,Special4Eff:[[]]
    ,Special8Eff:1
    ,Special16Eff:1
@@ -296,7 +296,10 @@ const v = new Vue({
       }
       ,BM0etcLengthStart(){
          var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
-         while(n--) arr[n]=1+(FGH2[n]||2);
+         if(this.FGHSpecial&128)
+            while(n--) arr[n]=2;
+         else
+            while(n--) arr[n]=1+(FGH2[n]||2);
          return arr
       }
       ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
@@ -531,7 +534,10 @@ const v = new Vue({
                case 128: v.FGHSpecial|=16; break;
                case 64: v.FGHSpecial|=32; break;
                case 1: v.FGHSpecial|=64; break;
-               case 4: v.FGHSpecial|=128; break;
+               case 4:
+               v.FGH2.map((x,n)=>v.FGH2Discard(n));
+               v.FGHSpecial|=128;
+               break;
             }
             v.FGHSpecialExit()
          }
@@ -569,6 +575,7 @@ const v = new Vue({
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
+         v.FGHSpecial&=~128;
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
       ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)
@@ -585,7 +592,7 @@ const v = new Vue({
          if(v.SpecialRun&4) v.Special4Eff=[[]];
          if(v.SpecialRun&16) v.Special16Base=1;
          if(v.SpecialRun&32) v.Special32Base=1;
-         v.SpecialRun&=(~255)
+         v.SpecialRun&=~255
       }
    }
 })
