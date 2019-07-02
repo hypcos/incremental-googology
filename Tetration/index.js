@@ -92,15 +92,15 @@ const Grow = dt=>{
    ,AutoActive:[]
    ,AutoBM0etcUnlockThreshold:[]
    ,AutoFGHPrestigeThreshold:0
-   ,Challenge:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
+   ,Challenge:0 //auto max all:4, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, start with:2, outside:64, sides:1
    ,Chal4Eff:[[]]
    ,Chal8Eff:1
    ,Chal16Eff:1
    ,Chal32Eff:1
    ,Chal16Base:1
    ,Chal32Base:1
-   ,SinceBought:Infinity
-   ,SinceBM0etcUnlock:Infinity
+   ,SinceBought:0
+   ,SinceBM0etcUnlock:0
    ,MainNumber:4
    ,MainNumberEver:4
    ,BMSStage:0
@@ -340,7 +340,7 @@ const v = new Vue({
       }
       ,BM0etcLengthStart(){
          var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
-         if(this.FGHChal&128)
+         if(this.FGHChal&32)
             while(n--) arr[n]=2;
          else
             while(n--) arr[n]=1+(FGH2[n]||2);
@@ -372,7 +372,14 @@ const v = new Vue({
          return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
-      ,FGHPrestigeCant(){return LessQ(this.MainNumber,this.Challenge&255?1e160:1e100)}
+      ,FGHPrestigeCant(){
+         switch(this.Challenge){
+            case 0: return LessQ(this.MainNumber,1e100);
+            case 64: return LessQ(this.MainNumber,1e200);
+            case 1: return LessQ(this.MainNumber,1e303);
+            default: return LessQ(this.MainNumber,1e100)
+         }
+      }
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber);
@@ -556,17 +563,17 @@ const v = new Vue({
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
          if(v.Challenge&255){
             switch(v.Challenge&255){
-               case 2: v.FGHChal|=1; break;
+               case 4: v.FGHChal|=1; break;
                case 32: v.FGHChal|=2; break;
                case 8: v.FGHChal|=4; break;
                case 16: v.FGHChal|=8; break;
                case 128: v.FGHChal|=16; break;
-               case 64: v.FGHChal|=32; break;
-               case 1: v.FGHChal|=64; break;
-               case 4:
+               case 2:
                v.FGH2.map((x,n)=>v.FGH2Discard(n));
-               v.FGHChal|=128;
+               v.FGHChal|=32;
                break;
+               case 64: v.FGHChal|=64; break;
+               case 1: v.FGHChal|=128; break;
                case 40: v.FGHChal|=256; break;
                case 24: v.FGHChal|=512; break;
             }
@@ -606,7 +613,7 @@ const v = new Vue({
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
-         v.FGHChal&=~128;
+         v.FGHChal&=~32;
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
       ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)
@@ -621,8 +628,12 @@ const v = new Vue({
       }
       ,FGHChalExit:()=>{
          if(v.Challenge&4) v.Chal4Eff=[[]];
+         if(v.Challenge&24) v.SinceBought=0;
          if(v.Challenge&16) v.Chal16Base=1;
-         if(v.Challenge&32) v.Chal32Base=1;
+         if(v.Challenge&32){
+            v.Chal32Base=1;
+            v.SinceBM0etcUnlock=0
+         }
          v.Challenge&=~255
       }
       ,AutoBM0etcUnlockThresholdChange:n=>{
