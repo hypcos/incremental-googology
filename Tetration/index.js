@@ -92,7 +92,7 @@ const Grow = dt=>{
    ,AutoActive:[]
    ,AutoBM0etcUnlockThreshold:[]
    ,AutoFGHPrestigeThreshold:0
-   ,Challenge:0 //auto max all:4, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, start with:2, outside:64, sides:1
+   ,Challenge:0 //auto max all:4, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, start with:2, inside:128, outside:64, sides:1
    ,Chal4Eff:[[]]
    ,Chal8Eff:1
    ,Chal16Eff:1
@@ -340,7 +340,7 @@ const v = new Vue({
       }
       ,BM0etcLengthStart(){
          var FGH2=this.FGH2,n=Math.max(this.BM0etcLengthEver.length,FGH2.length),arr=[];
-         if(this.FGHChal&32)
+         if(this.FGHChal&16)
             while(n--) arr[n]=2;
          else
             while(n--) arr[n]=1+(FGH2[n]||2);
@@ -375,7 +375,9 @@ const v = new Vue({
       ,FGHPrestigeCant(){
          switch(this.Challenge){
             case 0: return LessQ(this.MainNumber,1e100);
-            case 64: return LessQ(this.MainNumber,1e200);
+            case 2: return LessQ(this.MainNumber,1e123);
+            case 128: return LessQ(this.MainNumber,1e183);
+            case 64: return LessQ(this.MainNumber,1e243);
             case 1: return LessQ(this.MainNumber,1e303);
             default: return LessQ(this.MainNumber,1e100)
          }
@@ -567,11 +569,11 @@ const v = new Vue({
                case 32: v.FGHChal|=2; break;
                case 8: v.FGHChal|=4; break;
                case 16: v.FGHChal|=8; break;
-               case 128: v.FGHChal|=16; break;
                case 2:
                v.FGH2.map((x,n)=>v.FGH2Discard(n));
-               v.FGHChal|=32;
+               v.FGHChal|=16;
                break;
+               case 128: v.FGHChal|=32; break;
                case 64: v.FGHChal|=64; break;
                case 1: v.FGHChal|=128; break;
                case 40: v.FGHChal|=256; break;
@@ -613,7 +615,7 @@ const v = new Vue({
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
-         v.FGHChal&=~32;
+         v.FGHChal&=~16;
          Vue.set(FGH2,n,Plus(FGH2[n],1))
       }
       ,FGH2Discard:n=>Vue.set(v.FGH2,n,2)

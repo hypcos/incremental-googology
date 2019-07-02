@@ -32,6 +32,16 @@ const Cancel=[]
       ,'Base-3 also wants equality'
       ,'More bases'
       ,'Base-4 also wants equality'
+   ],[
+      'Googol: next level'
+      ,'More at once'
+      ,'Can I AFK'
+      ,'Speedrun'
+      ,'Unlock is unnecessary'
+      ,'So is it'
+      ,'The only item'
+      ,'I forgot to discard it'
+      ,'Waiting is no fun'
    ]
 ]
 ,GetAchievementTooltip = ()=>[
@@ -65,6 +75,16 @@ const Cancel=[]
       ,'Get multipliers of all zero-only base-2 and base-3 BM (at least 7 of them) equal (1% margin).<br>Reward: multipliers when buying base-3 BM increase by 0.1'
       ,'Buy a (0)(0)(0)[4].'
       ,'Get multipliers of all zero-only base-2 and base-4 BM (at least 7 of them) equal (1% margin).<br>Reward: Power up unlock multipliers by ^1.02'
+   ],[
+      'FGH-prestige.'
+      ,'Get two FGH number at once.'
+      ,'Get the 4 automatons from FGH challenge.'
+      ,'Get ×2048 from f<sub>1</sub><sup>m</sup>(n).'
+      ,'FGH-prestige with no zero-only BM unlock.'
+      ,'FGH-prestige without buying (0)(1)[2].'
+      ,'FGH-prestige with only (0)[2].'
+      ,'Complete FGH challenge 5 while f<sub>2</sub><sup>2</sup>(2) is bought.'
+      ,'Complete FGH challenge 3 under one minute.'
    ]
 ]
 ,AchievementOn = ()=>{
@@ -98,9 +118,10 @@ const Cancel=[]
       RowCancel[2] = v.$watch(()=>LessEqualQ(1e100,v.MainNumber),x=>{
          if(!x) return;
          RowCancel[2]();
-         Vue.set(v.Achievement,3,0)
+         Vue.set(v.Achievement,3,0);
+         Row3watch()
       })
-   }
+   }else Row3watch();
 }
 ,AchievementOff = ()=>{
    Cancel.map(x=>x());
@@ -378,5 +399,78 @@ const Cancel=[]
          if(!x) return;
          Cancel[26]();
          Vue.set(Achievement,2,Achievement[2]|256)
+      })
+}
+,Row3watch = ()=>{
+   var Achievement=v.Achievement;
+   if(!(Achievement[3]&1))
+      Cancel[27]=v.$watch(()=>v.FGHPrestige,x=>{
+         if(!x) return;
+         Cancel[27]();
+         Vue.set(Achievement,3,Achievement[3]|1)
+      })
+   if(!(Achievement[3]&2))
+      Cancel[28]=v.$watch(()=>v.FGHNumber,(x,x0)=>{
+         if(LessQ(1.999999999999,Minus(x,x0))){
+            Cancel[28]();
+            Vue.set(Achievement,3,Achievement[3]|2)
+         }
+      })
+   if(!(Achievement[3]&4))
+      Cancel[29]=v.$watch(()=>(v.FGHChal&15)==15,x=>{
+         if(!x) return;
+         Cancel[29]();
+         Vue.set(Achievement,3,Achievement[3]|4)
+      })
+   if(!(Achievement[3]&8))
+      Cancel[30]=v.$watch(()=>LessQ(2047.999999999,v.FGH1Eff),x=>{
+         if(!x) return;
+         Cancel[30]();
+         Vue.set(Achievement,3,Achievement[3]|8)
+      })
+   if(!(Achievement[3]&16))
+      Cancel[31]=v.$watch(()=>{
+         var BM0etcLength=v.BM0etcLength,BM0etcLengthStart=v.BM0etcLengthStart,n=BM0etcLength.length;
+         while(n--) if(!EqualQ(BM0etcLength[n],BM0etcLengthStart[n])) return [v.FGHPrestige,false];
+         return [v.FGHPrestige,true]
+      },(x,x0)=>{
+         if(LessQ(x0[0],x[0])&&x0[1]){
+            Cancel[31]();
+            Vue.set(Achievement,3,Achievement[3]|16)
+         }
+      })
+   if(!(Achievement[3]&32))
+      Cancel[32]=v.$watch(()=>[v.FGHPrestige,v.BM0c1],(x,x0)=>{
+         if(LessQ(x0[0],x[0])&&EqualQ(x0[1],2)){
+            Cancel[32]();
+            Vue.set(Achievement,3,Achievement[3]|32)
+         }
+      })
+   if(!(Achievement[3]&64))
+      Cancel[33]=v.$watch(()=>{
+         var BM0etc=v.BM0etc,n,n1=BM0etc.length;
+         while(n1--)
+            for(n=BM0etc[n1].length;n--;)
+               if((n1||n)&&BM0etc[n1][n]) return [v.FGHPrestige,false];
+         return [v.FGHPrestige,true]
+      },(x,x0)=>{
+         if(LessQ(x0[0],x[0])&&x0[1]){
+            Cancel[33]();
+            Vue.set(Achievement,3,Achievement[3]|64)
+         }
+      })
+   if(!(Achievement[3]&128))
+      Cancel[34]=v.$watch(()=>[v.FGHPrestige,(v.Challenge&255)==2&&LessQ(2.000000000001,v.FGH2[0])],(x,x0)=>{
+         if(LessQ(x0[0],x[0])&&x0[1]){
+            Cancel[34]();
+            Vue.set(Achievement,3,Achievement[3]|128)
+         }
+      })
+   if(!(Achievement[3]&256))
+      Cancel[35]=v.$watch(()=>[v.FGHPrestige,(v.Challenge&255)==8&&LessQ(v.SinceFGHPrestige,60)],(x,x0)=>{
+         if(LessQ(x0[0],x[0])&&x0[1]){
+            Cancel[35]();
+            Vue.set(Achievement,3,Achievement[3]|256)
+         }
       })
 }

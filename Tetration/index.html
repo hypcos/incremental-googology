@@ -140,7 +140,7 @@
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(32)"
             :class="{already:FGHChal&2&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==32?'#f95':''}">
                <b class="big">FGH Challenge 2</b><br>
-               Mechanism: Multipliers of all BM decay exponentially based on how fast your number grew in previous reset.<br><br>
+               Mechanism: BM decay exponentially based on how fast your number grew in previous reset.<br><br>
                Reach {{1e100|show}} to get automatic zero-only BM unlock
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(8)"
             :class="{already:FGHChal&4&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==8?'#f95':''}">
@@ -150,26 +150,26 @@
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(16)"
             :class="{already:FGHChal&8&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==16?'#f95':''}">
                <b class="big">FGH Challenge 4</b><br>
-               Mechanism: BM produce normally after purchase, but then multipliers decay exponentially
+               Mechanism: BM produce normally after purchase, but then decay exponentially
                based on the interval of your previous two purchases.<br><br>
                Reach {{1e100|show}} to get automatic FGH-prestige
-            </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(128)"
-            :class="{already:FGHChal&16&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==128?'#f95':''}">
-               <b class="big">FGH Challenge 5</b><br>
-               Mechanism: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
-               Reach {{1e100|show}} to unlock FGH-inside items
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(2)"
-            :class="{already:FGHChal&32&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==2?'#f95':''}">
-               <b class="big">FGH Challenge 6</b><br>
+            :class="{already:FGHChal&16&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==2?'#f95':''}">
+               <b class="big">FGH Challenge 5</b><br>
                Mechanism: Automatically and eagerly buy max of zero-only BM from lower to higher,
                but buying any BM resets your number and lower BM.<br><br>
-               Reach {{1e100|show}}, then you start with only {{2|showInt}} BM available for every base number<br v-show="FGHChal&32">
-               <span v-show="FGHChal&32" class="alter" @mousedown.stop="FGHChal&=~32">Discard</span>
+               Reach {{1e123|show}}, then you start with only {{2|showInt}} BM available for every base number<br v-show="FGHChal&16">
+               <span v-show="FGHChal&16" class="alter" @mousedown.stop="FGHChal&=~16">Discard</span>
+            </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(128)"
+            :class="{already:FGHChal&32&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==128?'#f95':''}">
+               <b class="big">FGH Challenge 6</b><br>
+               Mechanism: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
+               Reach {{1e183|show}} to unlock FGH-inside items
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(64)"
             :class="{already:FGHChal&64&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==64?'#f95':''}">
                <b class="big">FGH Challenge 7</b><br>
                Mechanism: The more Z(0)[n] you have, the weaker Z[n] is (where Z is a string of (0)'s).<br><br>
-               Reach {{1e200|show}} to unlock FGH-outside items
+               Reach {{1e243|show}} to unlock FGH-outside items
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(1)"
             :class="{already:FGHChal&128&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==1?'#f95':''}">
                <b class="big">FGH Challenge 8</b><br>
@@ -239,10 +239,12 @@
             Display numbers in base-{{NumberBase}}<br>
             <input type="range" v-model.number="NumberBase" min="2" max="36">
          </div>
-         <div class="itemrow4" title="When a number is beyond Javascript max number,
-both mantissa and exponent count into significant digits">
+         <div class="itemrow4" style="position:relative">
             Display {{Precision}} significant digits<br>
             <input type="range" v-model.number="Precision" min="1" :max="Math.floor(29.9336062089226/Math.log(NumberBase))">
+            <span class="tooltip">
+               When a number is beyond Javascript max number, both mantissa and exponent count into significant digits
+            </span>
          </div>
          <div class="itemrow4"><button @mousedown="Hotkey^=1">Hotkey: {{Hotkey?'On':'Off'}}</button></div>
       </div>
@@ -263,7 +265,7 @@ both mantissa and exponent count into significant digits">
          You achieved {{AchieveCellN|showInt}} cells(3×3), boosting zero-only BM by ×{{AchieveCellEff|show}}
       </div>
       <table>
-         <tr v-for="y in 3">
+         <tr v-for="y in 4">
             <td v-for="x in 9" :class="{ach1:AchieveCell[y-1][x-1],ach2:AchieveRow[y-1],ach3:AchieveColumn[x-1]}">
                <div class="ach" :class="{achieved:AchieveSingle[y-1][x-1]}">
                   {{Achievement.length>=y?AchievementName[y-1][x-1]:'LOCKED'}}
@@ -274,10 +276,10 @@ both mantissa and exponent count into significant digits">
       </table>
       <div class="bigrow">
          Rows reward:<br>
-         1 row: every row multiplies number gain by ×1.2<br>
-         <span v-if="Achievement.length>=2">2 rows: every row multiplies zero-only BM by ×1.2<br></span>
-         <span v-if="Achievement.length>=3">3 rows: every row multiplies unlock effect on BM by ×1.2<br></span>
-         <span v-if="Achievement.length>=4">4 rows: every row multiplies FGH number gain by ×1.2<br></span>
+         1 row: every row multiplies number gain by ×{{1.2|show}}<br>
+         <span v-if="Achievement.length>=2">2 rows: every row multiplies zero-only BM by ×{{1.2|show}}<br></span>
+         <span v-if="Achievement.length>=3">3 rows: every row multiplies unlock effect on BM by ×{{1.2|show}}<br></span>
+         <span v-if="Achievement.length>=4">4 rows: every row multiplies FGH number gain by ×{{1.2|show}}<br></span>
       </div>
    </div>
    <div v-else-if="CurrentTab==2" style="font-size:13px">
