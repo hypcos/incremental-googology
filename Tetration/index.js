@@ -7,10 +7,7 @@ const Grow = dt=>{
    n1=v.BM0etc.length;
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
-      var FGH2=v.FGH2,FGHNumber=v.FGHNumber;
-      n=(FGHNumber.pt||0)+1;
-      while(LessQ(FGHNumber,IteratedFGH2(2,--n+2))&&n>=0);
-      for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
+      FGHNumberUpdate()
    }
    if(Challenge&252){
       if(Challenge&24) v.SinceBought+=dt;
@@ -563,6 +560,7 @@ const v = new Vue({
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
+         FGHNumberUpdate();
          if(v.Challenge&255){
             switch(v.Challenge&255){
                case 4: v.FGHChal|=1; break;
@@ -676,6 +674,11 @@ const v = new Vue({
    v.MainNumber=4;
    v.BM0etc=[[0]];
    v.BM0etcBought=[[0]]
+}
+,FGHNumberUpdate = ()=>{
+   var FGH2=v.FGH2,FGHNumber=v.FGHNumber,n=(FGHNumber.pt||0)+1;
+   while(LessQ(FGHNumber,IteratedFGH2(2,--n+2))&&n>=0);
+   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
 }
 ,Buymax = (Amount,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),costo=Pointer(v,Costo);
