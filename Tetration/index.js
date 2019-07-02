@@ -64,12 +64,13 @@ const Grow = dt=>{
    if(Challenge&2){
       var BM0etcInfo=v.BM0etcInfo;
       amount=v.BM0etc,bought=v.BM0etcBought;
-      for(n1=0;n1<amount.length;++n1)
+      q:for(n1=0;n1<amount.length;++n1)
          for(n=0;n<amount[n1].length;++n)
             if(LessEqualQ(BM0etcInfo[n1][n].cost(bought[n1][n]),Challenge&1&&n?amount[n1][n-1]:v.MainNumber)){
                Vue.set(amount[n1],n,Plus(amount[n1][n],1));
                Vue.set(bought[n1],n,Plus(bought[n1][n],1));
-               v.BM0etcBuying(n1,n,1)
+               v.BM0etcBuying(n1,n,1);
+               break q
             }
    }
 }
@@ -512,12 +513,13 @@ const v = new Vue({
          if(Challenge&31){
             if(Challenge&2){
                BM0etcBought=v.BM0etcBought;
-               while(n1--)
+               q:while(n1--)
                   for(n=BM0etc[n1].length;n--;)
                      if(LessEqualQ(BM0etcInfo[n1][n].cost(BM0etcBought[n1][n]),Challenge&1&&n?BM0etc[n1][n-1]:v.MainNumber)){
                         Vue.set(BM0etc[n1],n,Plus(BM0etc[n1][n],1));
                         Vue.set(BM0etcBought[n1],n,Plus(BM0etcBought[n1][n],1));
-                        v.BM0etcBuying(n1,n,1)
+                        v.BM0etcBuying(n1,n,1);
+                        break q
                      }
                return
             }
