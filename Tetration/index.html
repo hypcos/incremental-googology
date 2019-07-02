@@ -20,9 +20,9 @@
       <button @mousedown="CurrentTab=2" :disabled="CurrentTab==2">Statistics</button>
       <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3"
       style="position:relative">BMS<span class="tooltip">Bashicu matrix system</span></button>
-      <button v-if="Achievement.length>3" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
+      <button v-if="Achievement.length>=4" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
       style="position:relative">FGH<span class="tooltip">fast-growing hierarchy</span></button>
-      <button v-if="AchieveRowN||FGHChal&15||Achievement.length>4" @mousedown="CurrentTab=5" :disabled="CurrentTab==5">Automatons</button>
+      <button v-if="FGHChal&15||Achievement.length>=5" @mousedown="CurrentTab=5" :disabled="CurrentTab==5">Automatons</button>
    </div>
    <div v-if="CurrentTab==3">
       <button v-if="Achievement.length>3" class="prestige" @mousedown="FGHPrestigeDo()"
@@ -274,10 +274,10 @@ both mantissa and exponent count into significant digits">
       </table>
       <div class="bigrow">
          Rows reward:<br>
-         1 row: automatic buy max of (0)[2]<br>
-         <span v-if="Achievement.length>=2">2 rows: automatic unlock (0)...(0)[2]<br></span>
-         <span v-if="Achievement.length>=3">3 rows: automatic buy max of (0)(0)[3]<br></span>
-         <span v-if="Achievement.length>=4">4 rows: automatic buy max of (0)...(0)[2]<br></span>
+         1 row: every row multiplies number gain by ×1.2<br>
+         <span v-if="Achievement.length>=2">2 rows: every row multiplies zero-only BM by ×1.2<br></span>
+         <span v-if="Achievement.length>=3">3 rows: every row multiplies unlock effect on BM by ×1.2<br></span>
+         <span v-if="Achievement.length>=4">4 rows: every row multiplies FGH number gain by ×1.2<br></span>
       </div>
    </div>
    <div v-else-if="CurrentTab==2" style="font-size:13px">

@@ -143,7 +143,7 @@ const v = new Vue({
             while(--n) s=Times(s,Plus(Times(BM0etc[n][0],Divide(Power(BM0etcMult[n][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[n][0]:1))||0,1));
          else
             while(--n) s=Times(s,Plus(Times(BM0etc[n][0],BM0etcMult[n][0])||0,1));
-         return s
+         return Times(s,this.AchieveRowEff)
       }
       ,AchievementName:GetAchievementName
       ,AchievementTooltip:GetAchievementTooltip
@@ -187,6 +187,7 @@ const v = new Vue({
       ,AchieveRowN(){return this.AchieveRow.reduce((x,y)=>x+y,0)}
       ,AchieveColumnN(){return this.AchieveColumn.reduce((x,y)=>x+y)}
       ,AchieveCellEff(){return Math.pow(1.3333333333333333,this.AchieveCellN)}
+      ,AchieveRowEff(){return Math.pow(1.2,this.AchieveRowN)}
       ,BM0etcInfo(){
          var Challenge=this.Challenge,b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
          while(n1--){
@@ -208,7 +209,7 @@ const v = new Vue({
       }
       ,BM0etcMult_Ach(){
          var Achievement=this.Achievement,BM0etcLengthEver=this.BM0etcLengthEver,n,n1=BM0etcLengthEver.length,arr,arr1=[]
-         ,Overall=this.AchieveCellEff*(Achievement[1]&8?1.01:1)//Overall bonus to all (0)...(0)[x]
+         ,Overall=this.AchieveCellEff*(this.AchieveRowN>=2?this.AchieveRowEff:1)*(Achievement[1]&8?1.01:1)//Overall bonus to all (0)...(0)[x]
          ,BaseMult;
          while(n1--){
             switch(n1){//Bonus to (0)...(0)[n1+2] for certain base number
@@ -358,10 +359,11 @@ const v = new Vue({
       }
       ,BM0etcUnlockerEff(){
          var BM0etcLength=this.BM0etcLength,BM0etcLengthStart=this.BM0etcLengthStart,n=BM0etcLength.length-1,arr=[]
+         ,AchieveRowEff=this.AchieveRowN>=3?this.AchieveRowEff:1
          ,Overall=this.Achievement[2]&256?1.02:1;
          arr[n]=Overall;
          while(n--) arr[n]=Times(Plus(Times(Minus(BM0etcLength[n+1],BM0etcLengthStart[n+1]),arr[n+1]),1),Overall);
-         return arr.map(x=>Power(2,x))
+         return arr.map(x=>Times(Power(2,x),AchieveRowEff))
       }
       ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
       ,BM0c1Cost(){
@@ -373,7 +375,8 @@ const v = new Vue({
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber);
-         return Times(Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715)),this.FGH2iter1Eff)
+         return Times(Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715)),
+            Times(this.AchieveRowN>=4?this.AchieveRowEff:1,this.FGH2iter1Eff))
       }
       ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
       ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}
@@ -432,27 +435,13 @@ const v = new Vue({
          }}
          ,{text:'Buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
          ,{text:'FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHChal&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet))&&v.FGHPrestigeDo()}
-         ,{text:'Buy max (0)[2]',act:()=>v.BM0etc[0]&&v.BM0etc[0].length&&BuyMax(['BM0etc',0,0],['BM0etcBought',0,0],['MainNumber'],v.BM0etcInfo[0][0].sum,v.BM0etcInfo[0][0].solve)}
-         ,{text:'Unlock (0)...(0)[2]',act:()=>v.BM0etcCantUnlock[0]===false&&v.BM0etcUnlock(0)}
-         ,{text:'Buy max (0)(0)[3]',act:()=>v.BM0etc[1]&&v.BM0etc[1].length&&BuyMax(['BM0etc',1,0],['BM0etcBought',1,0],['MainNumber'],v.BM0etcInfo[1][0].sum,v.BM0etcInfo[1][0].solve)}
-         ,{text:'Buy max (0)...(0)[2]',act:()=>{
-            var amount=v.BM0etc[0],n,info;
-            if(!amount) return;
-            n=amount.length;
-            info=v.BM0etcInfo[0]
-            while(n--) BuyMax(['BM0etc',0,n],['BM0etcBought',0,n],['MainNumber'],info[n].sum,info[n].solve)
-         }}
       ]
       ,AutoAvailable(){
-         var AchieveRowN=this.AchieveRowN,FGHChal=this.FGHChal,arr=[];
+         var FGHChal=this.FGHChal,arr=[];
          if(FGHChal&1) arr.push(1);
          if(FGHChal&2) arr.push(2);
          if(FGHChal&4) arr.push(3);
          if(FGHChal&8) arr.push(4);
-         if(AchieveRowN>=1) arr.push(5);
-         if(AchieveRowN>=2) arr.push(6);
-         if(AchieveRowN>=3) arr.push(7);
-         if(AchieveRowN>=4) arr.push(8);
          return arr
       }
       ,AutoBM0etcUnlockThresholdInput(){return this.AutoBM0etcUnlockThreshold.map(showInt)}
