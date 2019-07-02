@@ -90,7 +90,7 @@ sub+sup{margin-left:-1ch}
    background-color: #afa;
    border: 1px solid #0f0;
 }
-.cell1.already{
+.already.cell1{
    background-color: #050;
    color: #fff;
 }
@@ -110,7 +110,7 @@ sub+sup{margin-left:-1ch}
    background-color: #fca;
    border: 1px solid #f60;
 }
-.cell5.already{
+.already.cell5{
    background-color: #520;
    color: #fff;
 }

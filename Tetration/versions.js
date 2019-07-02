@@ -1,19 +1,9 @@
 'use strict';
 const Version=2
 ,TimeList=[
-   [
-      'LastUpdate'
-      ,'LastGame'
-   ],[
-      'LastUpdate'
-      ,'LastGame'
-   ],[
-      'LastUpdate'
-      ,'LastGame'
-      ,'LastFGHPrestige'
-      ,'LastBought'
-      ,'LastBM0etcUnlock'
-   ]
+   ['LastUpdate','LastGame']
+   ,['LastUpdate','LastGame']
+   ,['LastUpdate','LastGame']
 ]
 ,DataList=[
    [
@@ -52,6 +42,18 @@ const Version=2
       ,'Hotkey'
       ,'Achievement'
       ,'Ach2r16'
+      ,'AutoActive'
+      ,'AutoBM0etcUnlockThreshold'
+      ,'AutoFGHPrestigeThreshold'
+      ,'Challenge'
+      ,'Chal4Eff'
+      ,'Chal8Eff'
+      ,'Chal16Eff'
+      ,'Chal32Eff'
+      ,'Chal16Base'
+      ,'Chal32Base'
+      ,'SinceBought'
+      ,'SinceBM0etcUnlock'
       ,'MainNumber'
       ,'MainNumberEver'
       ,'BMSStage'
@@ -61,15 +63,9 @@ const Version=2
       ,'BM0etcLengthEver'
       ,'BM0etcUnlockTotal'
       ,'BM0c1'
-      ,'Challenge'
-      ,'Chal4Eff'
-      ,'Chal8Eff'
-      ,'Chal16Eff'
-      ,'Chal32Eff'
-      ,'Chal16Base'
-      ,'Chal32Base'
       ,'FGHNumber'
       ,'FGHPrestige'
+      ,'SinceFGHPrestige'
       ,'FGHPrestigeFastest'
       ,'FGHNumberRate'
       ,'AlphaSeries'
@@ -79,8 +75,5 @@ const Version=2
       ,'FGH2'
       ,'FGH3'
       ,'FGHChal'
-      ,'AutoActive'
-      ,'AutoBM0etcUnlockThreshold'
-      ,'AutoFGHPrestigeThreshold'
    ]
 ]

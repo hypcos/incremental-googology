@@ -2,6 +2,7 @@
 const Grow = dt=>{
    var AutoPool=v.AutoPool,Challenge=v.Challenge
    ,a1,a2,a3,n,n1;
+   v.SinceFGHPrestige+=dt;
    v.AutoActive.map(x=>AutoPool[x].act());
    n1=v.BM0etc.length;
    if(v.AlphaSeries&16){
@@ -12,9 +13,10 @@ const Grow = dt=>{
       for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,2);
    }
    if(Challenge&252){
-      if(Challenge&8) v.Chal8Eff=Math.min((Date.now()-Time.LastBought)/60000,1);
-      if(Challenge&16) v.Chal16Eff=Power(v.Chal16Base,Date.now()-Time.LastBought);
-      if(Challenge&32) v.Chal32Eff=Power(v.Chal32Base,Date.now()-Time.LastBM0etcUnlock);
+      if(Challenge&24) v.SinceBought+=dt;
+      if(Challenge&8) v.Chal8Eff=Math.min(v.SinceBought/60,1);
+      if(Challenge&16) v.Chal16Eff=Power(v.Chal16Base,v.SinceBought);
+      if(Challenge&32) v.Chal32Eff=Power(v.Chal32Base,v.SinceBM0etcUnlock+=dt);
       var Chal8Eff=v.Chal8Eff;
       if(Challenge&244)
          while(n1--){
@@ -74,9 +76,6 @@ const Grow = dt=>{
 ,TimeRaw = ()=>({
    LastUpdate:Date.now()
    ,LastGame:Date.now()
-   ,LastFGHPrestige:Date.now()
-   ,LastBought:Date.now()
-   ,LastBM0etcUnlock:Date.now()
 })
 ,InitialData = ()=>({
    ExportBox:false
@@ -89,6 +88,18 @@ const Grow = dt=>{
    ,CurrentTab:3
    ,Achievement:[0]
    ,Ach2r16:[0,0]
+   ,AutoActive:[]
+   ,AutoBM0etcUnlockThreshold:[]
+   ,AutoFGHPrestigeThreshold:0
+   ,Challenge:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
+   ,Chal4Eff:[[]]
+   ,Chal8Eff:1
+   ,Chal16Eff:1
+   ,Chal32Eff:1
+   ,Chal16Base:1
+   ,Chal32Base:1
+   ,SinceBought:Infinity
+   ,SinceBM0etcUnlock:Infinity
    ,MainNumber:4
    ,MainNumberEver:4
    ,BMSStage:0
@@ -98,28 +109,19 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
-   ,Challenge:0 //auto max all:2, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, inside:128, outside:64, sides:1, start with:4
-   ,Chal4Eff:[[]]
-   ,Chal8Eff:1
-   ,Chal16Eff:1
-   ,Chal32Eff:1
-   ,Chal16Base:1
-   ,Chal32Base:1
    ,FGHNumber:0
    ,FGHPrestige:0
+   ,SinceFGHPrestige:Infinity
    ,FGHPrestigeFastest:Infinity
    ,FGHNumberRate:0
    ,FGHTab:0
+   ,FGHChal:0 //1 bit for every item
    ,AlphaSeries:0 //1 bit for every item
    ,FGH0:[0]
    ,FGH1:[0]
    ,FGH2iter1:0
    ,FGH2:[]
    ,FGH3:2
-   ,FGHChal:0 //1 bit for every item
-   ,AutoActive:[]
-   ,AutoBM0etcUnlockThreshold:[]
-   ,AutoFGHPrestigeThreshold:0
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
@@ -378,7 +380,7 @@ const v = new Vue({
       ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
       ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
       ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
-      ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.3)}
+      ,FGH00Eff(){return Power(Max(this.BM0etcUnlockTotal,1),0.25)}
       ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
       ,ZeralumEff(){
          var x=Plus(Times(this.FGHNumber,0.25),1);
@@ -481,7 +483,6 @@ const v = new Vue({
          Save(0)
       }
       ,GamePlayed:()=>show((Date.now()-Time.LastGame)*0.001)
-      ,FGHPrestigePlayed:()=>show((Date.now()-Time.LastFGHPrestige)*0.001)
       ,BM0etcBuying:(n1,n,delta)=>{
          var Challenge=v.Challenge,BM0etcBought=v.BM0etcBought,BM0etcInfo,Chal4Eff
          ,amount,bought,b16,excess,i,i1;
@@ -512,8 +513,8 @@ const v = new Vue({
             Vue.set(Chal4Eff,0,Chal4Eff[0])
          }
          if(Challenge&24){
-            if(Challenge&16) v.Chal16Base=Exp(Divide(10,LessQ(delta,1.01)?16+Date.now()-Time.LastBought:16));
-            Time.LastBought=Date.now();
+            if(Challenge&16) v.Chal16Base=Exp(Divide(10,LessQ(delta,1.01)?0.016+v.SinceBought:0.016));
+            v.SinceBought=0;
          }
       }
       ,BM0etcMaxall:()=>{
@@ -556,8 +557,8 @@ const v = new Vue({
          BM0etcReset(n+1)
       }
       ,FGHPrestigeDo:()=>{
-         var t=(Date.now()-Time.LastFGHPrestige)*0.001;
-         Time.LastFGHPrestige=Date.now();
+         var t=Min(v.SinceFGHPrestige,(Date.now()-Time.LastGame)*0.001);
+         v.SinceFGHPrestige=0;
          v.FGHNumber=Plus(v.FGHNumber,v.FGHNumberToGet);
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
@@ -623,7 +624,7 @@ const v = new Vue({
          v.FGH3=Plus(v.FGH3,1)
       }
       ,FGHChalEnter:n=>{
-         Time.LastFGHPrestige=Date.now();
+         v.SinceFGHPrestige=0;
          BMSReset();
          v.Challenge|=n
       }
@@ -661,8 +662,8 @@ const v = new Vue({
    ,Challenge=v.Challenge;
    if(Challenge&36){
       if(Challenge&32){
-         v.Chal32Base=Root(Times(v.MainNumber,0.25),Date.now()-Time.LastBM0etcUnlock);
-         Time.LastBM0etcUnlock=Date.now()
+         v.Chal32Base=Root(Max(Times(v.MainNumber,0.25),1),v.SinceBM0etcUnlock);
+         v.SinceBM0etcUnlock=0
       }
       if(Challenge&4) v.Chal4Eff=[[]];
    }
