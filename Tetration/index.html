@@ -128,6 +128,8 @@
       </div>
       <div v-else-if="FGHTab==1">
          <br>
+         BMS work differently in FGH challenges.<br>
+         Your number need to reach certain point, then FGH-prestige, to complete an FGH challenge.<br><br>
          <button class="celldark itemrow3" style="font-size:24px" :disabled="!(Challenge&255)" @mousedown="FGHChalExit()">
             Exit current challenge
          </button><br>
@@ -135,7 +137,8 @@
             <button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(4)"
             :class="{already:FGHChal&1&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==4?'#f95':''}">
                <b class="big">FGH Challenge 1</b><br>
-               Mechanism: When buying any zero-only BM, those with greaterequal costs will be weaken by a half.<br><br>
+               Mechanism: When buying any zero-only BM, those with greaterequal costs will be weaken by a half.
+               (penalties reset on unlock and (0)(1)[n])<br><br>
                Reach {{1e100|show}} to get automatic buy-max of all zero-only BM
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(32)"
             :class="{already:FGHChal&2&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==32?'#f95':''}">
@@ -243,7 +246,7 @@
             Display {{Precision}} significant digits<br>
             <input type="range" v-model.number="Precision" min="1" :max="Math.floor(29.9336062089226/Math.log(NumberBase))">
             <span class="tooltip">
-               When a number is beyond Javascript max number, both mantissa and exponent count into significant digits
+               When a number is beyond Javascript Number, both mantissa and exponent count into significant digits
             </span>
          </div>
          <div class="itemrow4"><button @mousedown="Hotkey^=1">Hotkey: {{Hotkey?'On':'Off'}}</button></div>
