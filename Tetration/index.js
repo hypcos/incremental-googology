@@ -1,10 +1,10 @@
 'use strict';
 const Grow = dt=>{
-   var AutoPool=v.AutoPool,Challenge=v.Challenge
-   ,a1,a2,a3,n,n1;
-   v.SinceFGHPrestige+=dt;
+   var AutoPool=v.AutoPool;
    v.AutoActive.map(x=>AutoPool[x].act());
-   n1=v.BM0etc.length;
+   var Challenge=v.Challenge
+   ,a1,a2,a3,n,n1=v.BM0etc.length;
+   v.SinceFGHPrestige+=dt;
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
       FGHNumberUpdate()
@@ -131,16 +131,15 @@ const v = new Vue({
    ,data:vPre
    ,computed:{
       Growth(){
-         var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult
-         ,Challenge=this.Challenge,Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider
-         ,n=BM0etc.length,s;
-         s=Challenge&252?
-            Times(BM0etc[0][0],Divide(Power(BM0etcMult[0][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[0][0]:1))||0
-            :Times(BM0etc[0][0],BM0etcMult[0][0])||0;
-         if(Challenge&252)
+         var BM0etc=this.BM0etc,BM0etcMult=this.BM0etcMult,n=BM0etc.length,Challenge=this.Challenge,s; 
+         if(Challenge&252){
+            var Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider;
+            s=Times(BM0etc[0][0],Divide(Power(BM0etcMult[0][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[0][0]:1))||0;
             while(--n) s=Times(s,Plus(Times(BM0etc[n][0],Divide(Power(BM0etcMult[n][0],Challenge&8?Chal8Eff:1),Challenge&244?BM0etcDivider[n][0]:1))||0,1));
-         else
+         }else{
+            s=Times(BM0etc[0][0],BM0etcMult[0][0])||0;
             while(--n) s=Times(s,Plus(Times(BM0etc[n][0],BM0etcMult[n][0])||0,1));
+         }
          return Times(s,this.AchieveRowEff)
       }
       ,AchievementName:GetAchievementName
@@ -307,9 +306,10 @@ const v = new Vue({
          return arr1
       }
       ,BM0etcDivider(){
-         var BM0etc=this.BM0etc,Challenge=this.Challenge,Chal4Eff=this.Chal4Eff,Chal16Eff=this.Chal16Eff,Chal32Eff=this.Chal32Eff
-         ,n,n1=BM0etc.length,i1,arr,arr1=[];
+         var Challenge=this.Challenge;
          if(!(Challenge&252)) return;
+         var BM0etc=this.BM0etc,Chal4Eff=this.Chal4Eff,Chal16Eff=this.Chal16Eff,Chal32Eff=this.Chal32Eff
+         ,n,n1=BM0etc.length,i1,arr,arr1=[];
          while(n1--){
             arr=[];
             n=BM0etc[n1].length;
@@ -325,8 +325,9 @@ const v = new Vue({
          return arr1
       }
       ,BM0etcModifierHtml(){
-         var Challenge=this.Challenge,Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider,n,n1=BM0etcDivider.length,arr,arr1=[];
+         var Challenge=this.Challenge;
          if(!(Challenge&252)) return;
+         var Chal8Eff=this.Chal8Eff,BM0etcDivider=this.BM0etcDivider,n,n1=BM0etcDivider.length,arr,arr1=[];
          while(n1--){
             arr=[];
             n=BM0etcDivider[n1].length;
@@ -638,13 +639,13 @@ const v = new Vue({
       }
       ,AutoBM0etcUnlockThresholdChange:n=>{
          var input=v.AutoBM0etcUnlockThresholdInput[n],threshold=v.AutoBM0etcUnlockThreshold,s;
-         if(input==='') return Vue.set(threshold,n,Infinity);
+         if(typeof input!='string'||input==='') return Vue.set(threshold,n,Infinity);
          s=AntiShow(input,v.NumberBase,true);
          if(!Number.isNaN(s)) Vue.set(threshold,n,s)
       }
       ,AutoFGHPrestigeThresholdChange:()=>{
          var input=v.AutoFGHPrestigeThresholdInput[0],s;
-         if(input==='') return v.AutoFGHPrestigeThreshold=0;
+         if(typeof input!='string'||input==='') return v.AutoFGHPrestigeThreshold=0;
          s=AntiShow(input,v.NumberBase);
          if(!Number.isNaN(s)) v.AutoFGHPrestigeThreshold=s
       }
