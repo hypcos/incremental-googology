@@ -58,6 +58,10 @@ const Grow = dt=>{
          Vue.set(bought,n,0)
       }
    }
+   if(LessQ(v.FGHGainPeak,a3=Divide(v.FGHNumberToGet,Min(v.SinceFGHPrestige,(Date.now()-Time.LastGame)*0.001)))){
+      v.FGHGainPeak=a3;
+      v.FGHGainPeakAt=v.FGHNumberToGet
+   }
    if(Challenge&2){
       var BM0etcInfo=v.BM0etcInfo;
       amount=v.BM0etc,bought=v.BM0etcBought;
@@ -107,6 +111,8 @@ const Grow = dt=>{
    ,BM0etcLengthEver:[3]
    ,BM0etcUnlockTotal:0
    ,BM0c1:2
+   ,FGHGainPeak:0
+   ,FGHGainPeakAt:0
    ,FGHNumber:0
    ,FGHPrestige:0
    ,SinceFGHPrestige:Infinity
@@ -654,6 +660,8 @@ const v = new Vue({
 ,BMSReset = ()=>{
    v.Ach2r16=[0,0];
    v.MainNumber=4;
+   v.FGHGainPeak=0;
+   v.FGHGainPeakAt=0;
    v.BMSStage=0;
    v.BM0etc=[[0]];
    v.BM0etcBought=[[0]];
