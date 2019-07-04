@@ -129,7 +129,8 @@ const Grow = dt=>{
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
-,showInt = x=>Show(x,vPre.Precision,vPre.NumberBase,true);
+,showInt = x=>Show(x,vPre.Precision,vPre.NumberBase,true)
+,BM0etcText = (x,n)=>LessQ(x,14)?'(0)'.repeat(x)+'['+showInt(n)+']':'(0)...(0)['+showInt(n)+'] with '+showInt(x)+" (0)'s";
 Vue.filter('show',show);
 Vue.filter('showInt',showInt);
 const v = new Vue({
@@ -198,8 +199,8 @@ const v = new Vue({
             for(n=this.BM0etcLengthEver[n1];n--;){
                b16=Power(n1+2,Power(2,Plus(Plus(n1,2),n)));
                arr[n]={
-                  text:((n1,n)=>()=>'(0)'.repeat(n)+'['+showInt(n1)+']')(n1+2,n+1+n1)
-                  ,tooltip:n?'Generate '+'(0)'.repeat(n+n1)+'['+showInt(n1+2)+']':'Make your number grow'
+                  text:((n1,n)=>LessQ(n,14)?(()=>'(0)'.repeat(n)+'['+showInt(n1)+']'):(()=>'(0)...(0)['+showInt(n1)+'] with '+showInt(n)+" (0)'s"))(n1+2,n+1+n1)
+                  ,tooltip:n?'Generate '+BM0etcText(n+n1,n1+2):'Make your number grow'
                   ,costo:Challenge&1&&n?['BM0etc',n1,n-1]:['MainNumber']
                   ,cost:(b16=>x=>Natural(Power(b16,Plus(x,0.5))))(b16)
                   ,sum:((b16,sumk)=>x=>Natural(Times(sumk,Plus(Power(b16,x),-1))))(b16,Divide(Power(n1+2,Power(2,Plus(Plus(n1,1),n))),Plus(b16,-1)))
@@ -350,8 +351,9 @@ const v = new Vue({
             while(n--) arr[n]=1+(FGH2[n]||2);
          return arr
       }
-      ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
+      ,BM0etcUnlockText(){return this.BM0etcLength.map((x,n)=>BM0etcText(x+n+1,n+2))}
       ,BM0etcUnlockText1(){return this.BM0etcLengthEver.map((x,n)=>n?'and base-'+showInt(n+1)+' unlocker ':'')}
+      ,BM0etcUnlockText2(){return this.BM0etcLength.map((x,n)=>BM0etcText(x+n,n+2))}
       ,BM0etcUnlockTooltip(){return this.BM0etcLengthEver.map((x,n)=>'Reset your number'+(n?', all zero-only BM and previous unlockers':' and all zero-only BM'))}
       ,BM0etcUnlockCost(){
          var FGH3=this.FGH3,n=Math.max(this.BM0etcLengthEver.length,FGH3-1),arr=[];
@@ -370,7 +372,7 @@ const v = new Vue({
          while(n--) arr[n]=Times(Plus(Times(Minus(BM0etcLength[n+1],BM0etcLengthStart[n+1]),arr[n+1]),1),Overall);
          return arr.map(x=>Times(Power(2,x),AchieveRowEff))
       }
-      ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>'(0)'.repeat(x+n)+'['+showInt(n+2)+']')}
+      ,BM0etcUnlockEverText(){return this.BM0etcLengthEver.map((x,n)=>BM0etcText(x+n,n+2))}
       ,BM0c1Cost(){
          var BM0c1=this.BM0c1;
          return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
@@ -405,7 +407,7 @@ const v = new Vue({
       }
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
       ,FGH0Html(){return this.FGH0.map((x,n)=>'f<sub>0</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
-      ,FGH0Text(){return this.FGH0.map((x,n)=>LessQ(Plus(x,n),16)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
+      ,FGH0Text(){return this.FGH0.map((x,n)=>BM0etcText(Plus(x,n+1),n+2))}
       ,FGH0Cost(){return this.FGH0.map((x,n)=>Natural(Plus(x,n+3)))}
       ,FGH0Cant(){
          var FGHNumber=this.FGHNumber;
@@ -413,7 +415,7 @@ const v = new Vue({
       }
       ,FGH0Eff(){return Log(1e100,this.MainNumberEver)}
       ,FGH1Html(){return this.FGH1.map((x,n)=>'f<sub>1</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
-      ,FGH1Text(){return this.FGH1.map((x,n)=>LessQ(Plus(x,n),16)?'(0)'.repeat(Plus(x,n+1))+'['+showInt(n+2)+']':'(0)...(0)['+showInt(n+2)+'] with '+showInt(Plus(x,n+1))+" (0)'s")}
+      ,FGH1Text(){return this.FGH1.map((x,n)=>BM0etcText(Plus(x,n+1),n+2))}
       ,FGH1Cost(){return this.FGH1.map((x,n)=>Natural(Times(n+2,Power(2,Plus(x,1)))))}
       ,FGH1Cant(){
          var FGHNumber=this.FGHNumber;
@@ -428,7 +430,7 @@ const v = new Vue({
       ,FGH2iter1Cant(){return LessQ(this.FGHNumber,this.FGH2iter1Cost)}
       ,FGH2iter1Eff(){return Power(1.1,this.FGH2iter1)}
       ,FGH2Html(){return this.FGH2.map((x,n)=>'f<sub>2</sub><sup>'+showInt(n+2)+'</sup>('+showInt(x)+')')}
-      ,FGH2Text(){return this.FGH2.map((x,n)=>'(0)'.repeat(Plus(x,n+2))+'['+showInt(n+2)+']')}
+      ,FGH2Text(){return this.FGH2.map((x,n)=>BM0etcText(Plus(x,n+2),n+2))}
       ,FGH2Cost(){return this.FGH2.map((x,n)=>Natural(IteratedFGH2(x,n+2)))}
       ,FGH2Cant(){
          var FGHNumber=this.FGHNumber;
@@ -614,9 +616,14 @@ const v = new Vue({
       }
       ,FGH2iter1Buy:()=>{
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2iter1Cost);
-         v.FGH2iter1=Plus(v.FGH2iter1,1)
+         v.FGH2iter1=Plus(v.FGH2iter1,1);
+         v.AutoFGHPrestigeThreshold=Times(v.AutoFGHPrestigeThreshold,1.1)
       }
-      ,FGH2iter1Buymax:()=>Buymax(['FGH2iter1'],['FGHNumber'],x=>Natural(Times(x,Power(2,Plus(x,2)))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
+      ,FGH2iter1Buymax:()=>{
+         v.AutoFGHPrestigeThreshold=Times(v.AutoFGHPrestigeThreshold,Power(1.1,
+            Buymax(['FGH2iter1'],['FGHNumber'],x=>Natural(Times(x,Power(2,Plus(x,2)))),Y=>Times(LambertW(Times(Y,0.17328679513998633)),1.4426950408889634))
+         ))
+      }
       ,FGH2Buy:n=>{
          var FGH2=v.FGH2;
          v.FGHNumber=Minus(v.FGHNumber,v.FGH2Cost[n]);
@@ -692,7 +699,7 @@ const v = new Vue({
 ,Buymax = (Amount,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),costo=Pointer(v,Costo);
    var delta=Floor(Minus(solve(Plus(costo[0][costo[1]],sum(amount[0][amount[1]]))),amount[0][amount[1]]));
-   if(Sign(delta)<0) delta=0;
+   if(Sign(delta)<=0) return 0;
    if(costo[0]===v){
       v[costo[1]]=Minus(v[costo[1]],Minus(sum(Plus(amount[0][amount[1]],delta)),sum(amount[0][amount[1]])));
       if(Sign(v[costo[1]])<0) v[costo[1]]=0;
@@ -706,7 +713,7 @@ const v = new Vue({
 ,BuyMax = (Amount,Bought,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),bought=Pointer(v,Bought),costo=Pointer(v,Costo);
    var delta=Floor(Minus(solve(Plus(costo[0][costo[1]],sum(bought[0][bought[1]]))),bought[0][bought[1]]));
-   if(Sign(delta)<0) delta=0;
+   if(Sign(delta)<=0) return 0;
    if(costo[0]===v){
       v[costo[1]]=Minus(v[costo[1]],Minus(sum(Plus(bought[0][bought[1]],delta)),sum(bought[0][bought[1]])));
       if(Sign(v[costo[1]])<0) v[costo[1]]=0;

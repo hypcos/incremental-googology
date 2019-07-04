@@ -46,10 +46,10 @@
          <div v-for="(amounts,n1) in BM0etc"
          :class="{cellcolumn:BM0etc.length>4,column2:BM0etc.length==2,column3:BM0etc.length==3,column4:BM0etc.length==4}">
             <button v-show="BMSStage>=1" class="cell cell2" :disabled="BM0etcCantUnlock[n1]" @mousedown="BM0etcUnlock(n1)">
-               <b>Unlock (0){{BM0etcUnlockText[n1]}}</b><br>
+               <b>Unlock {{BM0etcUnlockText[n1]}}</b><br>
                Reset to boost {{BM0etcLength[n1]+1-BM0etcLengthStart[n1]}} initial (0)...(0)[{{n1+2|showInt}}]
                {{BM0etcUnlockText1[n1]}}by ×{{BM0etcUnlockerEff[n1]|show}}<br>
-               Requirement: {{BM0etcUnlockCost[n1]|showInt}} {{BM0etcUnlockText[n1]}}'s
+               Requirement: {{BM0etcUnlockCost[n1]|showInt}} {{BM0etcUnlockText2[n1]}}'s
                <span class="tooltip" v-html="BM0etcUnlockTooltip[n1]"></span>
             </button><buy v-for="(am,n) in amounts" :info="BM0etcInfo[n1][n]" :amount="['BM0etc',n1,n]" :bought="['BM0etcBought',n1,n]"
             :mult="['BM0etcMult',n1,n]" @buying="Challenge&30&&BM0etcBuying(n1,n,$event)"
