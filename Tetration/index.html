@@ -198,7 +198,7 @@
             Options for automatic unlock zero-only BM
             <div v-for="(x,n) in BM0etcLengthEver">
                Unlock (0)...(0)[{{n+2|showInt}}] at most
-               <input v-model="AutoBM0etcUnlockThresholdInput[n]" @keydown.stop @blur="AutoBM0etcUnlockThresholdChange(n)">
+               <input v-model="AutoBM0etcUnlockThresholdInput[n]" @keydown.stop @change="AutoBM0etcUnlockThresholdChange(n)">
                times.
             </div>
          </div>
@@ -206,7 +206,7 @@
          <div v-show="FGHChal&512" class="bigrow">
             Options for automatic FGH-prestige<br>
             FGH-prestige to get at least
-            <input v-model="AutoFGHPrestigeThresholdInput[0]" @keydown.stop @blur="AutoFGHPrestigeThresholdChange()">
+            <input v-model="AutoFGHPrestigeThresholdInput[0]" @keydown.stop @change="AutoFGHPrestigeThresholdChange()">
             fast-growing hierarchy number.
          </div>
       </div>
