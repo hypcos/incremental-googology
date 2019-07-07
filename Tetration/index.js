@@ -60,7 +60,7 @@ const Grow = dt=>{
    }
    if(LessQ(v.FGHGainPeak,a3=Divide(v.FGHNumberToGet,Min(v.SinceFGHPrestige,(Date.now()-Time.LastGame)*0.001)))){
       v.FGHGainPeak=a3;
-      v.FGHGainPeakAt=v.FGHNumberToGet
+      v.FGHGainPeakAt=MainNumber
    }
    if(Challenge&2){
       var BM0etcInfo=v.BM0etcInfo;
