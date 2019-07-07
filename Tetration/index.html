@@ -120,7 +120,7 @@
                   Cost: {{FGH2Cost[n]|showInt}} FGHN
                </button>
             </div><div class="column4">
-               <button class="cell cell3" :disabled="FGH3" @mousedown="FGH3Buy()">
+               <button class="cell cell3" :disabled="FGH3Cant" @mousedown="FGH3Buy()">
                   <b class="big">f<sub>3</sub>({{FGH3|showInt}})</b><br>
                   Apply achievement (3×3)cell bonus on all FGH items except this<br>
                   Current: ×{{FGH3Eff|show}}<br>

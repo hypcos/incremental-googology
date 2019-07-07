@@ -411,10 +411,7 @@ const v = new Vue({
       ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
       ,FGH00Eff(){return Times(Plus(Ln(Ln(this.MainNumberEver)),-4),this.FGH3Eff)}
       ,FGHbase1Eff(){return Times(Power(Max(this.FGHPrestige,1),0.5),this.FGH3Eff)}
-      ,ZeralumEff(){
-         var x=Plus(Times(this.FGHNumber,0.25),1);
-         return Times(Times(x,x),this.FGH3Eff)
-      }
+      ,ZeralumEff(){return Times(Plus(Times(this.FGHNumber,0.25),1),this.FGH3Eff)}
       ,UnalumEff(){return Natural(Plus(3,this.FGH3Eff))}
       ,BalumEff(){return Times(Times(0.1,this.FGHNumberRate),this.FGH3Eff)}
       ,FGH0Html(){return this.FGH0.map((x,n)=>'f<sub>0</sub>'+(x?'<sup>'+showInt(Plus(x,1))+'</sup>':'')+'('+showInt(n+2)+')')}
