@@ -41,7 +41,7 @@ const Grow = dt=>{
    if(LessQ(v.MainNumberEver,MainNumber)) v.MainNumberEver=MainNumber;
    if(v.BMSStage<2){
       if(LessEqualQ(18446744073709551616,MainNumber)) v.BMSStage=2;
-      else if(v.BMSStage<1&&LessEqualQ(16777216,MainNumber)) v.BMSStage=1;
+      else if(v.BMSStage<1&&LessEqualQ(v.FGHChal&16?4096:16777216,MainNumber)) v.BMSStage=1;
    }
    while(LessQ(MainNumber,Power(--m+2,Power(2,m+1))));
    while(n1<=m){
@@ -204,7 +204,7 @@ const v = new Vue({
             }
          }}
          ,{text:'Buy (0)(1)[n]', act:()=>v.BM0c1Cant||v.BM0c1Buy()}
-         ,{text:'FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHChal&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.FGHNumberToGet))&&v.FGHPrestigeDo()}
+         ,{text:'FGH-prestige',act:()=>v.FGHPrestigeCant||(!(v.FGHChal&512)||LessEqualQ(v.AutoFGHPrestigeThreshold,v.MainNumber))&&v.FGHPrestigeDo()}
       ]
       ,AutoAvailable(){
          var FGHChal=this.FGHChal,arr=[];
