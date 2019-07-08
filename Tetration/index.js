@@ -216,6 +216,7 @@ const v = new Vue({
       }
       ,AutoBM0etcUnlockThresholdInput(){return this.AutoBM0etcUnlockThreshold.map(showInt)}
       ,AutoFGHPrestigeThresholdInput(){return [show(this.AutoFGHPrestigeThreshold)]}
+      ,ChallengeGoal(){return {128:Power(10,600),64:Power(10,3003),1:Power(10,3003)}}
       ,BM0etcInfo(){
          var Challenge=this.Challenge,b16,n,n1=this.BM0etcLengthEver.length,arr,arr1=[];
          while(n1--){
@@ -391,15 +392,7 @@ const v = new Vue({
          return Natural(Power(BM0c1,Power(2,Plus(Times(BM0c1,BM0c1),2))))
       }
       ,BM0c1Cant(){return LessQ(this.MainNumber,this.BM0c1Cost)}
-      ,FGHPrestigeCant(){
-         switch(this.Challenge){
-            case 0: return LessQ(this.MainNumber,1e100);
-            case 128: return LessQ(this.MainNumber,1e183);
-            case 64: return LessQ(this.MainNumber,1e243);
-            case 1: return LessQ(this.MainNumber,1e303);
-            default: return LessQ(this.MainNumber,1e100)
-         }
-      }
+      ,FGHPrestigeCant(){return LessQ(this.MainNumber,this.Challenge&&this.ChallengeGoal[this.Challenge&255]||1e100)}
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
          var x=Ln(this.MainNumber),ach=this.Achievement[3];

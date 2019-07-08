@@ -170,17 +170,17 @@
             :class="{already:FGHChal&32&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==128?'#f95':''}">
                <b class="big">FGH Challenge 6</b><br>
                Mechanism: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
-               Reach {{1e183|show}} to unlock FGH-inside items
+               Reach {{ChallengeGoal[128]|show}} to unlock FGH-inside items
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(64)"
             :class="{already:FGHChal&64&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==64?'#f95':''}">
                <b class="big">FGH Challenge 7</b><br>
                Mechanism: The more Z(0)[n] you have, the weaker Z[n] is (where Z is a string of (0)'s).<br><br>
-               Reach {{1e243|show}} to unlock FGH-outside items
+               Reach {{ChallengeGoal[64]|show}} to unlock FGH-outside items
             </button><button class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(1)"
             :class="{already:FGHChal&128&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==1?'#f95':''}">
                <b class="big">FGH Challenge 8</b><br>
                Mechanism: You spend Z[n] to buy Z(0)[n] (where Z is a string of (0)'s).<br><br>
-               Reach {{1e303|show}} to unlock FGH-sides items
+               Reach {{ChallengeGoal[1]|show}} to unlock FGH-sides items
             </button><button v-show="FGHChal&2" class="chal cell5" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(40)"
             :class="{already:FGHChal&256&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==40?'#f95':''}">
                FGH Challenge 2 and 3 together.<br><br>
