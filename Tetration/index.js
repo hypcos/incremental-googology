@@ -257,6 +257,7 @@ const v = new Vue({
          }
          //Single BM specific bonus
          if(Achievement[0]&8) arr1[0][0]=Times(arr1[0][0],1.05);
+         if(Achievement[3]&32) arr1[0][0]=Times(arr1[0][0],2.5);
          if(arr1[0][1]&&Achievement[1]&128) arr1[0][1]=Times(arr1[0][1],1.1);
          if(arr1[0][2]&&Achievement[0]&16) arr1[0][2]=Times(arr1[0][2],1.05);
          if(arr1[0][3]&&Achievement[1]&16) arr1[0][3]=Times(arr1[0][3],1.05);
@@ -401,8 +402,9 @@ const v = new Vue({
       }
       ,FGHNumberToGet(){
          if(this.FGHPrestigeCant) return 0;
-         var x=Ln(this.MainNumber);
-         return Times(Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715)),this.AchieveRowN>=4?this.AchieveRowEff:1)
+         var x=Ln(this.MainNumber),ach=this.Achievement[3];
+         return Times(Times(Floor(Plus(Exp(Times(x,Power(Ln(x),-3.25))),-1.5522390492173715)),this.AchieveRowN>=4?this.AchieveRowEff:1)
+            ,(ach&4?1.02:1)*(ach&16?1.05:1)*(ach&64?1.1:1)*(ach&128?1.2:1)*(ach&256?1.5:1))
       }
       ,FGH00Cant(){return this.AlphaSeries&1||LessQ(this.FGHNumber,1)}
       ,FGHbase1Cant(){return this.AlphaSeries&2||LessQ(this.FGHNumber,2)}

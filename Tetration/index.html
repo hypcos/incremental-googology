@@ -281,10 +281,18 @@
       </table>
       <div class="bigrow">
          Rows reward:<br>
-         1 row: every row multiplies number gain by ×{{1.2|show}}<br>
-         <span v-if="Achievement.length>=2">2 rows: every row multiplies zero-only BM by ×{{1.2|show}}<br></span>
-         <span v-if="Achievement.length>=3">3 rows: every row multiplies unlock effect on BM by ×{{1.2|show}}<br></span>
-         <span v-if="Achievement.length>=4">4 rows: every row multiplies FGH number gain by ×{{1.2|show}}<br></span>
+         <span :class="{rowreward:AchieveRowN>=1}">
+            1 row: every row multiplies number gain by ×{{1.2|show}}<br>
+         </span>
+         <span v-if="Achievement.length>=2" :class="{rowreward:AchieveRowN>=2}">
+            2 rows: every row multiplies zero-only BM by ×{{1.2|show}}<br>
+         </span>
+         <span v-if="Achievement.length>=3" :class="{rowreward:AchieveRowN>=3}">
+            3 rows: every row multiplies unlock effect on BM by ×{{1.2|show}}<br>
+         </span>
+         <span v-if="Achievement.length>=4" :class="{rowreward:AchieveRowN>=4}">
+            4 rows: every row multiplies FGH number gain by ×{{1.2|show}}<br>
+         </span>
       </div>
    </div>
    <div v-else-if="CurrentTab==2" style="font-size:13px">

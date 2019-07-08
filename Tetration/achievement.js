@@ -78,13 +78,13 @@ const Cancel=[]
    ],[
       'FGH-prestige.'
       ,'Get the 4 automatons from FGH challenge.'
-      ,'Get ×160 from f<sub>0</sub><sup>m</sup>(n).'
+      ,'Get ×160 from f<sub>0</sub><sup>m</sup>(n).<br>Reward: get 2% more FGH number'
       ,'Make your number grow less than 1e-100 (but not zero) per second.'
-      ,'FGH-prestige with number between e1000 (including) and e1001.'
-      ,'FGH-prestige with only (0)[2].'
-      ,'Complete FGH challenge 5 while unalum is bought.'
-      ,'Complete FGH challenge 3 under one minute.'
-      ,'Get equal (1% margin) bonus from f<sub>2</sub>(n) and all bought f<sub>1</sub><sup>m</sup>(n).'
+      ,'FGH-prestige with number between e1000 (including) and e1001.<br>Reward: get 5% more FGH number'
+      ,'FGH-prestige with only (0)[2].<br>Reward: (0)[2] is 150% stronger'
+      ,'Complete FGH challenge 5 while unalum is bought.<br>Reward: get 10% more FGH number'
+      ,'Complete FGH challenge 3 under one minute.<br>Reward: get 20% more FGH number'
+      ,'Get equal (1% margin) bonus from f<sub>2</sub>(n) and all bought f<sub>1</sub><sup>m</sup>(n).<br>Reward: get 50% more FGH number'
    ]
 ]
 ,AchievementOn = ()=>{

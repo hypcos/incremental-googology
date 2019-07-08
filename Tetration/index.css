@@ -248,3 +248,15 @@ sub+sup{margin-left:-1ch}
 .ach1{background-color:#85b}
 .ach2{background-color:#5b8}
 .ach3{background-color:#b85}
+.rowreward{
+   color: #7fb;
+   font-size: 18px;
+   font-weight: 600;
+   text-shadow: 1px 0 3px;
+}
+.columnreward{
+   color: #fb7;
+   font-size: 18px;
+   font-weight: 600;
+   text-shadow: 1px 0 3px;
+}
