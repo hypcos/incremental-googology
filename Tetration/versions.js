@@ -72,10 +72,5 @@ const Version=2
       ,'FGHNumberRate'
       ,'FGHChal'
       ,'AlphaSeries'
-      ,'FGH0'
-      ,'FGH1'
-      ,'FGH2iter1'
-      ,'FGH2'
-      ,'FGH3'
    ]
 ]

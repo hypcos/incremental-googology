@@ -401,7 +401,7 @@ const Cancel=[]
          Vue.set(Achievement,2,Achievement[2]|256)
       })
 }
-,Row3watch = ()=>{
+,Row3watch = ()=>{/*
    var Achievement=v.Achievement;
    if(!(Achievement[3]&1))
       Cancel[27]=v.$watch(()=>v.FGHPrestige,x=>{
@@ -482,5 +482,5 @@ const Cancel=[]
          if(!x) return;
          Cancel[35]();
          Vue.set(Achievement,3,Achievement[3]|256)
-      })
+      })*/
 }
