@@ -20,7 +20,7 @@
       <button @mousedown="CurrentTab=2" :disabled="CurrentTab==2">Statistics</button>
       <button @mousedown="CurrentTab=3" :disabled="CurrentTab==3"
       style="position:relative">BMS<span class="tooltip">Bashicu matrix system</span></button>
-      <button v-if="Achievement.length>=4" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
+      <button v-if="FGHPrestige||Achievement.length>=5" @mousedown="CurrentTab=4" :disabled="CurrentTab==4"
       style="position:relative">FGH<span class="tooltip">fast-growing hierarchy</span></button>
       <button v-if="FGHChal&15||Achievement.length>=5" @mousedown="CurrentTab=5" :disabled="CurrentTab==5">Automatons</button>
    </div>
@@ -159,7 +159,19 @@
          </div>
       </div>
       <div v-else-if="FGHTab==2">
-         
+         <div class="left">
+            <div v-for="(amounts,n1) in FGH2f1"
+            :class="{cellcolumn:FGH2f1.length>4,column2:FGH2f1.length==2,column3:FGH2f1.length==3,column4:FGH2f1.length==4}">
+               <buy v-for="(x,n) in amounts" :info="FGH2f1Info[n1][n]" :amount="['FGH2f1',n1,n]" :bought="['FGH2f1Bought',n1,n]"
+               :mult="['FGH2f1Mult',n1,n]"></buy>
+            </div>
+         </div><br>
+         <div class="left">
+            <buy v-for="(x,n) in FGH1" :info="FGH1Info[n]" :amount="['FGH1',n]" :bought="['FGH1Bought',n]" :mult="['FGH1Mult',n]"></buy>
+         </div><br>
+         <div class="left">
+            <buy v-for="(x,n) in FGH0" :info="FGH0Info[n]" :amount="['FGH0',n]" :bought="['FGH0Bought',n]" :mult="['FGH0Mult',n]"></buy>
+         </div>
       </div>
    </div>
    <div v-else-if="CurrentTab==5">
