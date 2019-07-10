@@ -102,6 +102,10 @@ sub+sup{margin-left:-1ch}
    background-color: #efa;
    border: 1px solid #cf0;
 }
+.already.cell3{
+   background-color: #450;
+   color: #fff;
+}
 .cell4{
    background-color: #fea;
    border: 1px solid #fc0;
@@ -109,10 +113,6 @@ sub+sup{margin-left:-1ch}
 .cell5{
    background-color: #fca;
    border: 1px solid #f60;
-}
-.already.cell5{
-   background-color: #520;
-   color: #fff;
 }
 .prestige{
    min-width: 25%;
