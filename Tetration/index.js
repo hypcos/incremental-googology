@@ -26,7 +26,7 @@ const Grow = dt=>{
    Vue.set(a3,0,a3[0]);
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
-      //FGHNumberUpdate()
+      FGHNumberUpdate()
    }
    n1=v.BM0etc.length;
    if(Challenge&252){
@@ -113,7 +113,7 @@ const Grow = dt=>{
    ,AutoActive:[]
    ,AutoBM0etcUnlockThreshold:[]
    ,AutoFGHPrestigeThreshold:0
-   ,Challenge:0 //auto max all:4, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, start with:2, inside:128, outside:64, sides:1
+   ,Challenge:0 //auto max all:4, auto unlock:32, auto (0)(1)[n]:8, auto FGH-prestige:16, start with:2, iterated:128, multiordinal:64, unlocker:1
    ,Chal4Eff:[[]]
    ,Chal8Eff:1
    ,Chal16Eff:1
@@ -144,17 +144,17 @@ const Grow = dt=>{
    ,FGH0:[0]
    ,FGH0Bought:[0]
    ,FGH0Eff:[1]
-   ,FGH0Length:1
-   ,FGH0LengthEver:1
+   ,FGH0Length:3
+   ,FGH0LengthEver:3
    ,FGH1:[0]
    ,FGH1Bought:[0]
    ,FGH1Eff:[1]
-   ,FGH1Length:1
-   ,FGH1LengthEver:1
+   ,FGH1Length:3
+   ,FGH1LengthEver:3
    ,FGH2f1:[[0]]
    ,FGH2f1Bought:[[0]]
-   ,FGH2f1Length:[1]
-   ,FGH2f1LengthEver:[1]
+   ,FGH2f1Length:[3]
+   ,FGH2f1LengthEver:[3]
    ,FGH3:0
 })
 ,vPre = InitialData()
@@ -654,7 +654,6 @@ const v = new Vue({
          v.FGHPrestige++;
          v.FGHPrestigeFastest=Min(v.FGHPrestigeFastest,t);
          v.FGHNumberRate=Max(v.FGHNumberRate,Divide(v.FGHNumberToGet,t));
-         //FGHNumberUpdate();
          if(v.Challenge&255){
             switch(v.Challenge&255){
                case 4: v.FGHChal|=1; break;
@@ -673,6 +672,7 @@ const v = new Vue({
             }
             v.FGHChalExit()
          }
+         FGHNumberUpdate();
          BMSReset()
       }
       ,FGHChalEnter:n=>{
@@ -694,6 +694,22 @@ const v = new Vue({
          v.FGHNumber=Minus(v.FGHNumber,[1,2,11,20,10240][n]);
          v.AlphaSeries|=1<<n;
          if(n===3) v.FGHChal&=~16;
+      }
+      ,FGH0Buying:(n,delta)=>{
+         var FGH0=v.FGH0;
+         if(v.FGHChal&32&&n+1===FGH0.length&&n+1<v.FGH0Length&&LessEqualQ(Plus(n,4),FGH0[n])){
+            Vue.set(FGH0,n+1,0);
+            Vue.set(v.FGH0Bought,n+1,0);
+            Vue.set(v.FGH0Eff,n+1,0);
+         }
+      }
+      ,FGH1Buying:(n,delta)=>{
+         var FGH1=v.FGH1;
+         if(v.FGHChal&32&&n+1===FGH1.length&&n+1<v.FGH1Length&&LessEqualQ(Power(2,Plus(n,3)),FGH1[n])){
+            Vue.set(FGH1,n+1,0);
+            Vue.set(v.FGH1Bought,n+1,0);
+            Vue.set(v.FGH1Eff,n+1,0);
+         }
       }
    }
 })
@@ -725,9 +741,34 @@ const v = new Vue({
    v.BM0etcBought=[[0]]
 }
 ,FGHNumberUpdate = ()=>{
-   var FGH2=v.FGH2,FGHNumber=v.FGHNumber,n=(FGHNumber.pt||0)+1;
-   while(LessQ(FGHNumber,IteratedFGH2(2,--n+2))&&n>=0);
-   for(;n>=FGH2.length&&n>=0;--n) Vue.set(FGH2,n,0);
+   var FGHNumber=v.FGHNumber,amount,bought,lens,lensever,n,n1;
+   if(v.FGHChal&32){
+      n=(FGHNumber.pt||0)+1;
+      while(LessQ(FGHNumber,IteratedFGH2(8,n))&&n>0) --n;
+      n1=(amount=v.FGH2f1).length;
+      bought=v.FGH2f1Bought;
+      lens=v.FGH2f1Length;
+      lensever=v.FGH2f1LengthEver;
+      while(n>=n1){
+         lensever[n]||Vue.set(lensever,n,3);
+         Vue.set(lens,n,3);
+         Vue.set(amount,n,[0]);
+         Vue.set(bought,n,[0]);
+         --n
+      }
+   }
+   if(v.FGHChal&64){
+      n1=v.FGH2f1.length;
+      while(n1--){
+         amount=v.FGH2f1[n1];
+         bought=v.FGH2f1Bought[n1];
+         lens=v.FGH2f1Length[n1];
+         while((n=amount.length)<lens&&LessEqualQ(IteratedFGH2(Power(2,n+1),n1+1),FGHNumber)){
+            Vue.set(amount,n,0);
+            Vue.set(bought,n,0)
+         }
+      }
+   }
 }
 ,Buymax = (Amount,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),costo=Pointer(v,Costo);
