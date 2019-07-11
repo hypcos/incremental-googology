@@ -132,21 +132,21 @@
                but buying any BM resets your number and lower BM.<br><br>
                Reach {{1e100|show}}, then you start with only {{2|showInt}} BM available for every base number<br v-show="FGHChal&16">
                <span v-show="FGHChal&16" class="alter" @mousedown.stop="FGHChal&=~16">Discard</span>
-            </button><button class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(128)"
-            :class="{already:FGHChal&32&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==128?'#df5':''}">
+            </button><button class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(1)"
+            :class="{already:FGHChal&32&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==1?'#df5':''}">
                <b class="big">FGH Challenge 6</b><br>
+               Mechanism: You spend Z[n] to buy Z(0)[n] (where Z is a string of (0)'s).<br><br>
+               Multiply your FGH number gain by the FGH number you get in this challenge. Current: ×{{FGHChal6Eff|show}}
+            </button><button class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(128)"
+            :class="{already:FGHChal&64&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==128?'#df5':''}">
+               <b class="big">FGH Challenge 7</b><br>
                Mechanism: The more Z[m] you have, the weaker Z[n] is (where Z is a string of (0)'s, m≠n).<br><br>
                Reach {{ChallengeGoal[128]|show}} to unlock iterated FGH items
             </button><button class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(64)"
-            :class="{already:FGHChal&64&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==64?'#df5':''}">
-               <b class="big">FGH Challenge 7</b><br>
+            :class="{already:FGHChal&128&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==64?'#df5':''}">
+               <b class="big">FGH Challenge 8</b><br>
                Mechanism: The more Z(0)[n] you have, the weaker Z[n] is (where Z is a string of (0)'s).<br><br>
                Reach {{ChallengeGoal[64]|show}} to unlock multiordinal FGH items
-            </button><button class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(1)"
-            :class="{already:FGHChal&128&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==1?'#df5':''}">
-               <b class="big">FGH Challenge 8</b><br>
-               Mechanism: You spend Z[n] to buy Z(0)[n] (where Z is a string of (0)'s).<br><br>
-               Reach {{ChallengeGoal[1]|show}} to enable unlocker of FGH items
             </button><button v-show="FGHChal&2" class="chal cell3" :disabled="!!(Challenge&255)" @mousedown="FGHChalEnter(40)"
             :class="{already:FGHChal&256&&!(Challenge&255)}" :style="{'background-color':(Challenge&255)==40?'#df5':''}">
                FGH Challenge 2 and 3 together.<br><br>

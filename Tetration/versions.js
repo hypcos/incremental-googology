@@ -87,5 +87,6 @@ const Version=2
       ,'FGH2f1Length'
       ,'FGH2f1LengthEver'
       ,'FGH3'
+      ,'FGHChal6Eff'
    ]
 ]
