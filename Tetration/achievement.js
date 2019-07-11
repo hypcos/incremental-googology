@@ -50,7 +50,7 @@ const Cancel=[]
       ,'Buy a (0)(0)[2].'
       ,'Buy a (0)(0)(0)[2].'
       ,"Buy 4 (0)[2]'s at once. Reward: (0)[2] is 5% stronger"
-      ,"Have 4 (0)(0)(0)[2]'s without seeing (0)(0)(0)(0)[2].<br>Reward: (0)(0)(0)[2] is 5% stronger"
+      ,"Have 4 (0)(0)(0)[2]'s without seeing (0)(0)(0)(0)[2].<br>Reward: (0)(0)(0)[2] is 10% stronger"
       ,'Display your number as "ee...e" without other symbol.'
       ,'Get multipliers of (0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...<br>Reward: zero-only base-2 BM are 2% stronger'
       ,'Get amounts of (0)[2] < (0)(0)[2] < (0)(0)(0)[2] < ...<br>Reward: zero-only base-2 BM are 5% stronger'
@@ -60,7 +60,7 @@ const Cancel=[]
       ,'Buy a (0)(0)(0)(0)(0)(0)[2].'
       ,'Buy a (0)(0)(0)(0)(0)(0)(0)(0)[2].'
       ,'Have 16 different kinds of zero-only BM.<br>Reward: zero-only BM are 1% stronger'
-      ,'Unlock 16 times in total.<br>Reward: (0)(0)(0)(0)[2] is 5% stronger'
+      ,'Unlock 16 times in total.<br>Reward: (0)(0)(0)(0)[2] is 10% stronger'
       ,'Boost (0)[2] by 65536× from unlocker.'
       ,'Buy a (0)(0)(0)(0)(0)(0)(0)[2] without seeing (0)(0)[3].<br>Reward: (0)(0)(0)(0)(0)(0)(0)[2] is 20% stronger'
       ,'Unlock with only (0)[2] and highest zero-only base-2 BM bought.<br>Reward: (0)(0)[2] is 10% stronger'

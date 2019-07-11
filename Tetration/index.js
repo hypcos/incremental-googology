@@ -291,8 +291,8 @@ const v = new Vue({
          if(Achievement[0]&8) arr1[0][0]=Times(arr1[0][0],1.05);
          if(Achievement[3]&32) arr1[0][0]=Times(arr1[0][0],2.5);
          if(arr1[0][1]&&Achievement[1]&128) arr1[0][1]=Times(arr1[0][1],1.1);
-         if(arr1[0][2]&&Achievement[0]&16) arr1[0][2]=Times(arr1[0][2],1.05);
-         if(arr1[0][3]&&Achievement[1]&16) arr1[0][3]=Times(arr1[0][3],1.05);
+         if(arr1[0][2]&&Achievement[0]&16) arr1[0][2]=Times(arr1[0][2],1.1);
+         if(arr1[0][3]&&Achievement[1]&16) arr1[0][3]=Times(arr1[0][3],1.1);
          if(arr1[0][6]&&Achievement[1]&64) arr1[0][6]=Times(arr1[0][6],1.2);
          if(arr1[1]&&Achievement[2]&32){
             if(arr1[1][0]) arr1[1][0]=Times(arr1[1][0],1.2);
