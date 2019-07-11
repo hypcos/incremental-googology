@@ -122,6 +122,14 @@ const Cancel=[]
          Row3watch()
       })
    }else Row3watch();
+   if(len<=4){
+      RowCancel[3] = v.$watch(()=>LessQ(2.999999999999,v.FGHNumber),x=>{
+         if(!x) return;
+         RowCancel[3]();
+         Vue.set(v.Achievement,4,0);
+         Row4watch()
+      })
+   }else Row4watch();
 }
 ,AchievementOff = ()=>{
    Cancel.map(x=>x());
@@ -484,3 +492,4 @@ const Cancel=[]
          Vue.set(Achievement,3,Achievement[3]|256)
       })*/
 }
+,Row4watch = ()=>{}
