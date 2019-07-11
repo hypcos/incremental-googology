@@ -16,13 +16,13 @@ const Grow = dt=>{
    a2=v.FGH1Mult;
    a3=v.FGH1Eff;
    n=a1.length;
-   while(n--) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
+   while(--n) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
    Vue.set(a3,0,a3[0]);
    a1=v.FGH0;
    a2=v.FGH0Mult;
    a3=v.FGH0Eff;
    n=a1.length;
-   while(n--) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
+   while(--n) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
    Vue.set(a3,0,a3[0]);
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
@@ -326,19 +326,15 @@ const v = new Vue({
       }
       ,BM0etcMult_FGHPres(){
          var BM0etcLengthEver=this.BM0etcLengthEver
-         ,Overall=this.AlphaSeries&2?this.FGHbase1Eff:1
-         ,n,n1=BM0etcLengthEver.length,arr,arr1=[];
-         while(n1--){
-            arr=[];
-            n=BM0etcLengthEver[n1];
-            while(n--) arr[n]=Overall;
-            arr1[n1]=arr
-         }
-         return arr1
+         ,Overall=this.AlphaSeries&1?this.FGH00Eff:1
+         ,n=BM0etcLengthEver.length,arr=[];
+         while(n--) arr[n]=Overall;
+         if(this.AlphaSeries&2) arr[0]=Times(arr[0],this.FGHbase1Eff);
+         return arr
       }
       ,BM0etcMult_FGH(){
          var BM0etcLengthEver=this.BM0etcLengthEver
-         ,Overall=this.FGH0Eff[0]
+         ,Overall=Plus(Times(this.FGH0[0],this.FGH0Mult[0]),1)
          ,n,n1=BM0etcLengthEver.length,arr,arr1=[];
          while(n1--){
             arr=[];
@@ -350,7 +346,7 @@ const v = new Vue({
       }
       ,BM0etcMult(){
          var Ach=this.BM0etcMult_Ach,Bought=this.BM0etcMult_Bought,Unlocker=this.BM0etcMult_Unlocker
-         ,FGH00Eff=this.AlphaSeries&1?this.FGH00Eff:1,FGHPres=this.BM0etcMult_FGHPres,FGH=this.BM0etcMult_FGH
+         ,FGHPres=this.BM0etcMult_FGHPres,FGH=this.BM0etcMult_FGH
          ,ach,bought,unlocker,fghpres,fgh
          ,n,n1=Bought.length,arr,arr1=[];
          while(n1--){
@@ -360,7 +356,7 @@ const v = new Vue({
             unlocker=Unlocker[n1];
             fghpres=FGHPres[n1];
             fgh=FGH[n1];
-            while(n--) arr[n]=Times(Times(Times(ach[n],bought[n]),unlocker[n]),Times(Times(FGH00Eff,fghpres[n]),fgh[n]));
+            while(n--) arr[n]=Times(Times(Times(ach[n],bought[n]),unlocker[n]),Times(fghpres,fgh[n]));
             arr1[n1]=arr
          }
          if(this.AlphaSeries&4) arr1[0][0]=Times(arr1[0][0],this.ZeralumEff);
@@ -433,8 +429,8 @@ const v = new Vue({
       ,ZeralumCant(){return this.AlphaSeries&4||LessQ(this.FGHNumber,11)}
       ,UnalumCant(){return this.AlphaSeries&8||LessQ(this.FGHNumber,20)}
       ,BalumCant(){return this.AlphaSeries&16||LessQ(this.FGHNumber,10240)}
-      ,FGH00Eff(){return Plus(Ln(Ln(this.MainNumberEver)),-4)}
-      ,FGHbase1Eff(){return Power(Max(this.FGHPrestige,1),0.5)}
+      ,FGH00Eff(){return Power(Plus(this.FGHPrestige,1),0.5)}
+      ,FGHbase1Eff(){return Math.min(1+42*Math.pow(this.FGHPrestigeFastest,-0.5),160)}
       ,ZeralumEff(){return Plus(Times(this.FGHNumber,0.25),1)}
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
       ,FGH0Info(){
@@ -443,7 +439,7 @@ const v = new Vue({
             n52=Plus(n,2.5);
             arr[n]={
                text:(strn=>x=>strn+showInt(Plus(x,2))+')')('f<sub>0</sub>'+(n?'<sup>'+showInt(n+1)+'</sup>':'')+'(')
-               ,tooltip:'Generate multiplier of '+(n?'f<sub>0</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)':'zero-only BM')
+               ,tooltip:n?'Generate multiplier of f<sub>0</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)':'Boost all zero-only BM'
                ,costo:n?['FGH0',n-1]:['FGHNumber']
                ,cost:(n=>x=>Natural(Plus(x,n)))(Plus(n,3))
                ,sum:(c=>x=>Natural(Times(Times(Plus(x,c),x),0.5)))(Plus(n52,n52))
@@ -452,9 +448,14 @@ const v = new Vue({
          }
          return arr
       }
+      ,FGH0Html(){
+         var n=this.FGH0LengthEver,arr=[];
+         while(--n) arr[n]=' f<sub>0</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)';
+         return arr
+      }
       ,FGH0Mult(){
          var FGH0Eff=this.FGH0Eff
-         ,Overall=this.FGH1Eff[0]
+         ,Overall=Plus(Times(this.FGH1[0],this.FGH1Mult[0]),1)
          ,n=FGH0Eff.length,arr=[];
          while(n--) arr[n]=Times(FGH0Eff[n+1]||1,Overall);
          return arr
@@ -472,6 +473,11 @@ const v = new Vue({
                ,solve:(p2=>Y=>Plus(Power(Plus(Divide(Y,p2),2.25),0.5),-1.5))(p2)
             }
          }
+         return arr
+      }
+      ,FGH1Html(){
+         var n=this.FGH0LengthEver,arr=[];
+         while(--n) arr[n]=' f<sub>1</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)';
          return arr
       }
       ,FGH1Mult(){

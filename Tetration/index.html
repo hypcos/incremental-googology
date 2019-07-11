@@ -69,12 +69,12 @@
       <div v-if="FGHTab==0">
          <button class="cell cell1" :class="{already:AlphaSeries&1}" :disabled="FGH00Cant" @mousedown="AlphaSeriesBuy(0)">
             <b class="big">f<sub>0</sub>(0)</b><br>
-            Boost zero-only BM slightly based on your number ever reached<br>
+            Boost zero-only BM based on FGH-prestige count<br>
             Current: ×{{FGH00Eff|show}}<br>
             Cost: {{1|showInt}} FGHN
          </button><button class="cell cell1" :class="{already:AlphaSeries&2}" :disabled="FGHbase1Cant" @mousedown="AlphaSeriesBuy(1)">
             <b class="big">f<sub>α</sub>(1)</b><br>
-            Boost zero-only BM based on FGH-prestige count<br>
+            Boost (0)...(0)[{{2|showInt}}] based on fastest FGH-prestige<br>
             Current: ×{{FGHbase1Eff|show}}<br>
             Cost: {{2|showInt}} FGHN
          </button><br>
@@ -167,10 +167,12 @@
             </div>
          </div><br>
          <div class="left">
-            <buy v-for="(x,n) in FGH1" :info="FGH1Info[n]" :amount="['FGH1',n]" :bought="['FGH1Bought',n]" :mult="['FGH1Mult',n]"></buy>
+            <buy v-for="(x,n) in FGH1" :info="FGH1Info[n]" :amount="['FGH1',n]" :bought="['FGH1Bought',n]"
+            :mult="['FGH1Mult',n]"><span v-if="n" v-html="FGH1Html[n]"></span></buy>
          </div><br>
          <div class="left">
-            <buy v-for="(x,n) in FGH0" :info="FGH0Info[n]" :amount="['FGH0',n]" :bought="['FGH0Bought',n]" :mult="['FGH0Mult',n]"></buy>
+            <buy v-for="(x,n) in FGH0" :info="FGH0Info[n]" :amount="['FGH0',n]" :bought="['FGH0Bought',n]"
+            :mult="['FGH0Mult',n]"><span v-if="n" v-html="FGH0Html[n]"></span></buy>
          </div>
       </div>
    </div>
