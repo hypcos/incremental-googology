@@ -7,8 +7,8 @@ const Grow = dt=>{
    v.SinceFGHPrestige+=dt;
    n1=v.FGH2f1.length;
    while(n1--){
-      n=(a1=v.FGH2f1).length;
-      a2=v.FGH2f1Mult;
+      n=(a1=v.FGH2f1[n1]).length;
+      a2=v.FGH2f1Mult[n1];
       while(--n) a1[n-1]=Plus(a1[n-1],Times(Times(a1[n],a2[n]),dt*0.2))
    }
    Vue.set(v.FGH2f1,0,v.FGH2f1[0]);
