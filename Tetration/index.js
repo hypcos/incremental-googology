@@ -587,10 +587,12 @@ const v = new Vue({
             v.FGHChalExit()
          }
          FGHNumberUpdate();
+         FGHErase();
          BMSReset()
       }
       ,FGHChalEnter:n=>{
          v.SinceFGHPrestige=0;
+         FGHErase();
          BMSReset();
          v.Challenge|=n
       }
@@ -663,6 +665,12 @@ const v = new Vue({
          Vue.set(bought,n,0)
       }
    }
+}
+,FGHErase = ()=>{
+   var FGH2f1=v.FGH2f1,FGH2f1Bought=v.FGH2f1Bought,n,n1;
+   n1=FGH2f1.length;
+   while(n1--) for(n=FGH2f1[n1].length;n--;) FGH2f1[n1][n]=FGH2f1Bought[n1][n];
+   Vue.set(FGH2f1,0,FGH2f1[0])
 }
 ,Buymax = (Amount,Costo,sum,solve)=>{
    const amount=Pointer(v,Amount),costo=Pointer(v,Costo);
