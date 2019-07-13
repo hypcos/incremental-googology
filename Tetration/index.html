@@ -165,14 +165,6 @@
                <buy v-for="(x,n) in amounts" :info="FGH2f1Info[n1][n]" :amount="['FGH2f1',n1,n]" :bought="['FGH2f1Bought',n1,n]"
                :mult="['FGH2f1Mult',n1,n]"></buy>
             </div>
-         </div><br>
-         <div class="left">
-            <buy v-for="(x,n) in FGH1" :info="FGH1Info[n]" :amount="['FGH1',n]" :bought="['FGH1Bought',n]"
-            :mult="['FGH1Mult',n]" @buying="FGH1Buying(n,$event)"><span v-if="n" v-html="FGH1Html[n]"></span></buy>
-         </div><br>
-         <div class="left">
-            <buy v-for="(x,n) in FGH0" :info="FGH0Info[n]" :amount="['FGH0',n]" :bought="['FGH0Bought',n]"
-            :mult="['FGH0Mult',n]" @buying="FGH0Buying(n,$event)"><span v-if="n" v-html="FGH0Html[n]"></span></buy>
          </div>
       </div>
    </div>

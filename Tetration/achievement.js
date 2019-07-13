@@ -123,7 +123,7 @@ const Cancel=[]
       })
    }else Row3watch();
    if(len<=4){
-      RowCancel[3] = v.$watch(()=>LessQ(2.999999999999,v.FGHNumber),x=>{
+      RowCancel[3] = v.$watch(()=>LessQ(7.999999999999,v.FGHNumber),x=>{
          if(!x) return;
          RowCancel[3]();
          Vue.set(v.Achievement,4,0);

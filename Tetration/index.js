@@ -12,18 +12,6 @@ const Grow = dt=>{
       while(--n) a1[n-1]=Plus(a1[n-1],Times(Times(a1[n],a2[n]),dt*0.2))
    }
    Vue.set(v.FGH2f1,0,v.FGH2f1[0]);
-   a1=v.FGH1;
-   a2=v.FGH1Mult;
-   a3=v.FGH1Eff;
-   n=a1.length;
-   while(--n) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
-   Vue.set(a3,0,a3[0]);
-   a1=v.FGH0;
-   a2=v.FGH0Mult;
-   a3=v.FGH0Eff;
-   n=a1.length;
-   while(--n) a3[n]=Plus(a3[n],Times(Times(a1[n],a2[n]),dt*0.2));
-   Vue.set(a3,0,a3[0]);
    if(v.AlphaSeries&16){
       v.FGHNumber=Plus(v.FGHNumber,Times(v.BalumEff,dt));
       FGHNumberUpdate()
@@ -142,16 +130,6 @@ const Grow = dt=>{
    ,AlphaSeries:0 //1 bit for every item
    ,FGHChal:0 //1 bit for every item
    ,FGHChal6Eff:1
-   ,FGH0:[0]
-   ,FGH0Bought:[0]
-   ,FGH0Eff:[1]
-   ,FGH0Length:3
-   ,FGH0LengthEver:3
-   ,FGH1:[0]
-   ,FGH1Bought:[0]
-   ,FGH1Eff:[1]
-   ,FGH1Length:3
-   ,FGH1LengthEver:3
    ,FGH2f1:[[0]]
    ,FGH2f1Bought:[[0]]
    ,FGH2f1Length:[3]
@@ -333,22 +311,10 @@ const v = new Vue({
          if(this.AlphaSeries&2) arr[0]=Times(arr[0],this.FGHbase1Eff);
          return arr
       }
-      ,BM0etcMult_FGH(){
-         var BM0etcLengthEver=this.BM0etcLengthEver
-         ,Overall=Plus(Times(this.FGH0[0],this.FGH0Mult[0]),1)
-         ,n,n1=BM0etcLengthEver.length,arr,arr1=[];
-         while(n1--){
-            arr=[];
-            n=BM0etcLengthEver[n1];
-            while(n--) arr[n]=Overall;
-            arr1[n1]=arr
-         }
-         return arr1
-      }
       ,BM0etcMult(){
          var Ach=this.BM0etcMult_Ach,Bought=this.BM0etcMult_Bought,Unlocker=this.BM0etcMult_Unlocker
-         ,FGHPres=this.BM0etcMult_FGHPres,FGH=this.BM0etcMult_FGH
-         ,ach,bought,unlocker,fghpres,fgh
+         ,FGHPres=this.BM0etcMult_FGHPres,FGH=Plus(Times(this.FGH2f1[0][0],this.FGH2f1Mult[0][0]),1)
+         ,ach,bought,unlocker,fghpres
          ,n,n1=Bought.length,arr,arr1=[];
          while(n1--){
             arr=[];
@@ -356,8 +322,7 @@ const v = new Vue({
             n=(bought=Bought[n1]).length;
             unlocker=Unlocker[n1];
             fghpres=FGHPres[n1];
-            fgh=FGH[n1];
-            while(n--) arr[n]=Times(Times(Times(ach[n],bought[n]),unlocker[n]),Times(fghpres,fgh[n]));
+            while(n--) arr[n]=Times(Times(Times(ach[n],bought[n]),unlocker[n]),Times(fghpres,FGH));
             arr1[n1]=arr
          }
          if(this.AlphaSeries&4) arr1[0][0]=Times(arr1[0][0],this.ZeralumEff);
@@ -434,60 +399,6 @@ const v = new Vue({
       ,FGHbase1Eff(){return Math.min(1+42*Math.pow(this.FGHPrestigeFastest,-0.5),160)}
       ,ZeralumEff(){return Plus(Times(this.FGHNumber,0.25),1)}
       ,BalumEff(){return Times(0.1,this.FGHNumberRate)}
-      ,FGH0Info(){
-         var n52,n=this.FGH0LengthEver,arr=[];
-         while(n--){
-            n52=Plus(n,2.5);
-            arr[n]={
-               text:(strn=>x=>strn+showInt(Plus(x,2))+')')('f<sub>0</sub>'+(n?'<sup>'+showInt(n+1)+'</sup>':'')+'(')
-               ,tooltip:n?'Generate multiplier of f<sub>0</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)':'Boost all zero-only BM'
-               ,costo:n?['FGH0',n-1]:['FGHNumber']
-               ,cost:(n=>x=>Natural(Plus(x,n)))(Plus(n,3))
-               ,sum:(c=>x=>Natural(Times(Times(Plus(x,c),x),0.5)))(Plus(n52,n52))
-               ,solve:((cin,cout)=>Y=>Plus(Power(Plus(Plus(Y,Y),cin),0.5),cout))(Times(n52,n52),Neg(n52))
-            }
-         }
-         return arr
-      }
-      ,FGH0Html(){
-         var n=this.FGH0LengthEver,arr=[];
-         while(--n) arr[n]=' f<sub>0</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)';
-         return arr
-      }
-      ,FGH0Mult(){
-         var FGH0Eff=this.FGH0Eff
-         ,Overall=Plus(Times(this.FGH1[0],this.FGH1Mult[0]),1)
-         ,n=FGH0Eff.length,arr=[];
-         while(n--) arr[n]=Times(FGH0Eff[n+1]||1,Overall);
-         return arr
-      }
-      ,FGH1Info(){
-         var p2,n=this.FGH0LengthEver,arr=[];
-         while(n--){
-            p2=Power(2,n);
-            arr[n]={
-               text:(strn=>x=>strn+showInt(Plus(x,2))+')')('f<sub>1</sub>'+(n?'<sup>'+showInt(n+1)+'</sup>':'')+'(')
-               ,tooltip:n?'Generate multiplier of f<sub>1</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)':'Boost all f<sub>0</sub> items'
-               ,costo:n?['FGH1',n-1]:['FGHNumber']
-               ,cost:(p2=>x=>Natural(Times(Plus(x,2),p2)))(Power(2,n+1))
-               ,sum:(p2=>x=>Natural(Times(Times(Plus(x,3),x),p2)))(p2)
-               ,solve:(p2=>Y=>Plus(Power(Plus(Divide(Y,p2),2.25),0.5),-1.5))(p2)
-            }
-         }
-         return arr
-      }
-      ,FGH1Html(){
-         var n=this.FGH0LengthEver,arr=[];
-         while(--n) arr[n]=' f<sub>1</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(n)';
-         return arr
-      }
-      ,FGH1Mult(){
-         var FGH1Eff=this.FGH1Eff
-         ,Overall=Plus(Times(this.FGH2f1[0][0],this.FGH2f1Mult[0][0]),1)
-         ,n=FGH1Eff.length,arr=[];
-         while(n--) arr[n]=Times(FGH1Eff[n+1]||1,Overall);
-         return arr
-      }
       ,FGH2f1Info(){
          var p2,b41,n,n1=this.FGH2f1LengthEver.length,arr,arr1=[];
          while(n1--){
@@ -501,7 +412,7 @@ const v = new Vue({
                      'f<sub>2</sub>'+(n1?'<sup>'+showInt(n1+1)+'</sup>':'')+'('+(n?'f<sub>1</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(':'')
                      ,!!n)
                   ,tooltip:n?'Generate f<sub>2</sub>'+(n1?'<sup>'+showInt(n1+1)+'</sup>':'')+'('+(n>1?'f<sub>1</sub>'+(n>2?'<sup>'+showInt(n-1)+'</sup>':'')+'(n))':'n)')
-                     :'Boost '+(n1?'f<sub>2</sub>'+(n1>1?'<sup>'+showInt(n1)+'</sup>':'')+'(f<sub>1</sub><sup>m</sup>(n))':'all f<sub>1</sub> items')
+                     :'Boost '+(n1?'f<sub>2</sub>'+(n1>1?'<sup>'+showInt(n1)+'</sup>':'')+'(f<sub>1</sub><sup>m</sup>(n))':'all zero-only BM')
                   ,costo:['FGHNumber']
                   ,cost:((n1,p2)=>x=>Natural(IteratedFGH2(Times(Plus(x,2),p2),n1)))(n1+1,p2)
                   ,sum:n1?((n1,p2)=>x=>x?Natural(IteratedFGH2(Times(Plus(x,1),p2),n1)):0)(n1+1,p2)
@@ -698,22 +609,6 @@ const v = new Vue({
          v.AlphaSeries|=1<<n;
          if(n===3) v.FGHChal&=~16;
       }
-      ,FGH0Buying:(n,delta)=>{
-         var FGH0=v.FGH0;
-         if(v.FGHChal&64&&n+1===FGH0.length&&n+1<v.FGH0Length&&LessEqualQ(Plus(n,4),FGH0[n])){
-            Vue.set(FGH0,n+1,0);
-            Vue.set(v.FGH0Bought,n+1,0);
-            Vue.set(v.FGH0Eff,n+1,0);
-         }
-      }
-      ,FGH1Buying:(n,delta)=>{
-         var FGH1=v.FGH1;
-         if(v.FGHChal&64&&n+1===FGH1.length&&n+1<v.FGH1Length&&LessEqualQ(Power(2,Plus(n,3)),FGH1[n])){
-            Vue.set(FGH1,n+1,0);
-            Vue.set(v.FGH1Bought,n+1,0);
-            Vue.set(v.FGH1Eff,n+1,0);
-         }
-      }
    }
 })
 ,BMSReset = ()=>{
@@ -745,31 +640,27 @@ const v = new Vue({
 }
 ,FGHNumberUpdate = ()=>{
    var FGHNumber=v.FGHNumber,amount,bought,lens,lensever,n,n1;
-   if(v.FGHChal&64){
-      n=(FGHNumber.pt||0)+1;
-      while(LessQ(FGHNumber,IteratedFGH2(8,n))&&n>0) --n;
-      n1=(amount=v.FGH2f1).length;
-      bought=v.FGH2f1Bought;
-      lens=v.FGH2f1Length;
-      lensever=v.FGH2f1LengthEver;
-      while(n>=n1){
-         lensever[n]||Vue.set(lensever,n,3);
-         Vue.set(lens,n,3);
-         Vue.set(amount,n,[0]);
-         Vue.set(bought,n,[0]);
-         --n
-      }
+   n=(FGHNumber.pt||0)+1;
+   while(LessQ(FGHNumber,IteratedFGH2(8,n))&&n>0) --n;
+   n1=(amount=v.FGH2f1).length;
+   bought=v.FGH2f1Bought;
+   lens=v.FGH2f1Length;
+   lensever=v.FGH2f1LengthEver;
+   while(n>=n1){
+      lensever[n]||Vue.set(lensever,n,3);
+      Vue.set(lens,n,3);
+      Vue.set(amount,n,[0]);
+      Vue.set(bought,n,[0]);
+      --n
    }
-   if(v.FGHChal&128){
-      n1=v.FGH2f1.length;
-      while(n1--){
-         amount=v.FGH2f1[n1];
-         bought=v.FGH2f1Bought[n1];
-         lens=v.FGH2f1Length[n1];
-         while((n=amount.length)<lens&&LessEqualQ(IteratedFGH2(Power(2,n+1),n1+1),FGHNumber)){
-            Vue.set(amount,n,0);
-            Vue.set(bought,n,0)
-         }
+   n1=v.FGH2f1.length;
+   while(n1--){
+      amount=v.FGH2f1[n1];
+      bought=v.FGH2f1Bought[n1];
+      lens=v.FGH2f1Length[n1];
+      while((n=amount.length)<lens&&LessEqualQ(IteratedFGH2(Power(2,n+1),n1+1),FGHNumber)){
+         Vue.set(amount,n,0);
+         Vue.set(bought,n,0)
       }
    }
 }
