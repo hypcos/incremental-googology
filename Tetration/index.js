@@ -138,11 +138,20 @@ const Grow = dt=>{
 })
 ,vPre = InitialData()
 ,show = x=>Show(x,vPre.Precision,vPre.NumberBase)
-,showInt = x=>Show(x,vPre.Precision,vPre.NumberBase,true)
-,BM0etcText = (x,n)=>LessQ(x,14)?'(0)'.repeat(x)+'['+showInt(n)+']':'(0)...(0)['+showInt(n)+'] with '+showInt(x)+" (0)'s";
+,showInt = x=>Show(x,vPre.Precision,vPre.NumberBase,true);
 Vue.filter('show',show);
 Vue.filter('showInt',showInt);
-const v = new Vue({
+function FGHText(x){
+   var len=arguments.length,n=0,s=typeof x=='string'?x:showInt(x);
+   while(++n<len)
+      if(arguments[n])
+         s='f<sub>'+showInt(n-1)+'</sub>'+
+            (typeof arguments[n]=='string'?'<sup>'+arguments[n]+'</sup>':arguments[n]===1?'':'<sup>'+showInt(arguments[n])+'</sup>')+
+            '('+s+')';
+   return s
+}
+const BM0etcText = (x,n)=>LessQ(x,14)?'(0)'.repeat(x)+'['+showInt(n)+']':'(0)...(0)['+showInt(n)+'] with '+showInt(x)+" (0)'s"
+,v = new Vue({
    el:'#game'
    ,data:vPre
    ,computed:{
@@ -408,11 +417,9 @@ const v = new Vue({
                p2=Power(2,n);
                b41=Plus(Power(2,p2),-1);
                arr[n]={
-                  text:((str,n)=>x=>str+showInt(Plus(x,2))+(n?'))':')'))(
-                     'f<sub>2</sub>'+(n1?'<sup>'+showInt(n1+1)+'</sup>':'')+'('+(n?'f<sub>1</sub>'+(n>1?'<sup>'+showInt(n)+'</sup>':'')+'(':'')
-                     ,!!n)
-                  ,tooltip:n?'Generate f<sub>2</sub>'+(n1?'<sup>'+showInt(n1+1)+'</sup>':'')+'('+(n>1?'f<sub>1</sub>'+(n>2?'<sup>'+showInt(n-1)+'</sup>':'')+'(n))':'n)')
-                     :'Boost '+(n1?'f<sub>2</sub>'+(n1>1?'<sup>'+showInt(n1)+'</sup>':'')+'(f<sub>1</sub><sup>m</sup>(n))':'all zero-only BM')
+                  text:((n,n1)=>x=>FGHText(Plus(x,2),0,n,n1))(n,n1+1)
+                  ,tooltip:n?'Generate '+FGHText('n',0,n-1,n1+1)
+                     :'Boost '+(n1?FGHText('n',0,'m',n1):'all zero-only BM')
                   ,costo:['FGHNumber']
                   ,cost:((n1,p2)=>x=>Natural(IteratedFGH2(Times(Plus(x,2),p2),n1)))(n1+1,p2)
                   ,sum:n1?((n1,p2)=>x=>x?Natural(IteratedFGH2(Times(Plus(x,1),p2),n1)):0)(n1+1,p2)
